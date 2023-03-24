@@ -1,0 +1,7 @@
+COMPOSE_PROJECT_NAME=Genetta
+PYTHONBUFFERED=true
+FLASK_APP=router.py
+FLASK_DEBUG=1
+PYTHONBUFFERED=true
+NEO4J_AUTH=neo4j/Radeon12300
+NEO4J_PLUGINS=["graph-data-science","apoc"]
