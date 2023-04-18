@@ -6,6 +6,7 @@ cyto.load_extra_layouts()
 default_stylesheet_fn = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), "default_stylesheet.txt")
 
+
 class AbstractVisual:
     def __init__(self):
         self.view = self.set_full_graph_view
@@ -30,7 +31,33 @@ class AbstractVisual:
             self.node_shape]
         return current_settings
 
+    def reset(self):
+        self.set_full_graph_view()
+        self.set_network_mode()
+        self.add_node_no_labels()
+        self.add_edge_no_labels()
+        self.add_standard_node_color()
+        self.add_standard_edge_color()
+        self.add_standard_node_size()
+        self.set_circle_node_shape()
+        self.set_straight_edge_shape()
+
+    def set_standard_preset(self):
+        '''
+        Pre-set methods for default settings.
+        '''
+        preset_functions = [self.set_full_graph_view,
+                            self.set_network_mode,
+                            self.add_node_no_labels,
+                            self.add_edge_no_labels,
+                            self.add_standard_node_color,
+                            self.add_standard_edge_color,
+                            self.add_standard_node_size,
+                            self.set_circle_node_shape,
+                            self.set_straight_edge_shape]
+        return self._set_preset(preset_functions)
     # ---------------------- View ------------------------------------
+
     def set_full_graph_view(self):
         '''
         Renders the Full graph. 
@@ -71,7 +98,6 @@ class AbstractVisual:
         else:
             self.mode = self.set_union_mode
 
-
     def set_node_difference_mode(self):
         '''
         Only for multiple graph visualisation. 
@@ -84,7 +110,6 @@ class AbstractVisual:
             self._builder.set_node_difference_mode()
         else:
             self.mode = self.set_node_difference_mode
-
 
     def set_edge_difference_mode(self):
         '''
@@ -99,7 +124,6 @@ class AbstractVisual:
         else:
             self.mode = self.set_edge_difference_mode
 
-
     def set_node_intersection_mode(self):
         '''
         Only for multiple graph visualisation. 
@@ -112,7 +136,6 @@ class AbstractVisual:
             self._builder.set_node_intersection_mode()
         else:
             self.mode = self.set_node_intersection_mode
-
 
     def set_edge_intersection_mode(self):
         '''
@@ -159,10 +182,9 @@ class AbstractVisual:
         '''
         self._set_layout(self._layout_h.Cose)
 
-    
    # def set_cose_bilkent_layout(self):
    #     '''
-   #     Positions nodes based on the CoSE: Compound Spring Embedder - 
+   #     Positions nodes based on the CoSE: Compound Spring Embedder -
    #     A force directed layout scheme.
    #     Similar to COSE but more expensive + can provide better results.
    #     '''
@@ -265,7 +287,7 @@ class AbstractVisual:
             return self._label_h.node.class_type()
         else:
             self.node_text = self.add_node_type_labels
-    
+
     def add_node_uri_labels(self):
         '''
         Textual data pertaining to a nodes URI if possible else name.
@@ -275,8 +297,8 @@ class AbstractVisual:
         else:
             self.node_text = self.add_node_uri_labels
 
-
     # ---------------------- Edge Labels ----------------------
+
     def add_edge_no_labels(self):
         '''
         Textual data pertaining to a egde is not rendered.
@@ -561,10 +583,10 @@ class AbstractVisual:
         else:
             self.edge_shape = self.set_segments_edge_shape
 
-    def empty_graph(self,graph_id):
-        return cyto.Cytoscape(id=graph_id,layout=self.layout.build(),elements = [])
+    def empty_graph(self, graph_id):
+        return cyto.Cytoscape(id=graph_id, layout=self.layout.build(), elements=[])
 
-    def build(self, graph_id="cytoscape_graph", legend=False,datatable=False, width=80, height=100):
+    def build(self, graph_id="cytoscape_graph", legend=False, datatable=False, width=80, height=100):
         rets = []
         stylesheet = self._build_default_stylesheet()
         nodes = []
@@ -577,7 +599,7 @@ class AbstractVisual:
         else:
             self._builder.build()
         self.mode()
-        
+
         node_color = self.node_color()
         node_shapes = self.node_shape()
         node_sizes = self.node_size()
@@ -588,6 +610,9 @@ class AbstractVisual:
 
         if self.layout is not None:
             layout = self.layout.build()
+            layout["animate"] = True
+            layout["animationDuration"] = 500
+            layout["fit"] = True
         for index, node in enumerate(self._builder.view.nodes()):
             text = node_text[index]
             color_key = list(node_color[index].keys())[0]
@@ -605,7 +630,8 @@ class AbstractVisual:
         for index, edge in enumerate(self._builder.view.edges()):
             color_key = list(edge_color[index].keys())[0]
             e_color = edge_color[index][color_key]
-            edge, e_style = self._build_edge(edge, edge_text[index], color_key, e_color, edge_shape)
+            edge, e_style = self._build_edge(
+                edge, edge_text[index], color_key, e_color, edge_shape)
             if color_key not in edge_selectors:
                 stylesheet.append(e_style)
                 edge_selectors.append(color_key)

@@ -204,7 +204,7 @@ class CypherDash(AbstractDash):
                 export_modal_o["data"].component_id, [])
             export_modal = self.create_modal(export_modal_o["id"].component_id,
                                             export_modal_i["close_export"].component_id,
-                                            "Export", export_div)
+                                            "Export Data", export_div)
             exports = self.create_heading_4("export_img_heading", "Image Export")
             for e_input in export_img_i:
                 exports += self.create_button(e_input.component_id,className="export_img_button")

@@ -2,35 +2,6 @@ import uuid
 from neo4j.exceptions import ClientError
 from app.enhancer.evaluator.abstract_evaluator import AbstractEvaluator
 
-'''
-for root in roots:
-    print("\n")
-    seens = []
-
-    res = graph.procedure.bfs(proj_name,root)
-    for path in res:
-        children = [c.v for c in graph.get_children(root)]
-        for index,element in enumerate(path["path"]):
-            print(element,[str(c) for c in children])
-            if index == 0:
-                assert(element == root)
-                level += 1
-                levels.append([])
-                continue
-            if element not in children:
-                children = []
-                for e in levels[level]:
-                    children += [c.v for c in graph.get_children(e)]
-                    if len(set(children) & set(seens)) > 0:
-                        print("Circular")
-                
-                level += 1
-            if len(levels) <= level:
-                levels.append([])
-            levels[level].append(element)
-            seens.append(element)
-return levels
-'''
 
 class HierarchyEvaluator(AbstractEvaluator):
     '''

@@ -8,49 +8,59 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='2_custom.css')}}"> {% if title %}
-    <title>Genet - {{ title }}</title>
+    <title>Genetta - {{ title }}</title>
     {% else %}
-    <title>Genet </title>
+    <title>Genetta </title>
     {% endif %}
 </head>
 
-<body style="background-image: url('{{url_for('static', filename='1995-trace-1.png')}}');height: 100vh">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index') }}">Genet</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<body style="background-image: url('{{url_for('static', filename='network.jpeg')}}');">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ url_for('index') }}">
+                    <img src="{{url_for('static', filename='logo.png')}}" alt="" width="130">
+                  </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('modify_graph') }}">Graph Admin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('visualiser') }}">Visualiser</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('editor') }}">Editor</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('truth') }}">Database</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Misc
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ url_for('evaluate') }}">Evaluator</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('cypher') }}">Cypher</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('gds') }}">GDS</a></li>
-                    </ul>
-                </li>
-            </ul>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('modify_graph') }}">Modify Graphs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('visualiser') }}">Visualiser</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('editor') }}">Editor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('truth') }}">Database</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Misc
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('tutorial') }}">Tutorial</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('examples') }}">Examples</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('evaluate') }}">Evaluator</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('graph_admin') }}">Admin</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        <div id="app" class="container">
+            {% block content %}{% endblock %}
         </div>
-    </nav>
-    {% block content %}{% endblock %}
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.js"

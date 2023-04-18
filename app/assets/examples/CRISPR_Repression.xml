@@ -1,0 +1,896 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#EYFP_gene/1">
+    <sbol:displayId>EYFP_gene</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#EYFP_gene"/>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#EYFP_gene/EYFP_gene_CRP_b_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>EYFP_gene_CRP_b_c</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#CRP_b/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#EYFP_gene/EYFP_gene_CRP_b_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://shortbol.org/v2#EYFP_gene/EYFP_gene_CRP_b_c_i_precedes_EYFP_cds_c/1">
+        <sbol:displayId>EYFP_gene_CRP_b_c_i_precedes_EYFP_cds_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:version>1</sbol:version>
+        <sbol:subject rdf:resource="http://shortbol.org/v2#EYFP_gene/EYFP_gene_CRP_b_c/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#EYFP_gene/EYFP_gene_CRP_b_c_i_precedes_EYFP_cds_c"/>
+        <sbol:object rdf:resource="http://shortbol.org/v2#EYFP_gene/EYFP_gene_EYFP_cds_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:version>1</sbol:version>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#EYFP_gene/EYFP_gene_EYFP_cds_c/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#EYFP_cds/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#EYFP_gene/EYFP_gene_EYFP_cds_c"/>
+        <sbol:displayId>EYFP_gene_EYFP_cds_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#Gal4VP16/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#Gal4VP16"/>
+    <sbol:displayId>Gal4VP16</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#cas9_generic/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>cas9_generic</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9_generic"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#EYFP/1">
+    <sbol:displayId>EYFP</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#EYFP"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#Gal4VP16_cds/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#Gal4VP16_cds"/>
+    <sbol:displayId>Gal4VP16_cds</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#mKate/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate"/>
+    <sbol:displayId>mKate</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#CRP_b/1">
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>CRP_b</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#CRP_b_sequence/1"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRP_b"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#cas9m_BFP_gene/1">
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_pConst_c_i_precedes_cas9m_BFP_cds_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_cas9m_BFP_cds_c/1"/>
+        <sbol:displayId>cas9m_BFP_gene_pConst_c_i_precedes_cas9m_BFP_cds_c</sbol:displayId>
+        <sbol:subject rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_pConst_c/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_pConst_c_i_precedes_cas9m_BFP_cds_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_cas9m_BFP_cds_c/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#cas9m_BFP_cds/1"/>
+        <sbol:displayId>cas9m_BFP_gene_cas9m_BFP_cds_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_cas9m_BFP_cds_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_pConst_c/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#pConst/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene/cas9m_BFP_gene_pConst_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>cas9m_BFP_gene_pConst_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:displayId>cas9m_BFP_gene</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#gRNA_generic/1">
+    <sbol:displayId>gRNA_generic</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_generic"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Rna"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#CRa_U6/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRa_U6"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#CRa_U6_sequence/1"/>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>CRa_U6</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#cas9m_BFP_gRNA_b/1">
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>cas9m_BFP_gRNA_b</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP_gRNA_b"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Complex"/>
+  </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/1">
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>cas9m_BFP_fc</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#cas9m_BFP/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc/1">
+        <sbol:displayId>gRNA_b_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#gRNA_b/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#Gal4VP16_gene/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>Gal4VP16_gene_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#mKate/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>mKate_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc_i_genetic_production_with_mKate_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc_i_genetic_production_with_mKate_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc_i_genetic_production_with_mKate_fc/mKate_gene_fc_i_genetic_production_with_mKate_fc_mKate_fc_i_product/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>mKate_gene_fc_i_genetic_production_with_mKate_fc_mKate_fc_i_product</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc_i_genetic_production_with_mKate_fc/mKate_gene_fc_i_genetic_production_with_mKate_fc_mKate_fc_i_product"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc_i_genetic_production_with_mKate_fc/mKate_gene_fc_i_genetic_production_with_mKate_fc_mKate_gene_fc_i_participation_promoter/1">
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc_i_genetic_production_with_mKate_fc/mKate_gene_fc_i_genetic_production_with_mKate_fc_mKate_gene_fc_i_participation_promoter"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:displayId>mKate_gene_fc_i_genetic_production_with_mKate_fc_mKate_gene_fc_i_participation_promoter</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>mKate_gene_fc_i_genetic_production_with_mKate_fc</sbol:displayId>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#cas9m_BFP_gene/1"/>
+        <sbol:displayId>cas9m_BFP_gene_fc</sbol:displayId>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:version>1</sbol:version>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc_i_degradation/1">
+        <sbol:displayId>Gal4VP16_fc_i_degradation</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc_i_degradation"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc_i_degradation/Gal4VP16_fc_i_reactant/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc_i_degradation/Gal4VP16_fc_i_reactant"/>
+            <sbol:displayId>Gal4VP16_fc_i_reactant</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc_i_degradation/1">
+        <sbol:displayId>gRNA_b_fc_i_degradation</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc_i_degradation"/>
+        <sbol:version>1</sbol:version>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc_i_degradation/gRNA_b_fc_i_reactant/1">
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>gRNA_b_fc_i_reactant</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc_i_degradation/gRNA_b_fc_i_reactant"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+        <sbol:displayId>EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc_EYFP_gene_fc_i_stimulator/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc_EYFP_gene_fc_i_stimulator"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc/1"/>
+            <sbol:displayId>EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc_EYFP_gene_fc_i_stimulator</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc_Gal4VP16_fc_i_stimulated/1">
+            <sbol:version>1</sbol:version>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc_Gal4VP16_fc_i_stimulated"/>
+            <sbol:displayId>EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc_Gal4VP16_fc_i_stimulated</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc_i_stimulation_with_Gal4VP16_fc"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#EYFP_gene/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc"/>
+        <sbol:displayId>EYFP_gene_fc</sbol:displayId>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc_i_degradation/1">
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc_i_degradation"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>mKate_fc_i_degradation</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc_i_degradation/mKate_fc_i_reactant/1">
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>mKate_fc_i_reactant</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc_i_degradation/mKate_fc_i_reactant"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#mKate_gene/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>mKate_gene_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/mKate_gene_fc"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc_cas9m_BFP_fc_i_product/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc_cas9m_BFP_fc_i_product"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc/1"/>
+            <sbol:displayId>cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc_cas9m_BFP_fc_i_product</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:displayId>cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc_cas9m_BFP_gene_fc_i_participation_promoter/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc/1"/>
+            <sbol:displayId>cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc_cas9m_BFP_gene_fc_i_participation_promoter</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc/cas9m_BFP_gene_fc_i_genetic_production_with_cas9m_BFP_fc_cas9m_BFP_gene_fc_i_participation_promoter"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc_Gal4VP16_fc_i_product/1">
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc_Gal4VP16_fc_i_product</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc_Gal4VP16_fc_i_product"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc_Gal4VP16_gene_fc_i_participation_promoter/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc_Gal4VP16_gene_fc_i_participation_promoter"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc_Gal4VP16_gene_fc_i_participation_promoter</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_gene_fc_i_genetic_production_with_Gal4VP16_fc"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc_gRNA_b_fc_i_product/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc_gRNA_b_fc_i_product"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc/1"/>
+            <sbol:displayId>gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc_gRNA_b_fc_i_product</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:displayId>gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc_gRNA_b_gene_fc_i_participation_promoter/1">
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc/gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc_gRNA_b_gene_fc_i_participation_promoter"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>gRNA_b_gene_fc_i_genetic_production_with_gRNA_b_fc_gRNA_b_gene_fc_i_participation_promoter</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>EYFP_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#EYFP/1"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:displayId>CRPb_characterization_Circuit</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit"/>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc_i_degradation/1">
+        <sbol:version>1</sbol:version>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc_i_degradation/cas9m_BFP_gRNA_b_fc_i_reactant/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc/1"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>cas9m_BFP_gRNA_b_fc_i_reactant</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc_i_degradation/cas9m_BFP_gRNA_b_fc_i_reactant"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>cas9m_BFP_gRNA_b_fc_i_degradation</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc_i_degradation"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc_i_degradation/1">
+        <sbol:displayId>EYFP_fc_i_degradation</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc_i_degradation"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc_i_degradation/EYFP_fc_i_reactant/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:displayId>EYFP_fc_i_reactant</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc_i_degradation/EYFP_fc_i_reactant"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:module>
+      <sbol:Module rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/1">
+        <sbol:displayId>Template_Module</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#CRISPR_Template/1"/>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/cas9m_BFP_fc_mapsTo_cas9_generic_fc/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/cas9m_BFP_fc_mapsTo_cas9_generic_fc"/>
+            <sbol:displayId>cas9m_BFP_fc_mapsTo_cas9_generic_fc</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:remote rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc/1"/>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#useLocal"/>
+            <sbol:local rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc/1"/>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/EYFP_fc_mapsTo_target_fc/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/EYFP_fc_mapsTo_target_fc"/>
+            <sbol:version>1</sbol:version>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#useLocal"/>
+            <sbol:displayId>EYFP_fc_mapsTo_target_fc</sbol:displayId>
+            <sbol:remote rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_fc/1"/>
+            <sbol:local rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_fc/1"/>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/gRNA_b_fc_mapsTo_gRNA_generic_fc/1">
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/gRNA_b_fc_mapsTo_gRNA_generic_fc"/>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#useLocal"/>
+            <sbol:displayId>gRNA_b_fc_mapsTo_gRNA_generic_fc</sbol:displayId>
+            <sbol:local rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_fc/1"/>
+            <sbol:remote rdf:resource="http://shortbol.org/v2#CRISPR_Template/gRNA_generic_fc/1"/>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+        <sbol:version>1</sbol:version>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/cas9m_BFP_gRNA_b_fc_mapsTo_cas9_gRNA_complex_fc/1">
+            <sbol:version>1</sbol:version>
+            <sbol:local rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc/1"/>
+            <sbol:displayId>cas9m_BFP_gRNA_b_fc_mapsTo_cas9_gRNA_complex_fc</sbol:displayId>
+            <sbol:remote rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc/1"/>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#useLocal"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/cas9m_BFP_gRNA_b_fc_mapsTo_cas9_gRNA_complex_fc"/>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+        <sbol:mapsTo>
+          <sbol:MapsTo rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/EYFP_gene_fc_mapsTo_target_gene_fc/1">
+            <sbol:remote rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc/1"/>
+            <sbol:local rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/EYFP_gene_fc/1"/>
+            <sbol:refinement rdf:resource="http://sbols.org/v2#useLocal"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Template_Module/EYFP_gene_fc_mapsTo_target_gene_fc"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>EYFP_gene_fc_mapsTo_target_gene_fc</sbol:displayId>
+          </sbol:MapsTo>
+        </sbol:mapsTo>
+      </sbol:Module>
+    </sbol:module>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc_i_degradation/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc_i_degradation"/>
+        <sbol:displayId>cas9m_BFP_fc_i_degradation</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc_i_degradation/cas9m_BFP_fc_i_reactant/1">
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc/1"/>
+            <sbol:displayId>cas9m_BFP_fc_i_reactant</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_fc_i_degradation/cas9m_BFP_fc_i_reactant"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000179"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/gRNA_b_gene_fc"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#gRNA_b_gene/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>gRNA_b_gene_fc</sbol:displayId>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#Gal4VP16/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>Gal4VP16_fc</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/Gal4VP16_fc"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc/1">
+        <sbol:displayId>cas9m_BFP_gRNA_b_fc</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#cas9m_BFP_gRNA_b/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRPb_characterization_Circuit/cas9m_BFP_gRNA_b_fc"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+  </sbol:ModuleDefinition>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#CRa_U6_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRa_U6_sequence"/>
+    <sbol:elements>GGTTTACCGAGCTCTTATTGGTTTTCAAACTTCATTGACTGTGCCAAGGTCGGGCAGGAAGAGGGCCTATTTCCCATGATTCCTTCATATTTGCATATACGATACAAGGCTGTTAGAGAGATAATTAGAATTAATTTGACTGTAAACACAAAGATATTAGTACAAAATACGTGACGTAGAAAGTAATAATTTCTTGGGTAGTTTGCAGTTTTAAAATTATGTTTTAAAATGGACTATCATATGCTTACCGTAACTTGAAATATAGAACCGATCCTCCCATTGGTATATATTATAGAACCGATCCTCCCATTGGCTTGTGGAAAGGACGAAACACCGTACCTCATCAGGAACATGTGTTTAAGAGCTATGCTGGAAACAGCAGAAATAGCAAGTTTAAATAAGGCTAGTCCGTTATCAACTTGAAAAAGTGGCACCGAGTCGGTGCTTTTTTTGGTGCGTTTTTATGCTTGTAGTATTGTATAATGTTTTT</sbol:elements>
+    <sbol:displayId>CRa_U6_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#target/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#target"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:displayId>target</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#mKate_cds_sequence/1">
+    <sbol:elements>TCTAAGGGCGAAGAGCTGATTAAGGAGAACATGCACATGAAGCTGTACATGGAGGGCACCGTGAACAACCACCACTTCAAGTGCACATCCGAGGGCGAAGGCAAGCCCTACGAGGGCACCCAGACCATGAGAATCAAGGTGGTCGAGGGCGGCCCTCTCCCCTTCGCCTTCGACATCCTGGCTACCAGCTTCATGTACGGCAGCAAAACCTTCATCAACCACACCCAGGGCATCCCCGACTTCTTTAAGCAGTCCTTCCCTGAGGTAAGTGGTCCTACCTCATCAGGAACATGTGTTTTAGAGCTAGAAATAGCAAGTTAAAATAAGGCTAGTCCGTTATCAACTTGAAAAAGTGGCACCGAGTCGGTGCTACTAACTCTCGAGTCTTCTTTTTTTTTTTCACAGGGCTTCACATGGGAGAGAGTCACCACATACGAAGACGGGGGCGTGCTGACCGCTACCCAGGACACCAGCCTCCAGGACGGCTGCCTCATCTACAACGTCAAGATCAGAGGGGTGAACTTCCCATCCAACGGCCCTGTGATGCAGAAGAAAACACTCGGCTGGGAGGCCTCCACCGAGATGCTGTACCCCGCTGACGGCGGCCTGGAAGGCAGAAGCGACATGGCCCTGAAGCTCGTGGGCGGGGGCCACCTGATCTGCAACTTGAAGACCACATACAGATCCAAGAAACCCGCTAAGAACCTCAAGATGCCCGGCGTCTACTATGTGGACAGAAGACTGGAAAGAATCAAGGAGGCCGACAAAGAGACCTACGTCGAGCAGCACGAGGTGGCTGTGGCCAGATACTGCG</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>mKate_cds_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate_cds_sequence"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#cas9m_BFP_cds/1">
+    <sbol:displayId>cas9m_BFP_cds</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP_cds"/>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#gRNA_b/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#RnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b"/>
+    <sbol:displayId>gRNA_b</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0001998"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#cas9_gRNA_complex/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9_gRNA_complex"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Complex"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>cas9_gRNA_complex</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#gRNA_b_nc_sequence/1">
+    <sbol:elements>AAGGTCGGGCAGGAAGAGGGCCTATTTCCCATGATTCCTTCATATTTGCATATACGATACAAGGCTGTTAGAGAGATAATTAGAATTAATTTGACTGTAAACACAAAGATATTAGTACAAAATACGTGACGTAGAAAGTAATAATTTCTTGGGTAGTTTGCAGTTTTAAAATTATGTTTTAAAATGGACTATCATATGCTTACCGTAACTTGAAAGTATTTCGATTTCTTGGCTTTATATATCTTGTGGAAAGGACGAAACACCGTACCTCATCAGGAACATGTGTTTAAGAGCTATGCTGGAAACAGCAGAAATAGCAAGTTTAAATAAGGCTAGTCCGTTATCAACTTGAAAAAGTGGCACCGAGTCGGTGCTTTTTTT</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_nc_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>gRNA_b_nc_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ModuleDefinition rdf:about="http://shortbol.org/v2#CRISPR_Template/1">
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRISPR_Template/target_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#target/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>target_fc</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_fc"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>cas9_generic_fc</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#cas9_generic/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:version>1</sbol:version>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000169"/>
+        <sbol:displayId>cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc_cas9_gRNA_complex_fc_i_inhibitor/1">
+            <sbol:version>1</sbol:version>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000020"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc_cas9_gRNA_complex_fc_i_inhibitor"/>
+            <sbol:displayId>cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc_cas9_gRNA_complex_fc_i_inhibitor</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc_target_gene_fc_i_inhibited/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000642"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc_target_gene_fc_i_inhibited</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc/cas9_gRNA_complex_fc_i_inhibition_with_target_gene_fc_target_gene_fc_i_inhibited"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_gRNA_complex_fc"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>cas9_gRNA_complex_fc</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#cas9_gRNA_complex/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRISPR_Template/gRNA_generic_fc/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#gRNA_generic/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>gRNA_generic_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/gRNA_generic_fc"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#CRISPR_Template/target_gene_fc/1">
+        <sbol:displayId>target_gene_fc</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#target_gene/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRISPR_Template/target_gene_fc_i_genetic_production_with_target_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRISPR_Template/target_gene_fc_i_genetic_production_with_target_fc/target_gene_fc_i_genetic_production_with_target_fc_target_gene_fc_i_participation_promoter/1">
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc_i_genetic_production_with_target_fc/target_gene_fc_i_genetic_production_with_target_fc_target_gene_fc_i_participation_promoter"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:displayId>target_gene_fc_i_genetic_production_with_target_fc_target_gene_fc_i_participation_promoter</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc_i_genetic_production_with_target_fc"/>
+        <sbol:displayId>target_gene_fc_i_genetic_production_with_target_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRISPR_Template/target_gene_fc_i_genetic_production_with_target_fc/target_gene_fc_i_genetic_production_with_target_fc_target_fc_i_product/1">
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_fc/1"/>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/target_gene_fc_i_genetic_production_with_target_fc/target_gene_fc_i_genetic_production_with_target_fc_target_fc_i_product"/>
+            <sbol:displayId>target_gene_fc_i_genetic_production_with_target_fc_target_fc_i_product</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:displayId>CRISPR_Template</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template"/>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc/1">
+        <sbol:displayId>cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc</sbol:displayId>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000177"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc_cas9_generic_fc_i_reactant/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:displayId>cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc_cas9_generic_fc_i_reactant</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc_cas9_generic_fc_i_reactant"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc/1"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc_gRNA_generic_fc_i_reactant/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000010"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRISPR_Template/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc/cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc_gRNA_generic_fc_i_reactant"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#CRISPR_Template/gRNA_generic_fc/1"/>
+            <sbol:displayId>cas9_generic_fc_i_noncovalent_bonding_with_gRNA_generic_fc_gRNA_generic_fc_i_reactant</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+  </sbol:ModuleDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#gRNA_b_gene/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_nc_c_i_precedes_gRNA_b_terminator_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:object rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_terminator_c/1"/>
+        <sbol:displayId>gRNA_b_gene_gRNA_b_nc_c_i_precedes_gRNA_b_terminator_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_nc_c/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_nc_c_i_precedes_gRNA_b_terminator_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_nc_c/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#gRNA_b_nc/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_nc_c"/>
+        <sbol:displayId>gRNA_b_gene_gRNA_b_nc_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:version>1</sbol:version>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_CRa_U6_c_i_precedes_gRNA_b_nc_c/1">
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>gRNA_b_gene_CRa_U6_c_i_precedes_gRNA_b_nc_c</sbol:displayId>
+        <sbol:subject rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_CRa_U6_c/1"/>
+        <sbol:object rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_nc_c/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_CRa_U6_c_i_precedes_gRNA_b_nc_c"/>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_terminator_c/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_gRNA_b_terminator_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>gRNA_b_gene_gRNA_b_terminator_c</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#gRNA_b_terminator/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:displayId>gRNA_b_gene</sbol:displayId>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_CRa_U6_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#CRa_U6/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_gene/gRNA_b_gene_CRa_U6_c"/>
+        <sbol:displayId>gRNA_b_gene_CRa_U6_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_gene"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#target_gene/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#target_gene"/>
+    <sbol:displayId>target_gene</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#gRNA_b_terminator/1">
+    <sbol:displayId>gRNA_b_terminator</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_terminator"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#cas9m_BFP/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#cas9m_BFP"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>cas9m_BFP</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#mKate_cds/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate_cds"/>
+    <sbol:displayId>mKate_cds</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#mKate_cds_sequence/1"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#mKate_gene/1">
+    <sbol:displayId>mKate_gene</sbol:displayId>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#mKate_gene/mKate_gene_pConst_c/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#pConst/1"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate_gene/mKate_gene_pConst_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>mKate_gene_pConst_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://shortbol.org/v2#mKate_gene/mKate_gene_pConst_c_i_precedes_mKate_cds_c/1">
+        <sbol:displayId>mKate_gene_pConst_c_i_precedes_mKate_cds_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate_gene/mKate_gene_pConst_c_i_precedes_mKate_cds_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="http://shortbol.org/v2#mKate_gene/mKate_gene_mKate_cds_c/1"/>
+        <sbol:subject rdf:resource="http://shortbol.org/v2#mKate_gene/mKate_gene_pConst_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:version>1</sbol:version>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#mKate_gene/mKate_gene_mKate_cds_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate_gene/mKate_gene_mKate_cds_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>mKate_gene_mKate_cds_c</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#mKate_cds/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mKate_gene"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#Gal4VP16_gene/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#Gal4VP16_gene"/>
+    <sbol:displayId>Gal4VP16_gene</sbol:displayId>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_pConst_c_i_precedes_Gal4VP16_cds_c/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_pConst_c_i_precedes_Gal4VP16_cds_c"/>
+        <sbol:subject rdf:resource="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_pConst_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_Gal4VP16_cds_c/1"/>
+        <sbol:displayId>Gal4VP16_gene_pConst_c_i_precedes_Gal4VP16_cds_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_pConst_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_pConst_c"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#pConst/1"/>
+        <sbol:displayId>Gal4VP16_gene_pConst_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_Gal4VP16_cds_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>Gal4VP16_gene_Gal4VP16_cds_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#Gal4VP16_gene/Gal4VP16_gene_Gal4VP16_cds_c"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#Gal4VP16_cds/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#EYFP_cds/1">
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#EYFP_cds"/>
+    <sbol:displayId>EYFP_cds</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#pConst/1">
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pConst"/>
+    <sbol:displayId>pConst</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#gRNA_b_nc/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#gRNA_b_nc"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#gRNA_b_nc_sequence/1"/>
+    <sbol:displayId>gRNA_b_nc</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#CRP_b_sequence/1">
+    <sbol:elements>GCTCCGAATTTCTCGACAGATCTCATGTGATTACGCCAAGCTACGGGCGGAGTACTGTCCTCCGAGCGGAGTACTGTCCTCCGAGCGGAGTACTGTCCTCCGAGCGGAGTACTGTCCTCCGAGCGGAGTTCTGTCCTCCGAGCGGAGACTCTAGATACCTCATCAGGAACATGTTGGAATTCTAGGCGTGTACGGTGGGAGGCCTATATAAGCAGAGCTCGTTTAGTGAACCGTCAGATCGCCTCGAGTACCTCATCAGGAACATGTTGGATCCAATTCGACC</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>CRP_b_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#CRP_b_sequence"/>
+  </sbol:Sequence>
+</rdf:RDF>

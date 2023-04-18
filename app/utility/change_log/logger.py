@@ -1,18 +1,18 @@
 
 import json
 import os
+from flask import session
 from app.graph.utility.graph_objects.node import Node
 from app.graph.utility.graph_objects.edge import Edge
 
-default_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),"logs")
+#default_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),"logs")
 class ChangeLogger:
-    def __init__(self,log_dir=default_dir):
-        self.log_dir = log_dir
-        if not os.path.isdir(self.log_dir):
-            os.mkdir(self.log_dir)
+    def __init__(self):
+        pass
     
     def _get_gn(self,gn):
-        fn = os.path.join(self.log_dir,"-".join(gn)+".json")
+        user_dir = session["user_dir"]
+        fn = os.path.join(user_dir,"-".join(gn)+".json")
         if not os.path.isfile(fn):
             os.mknod(fn)
         return fn
@@ -30,7 +30,7 @@ class ChangeLogger:
 
     def get_changes(self,graph_name):
         fn = self._get_gn(graph_name)
-        with open(os.path.join(self.log_dir,fn)) as f:
+        with open(os.path.join(fn)) as f:
             changes = json.load(f)
         for change in changes:
             for k,v in change.items():
@@ -120,6 +120,7 @@ class ChangeLogger:
                 "key" : edge.get_type(),
                 "properties" : edge.get_properties(),
                 "graph_type" : "edge"}
+    
 logger = ChangeLogger()
 
 

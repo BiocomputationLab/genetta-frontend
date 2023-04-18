@@ -1,4 +1,5 @@
 import os
+import json
 from flask_wtf import FlaskForm
 from wtforms import SubmitField
 from wtforms import TextAreaField
@@ -8,6 +9,7 @@ from wtforms import FileField
 from wtforms import validators
 from wtforms import FormField
 from wtforms.form import BaseForm
+from wtforms import PasswordField
 graph_choices = [('SBOL', 'SBOL'), ("GBK", "Genbank")]
 r_mode = [("automated", "Automated"), ("semi", "Semi-Automated")]
 
@@ -47,6 +49,24 @@ class PasteForm(FlaskForm):
     submit_paste = SubmitField('Submit')
     paste = TextAreaField('Paste', validators=[validators.InputRequired()])
 
+class CreateUserForm(FlaskForm):
+    class Meta:
+        csrf = False
+    username = TextAreaField("Username", validators=[validators.InputRequired()])
+    password = PasswordField("Password", validators=[validators.InputRequired()])
+    submit = SubmitField('Submit')
+
+class CreateAdminForm(FlaskForm):
+    class Meta:
+        csrf = False
+    username = TextAreaField("Username", validators=[validators.InputRequired()])
+    password = PasswordField("Password", validators=[validators.InputRequired()])
+    submit = SubmitField('Submit')
+
+class AdminLogoutForm(FlaskForm):
+    class Meta:
+        csrf = False
+    submit = SubmitField('Logout')
 
 class UploadDesignForm(UploadForm):
     class Meta:
@@ -87,6 +107,12 @@ class ConnectorFormFalse(FlaskForm):
     class Meta:
         csrf = False
     cff_submit = SubmitField('No')
+
+class LargeGraphForm(FlaskForm):
+    class Meta:
+        csrf = False
+    lg_confirm = SubmitField('Continue')
+    lg_decline = SubmitField("Return")
 
 def add_remove_graph_form(choices, **kwargs):
     class RemoveGraphForm(FlaskForm):
@@ -194,3 +220,21 @@ def add_choose_graph_enhancement_form(choices,pipelines, **kwargs):
     setattr(ChooseGraphForm, "pipelines", SelectField(
         "Enhancement Factor", choices=[(c, c) for c in pipelines]))
     return ChooseGraphForm(**kwargs)
+
+
+def create_example_design_form(expanation_file, **kwargs):
+    class ExampleDesignForm(FlaskForm):
+        class Meta:
+            csrf = False
+        submit_example = SubmitField('Submit')
+        close = SubmitField("Cancel")
+    with open(expanation_file) as f:
+        data = json.load(f)
+    examples = []
+    for k,v in data.items():
+        data = {"label":k.split(".")[0],"description":v}
+        identifier = k
+        examples.append((identifier,BooleanField,data))
+    stage_form = form_from_fields([(field_id,f_type(**data)) for field_id,f_type,data in examples])
+    setattr(ExampleDesignForm, "examples",FormField(stage_form))
+    return ExampleDesignForm(**kwargs)

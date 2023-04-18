@@ -7,6 +7,9 @@ class EditorVisual(AbstractDesignVisual):
     def __init__(self,graph):
         super().__init__(EditorBuilder(graph))
 
+    def get_add_node_options(self,n_key,n_type,n_seq,n_desc):
+        return self._builder.get_add_node_options(n_key,n_type,n_seq,n_desc)
+        
     def get_io_nodes(self,predicate):
         return self._builder.get_io_nodes(predicate)
     

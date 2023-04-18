@@ -17,14 +17,19 @@ The local running is when both the Genetta server AND frontend are hosted extern
 The partially hosted running is when the Genetta server is hosted externally and the frontend is ran locally.
 #### Using Docker
 1. Navigate to your install directory
-2. `sudo chmod +x local.sh`
-3. `./local.sh`
-4. Open a browser and enter: http://127.0.0.1:5000/
-5. The landing page has information for using the tool.
+2. Within the file, modify these three settings to the correct values:
+	1. NEO4J_HOST
+	2. NEO4J_PORT
+	3. NEO4J_AUTH
+3. `sudo chmod +x frontend.sh`
+4. `./frontend.sh`
+5. Open a browser and enter: http://127.0.0.1:5000/
+6. The landing page has information for using the tool.
 #### Without Docker
+1. Clone repository `$ git clone https://github.com/Biocomputation-CBGP/genetta-frontend`
 1. Navigate to your install directory
 2. `python -m pip install -r requirements.txt`
-3.  $ FLASK_APP=router.py python3 -m flask run
+3. `NEO4J_HOST=<HOST> NEO4J_PORT=<PORT> NEO4J_AUTH=<Username/Password> FLASK_APP=router.py python3 -m flask run`
 4.  Open a browser and enter: http://127.0.0.1:5000/
 5.  The landing page has information for using the tool.
 
@@ -32,15 +37,17 @@ The partially hosted running is when the Genetta server is hosted externally and
 ### Local
 The local running is when both the Genetta server AND frontend are ran locally on the same machine.
 #### Using Docker
-1. Navigate to your install directory
-2. `sudo chmod +x local.sh`
-3. `./local.sh`
-4. Open a browser and enter: http://127.0.0.1:5000/
-5. The landing page has information for using the tool.
+1. Clone repository `$ git clone https://github.com/Biocomputation-CBGP/genetta-frontend`
+2. Navigate to your install directory
+3. `sudo chmod +x local.sh`
+4. `./local.sh`
+5. Open a browser and enter: http://127.0.0.1:5000/
+6. The landing page has information for using the tool.
+
 #### Without Docker
 If docker is not available, here is a brief guide to installing neo4j with links to more comprehensive installation guides. 
 Note this guide assumes a Debian based operating system.
-* `$ git clone https://github.com/intbio-ncl/genet2`
+* `$ git clone https://github.com/Biocomputation-CBGP/genetta-frontend`
 *  Install Neo4j (https://neo4j.com/docs/operations-manual/current/installation/)
 	1. `$ wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -`
 	2. `$ echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list`

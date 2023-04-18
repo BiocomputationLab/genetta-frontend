@@ -380,7 +380,7 @@ class TestSeeder(unittest.TestCase):
 
 
     def test_all_integrate(self):
-        self.fail("Run this seperatley (And with backups), it will remove the truth graph.")
+        #self.fail("Run this seperatley (And with backups), it will remove the truth graph.")
         self.seeder.enable_all()
         self.seeder.build()
         tg = self.wg.truth

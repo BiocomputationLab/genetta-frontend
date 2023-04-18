@@ -24,9 +24,11 @@ prefix = "https://synbiohub.org/public/igem/"
 
 def convert(filename, neo_graph, graph_name):
     graph = Graph()
+    directory,name =  os.path.split(os.path.abspath(filename))
+    name = name.split(".")[0]
     for record in SeqIO.parse(filename, "genbank"):
         seq = record.seq
-        name = os.path.basename(filename).split(".")[0]
+        
         subject = _build_uri(prefix,name)
         sources = [f for f in record.features if f.type == "source"]
         props = ""
@@ -84,7 +86,7 @@ def convert(filename, neo_graph, graph_name):
                 components=components, sas=sas, props=props)
 
     sbol = _serialise(graph)
-    out_fn = name + ".xml"
+    out_fn = os.path.join(directory,name + ".xml")
     with open(out_fn, 'w') as o:
         o.write(sbol)
     return sbol_convert(out_fn,neo_graph,graph_name)

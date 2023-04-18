@@ -1,0 +1,13 @@
+{
+    "NOR_tamsir.xml": "NOR logic gate built by Tamsir and colleagues, this gate outputs 1 (i.e., target gene expressed) if both inputs are 0, and outputs 0 (i.e., target gene not expressed) in any other case.",
+    "Digitalizer_all_or_nothing.xml": "A genetic device to digitalize gene expression into a sharp on/off signal. The goal of the digitalizer circuit is to minimise the leakage expression of a specific gene of interest while maximising the full production.",
+    "cello_0x87.xml" : "A circuit from the Cello library couples four NOR logic gates and one OR logic gate and uses three molecular reagents, five regulatory proteins, five genes and ten promoters.",
+    "cello_0xC7.xml" : "A circuit from the Cello library couples three NOR logic gates, one OR logic gate and one inverter and uses three molecular reagents, eight regulatory proteins, five genes and nine promoters.",
+    "BBa_B0015.xml" : "Double terminator consisting of BBa_B0010 and BBa_B0012. Taken from the IGEM parts repository.",
+    "CRISPR_Repression.xml" : "CRISPR Repression Model.",
+    "abstract_NOR.xml" : "Abstract definition of NOR gate without implemenation details.",
+    "implicit_NOR.xml" : "abstract_NOR with implementation details. Some details are abstracted such as protein repression.",
+    "explicit_NOR.xml" : "implicit_NOR with more information defined such as input factors and proteins.",
+    "GeneticToggleSwitch.xml" : "LacI/TetR toggle switch similar to those constructed in Gardner et al.",
+    "pSEVA211.xml" : "Cloning vector pSEVA211. RESISTANCE: Km, ORI: R6K, CARGO: MCS-default"
+}

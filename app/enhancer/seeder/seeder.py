@@ -4,7 +4,6 @@ from app.enhancer.seeder.datasets.igem import IGEM
 from app.enhancer.seeder.datasets.vpr import VPR
 from app.enhancer.seeder.aligner import Aligner
 
-
 def _add_dataset(obj, ds):
     e_name = f'enable_{ds.__class__.__name__}'.lower()
     d_name = f'disable_{ds.__class__.__name__}'.lower()

@@ -51,7 +51,18 @@ class EditorBuilder(DesignBuilder):
             return True
         return False
     
+    def get_add_node_options(self,key,type,sequence,description):
+        gn = self.get_loaded_design_names()
+        props = {"graph_name" : gn,
+                "name":_get_name(key)}
+        if sequence is not None:
+            props[model.identifiers.predicates.has_sequence] = sequence
+        if description is not None:
+            props[DCTERMS.description] = description
 
+        entity = Node(key,type,**props)
+        return self._enhancer.get_canonical_entity(entity,gn)
+    
     def get_io_nodes(self, predicate):
         inputs = {}
         outputs = {}

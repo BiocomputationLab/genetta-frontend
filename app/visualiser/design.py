@@ -1,15 +1,18 @@
 import re
+import os
+import json
 from inspect import signature, getargspec
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 from dash import callback_context
-
+from flask import session
 from app.visualiser.abstract_dashboard.utility.callback_structs import *
 from app.visualiser.visual.design import DesignVisual
 from app.visualiser.abstract_dashboard.abstract import AbstractDash
 
 assets_ignore = '.*bootstrap.*'
 hFalse = False
+user_gns = "graph_names.json"
 class DesignDash(AbstractDash):
     def __init__(self, name, server, graph):
         super().__init__(DesignVisual(graph), name, server,
@@ -18,20 +21,16 @@ class DesignDash(AbstractDash):
         
     def _build_app(self):
         # Add Options
-        form_elements, identifiers, maps = self._create_form_elements(
-            self.visualiser, id_prefix=id_prefix)
-
+        form_elements, ids, maps = self._create_form_elements(self.visualiser, id_prefix=id_prefix)
         del maps["cyto_preset"]
-        preset_identifiers, identifiers, preset_output, preset_state = self._generate_inputs_outputs(
-            identifiers)
+        preset_ids, ids, preset_os, preset_s = self._generate_inputs_outputs(ids)
 
-        update_i.update(identifiers)
-        preset_i.update(preset_identifiers)
-        preset_o.update(preset_output)
-
-        gns = [{"label": c, "value": c} for c in self.visualiser.get_design_names()]
+        update_i.update(ids)
+        preset_i.update(preset_ids)
+        preset_o.update(preset_os)
+        load_o.update({k:Output(v.component_id,v.component_property) for k,v in preset_ids.items()})
         lp =  [{"label": c, "value": c} for c in self.visualiser.get_load_predicates()]
-        inp = (self.create_dropdown(load_s["gns"].component_id, gns, multi=True,placeholder="Load Design") + 
+        inp = (self.create_dropdown(load_s["gns"].component_id, [], multi=True,placeholder="Load Design") + 
                self.create_dropdown(load_s["lp"].component_id,lp,placeholder="Load Predicate") +
                self.create_line_break(10) + self.create_button(load_i.component_id,"Submit"))
         acc_elements = [("Load Design", inp)]
@@ -39,10 +38,10 @@ class DesignDash(AbstractDash):
         
         manual = self._create_manual_toolbar()
         form_div = self.create_div(graph_type_o["id"].component_id, form_elements)
-        options = self.create_sidebar(not_modifier_identifiers["sidebar_id"], "Options", form_div, className="col sidebar")
+        options = self.create_sidebar(not_modifier_identifiers["sidebar_id"], "Options", form_div, className="col-sm-auto sidebar")
         figure = self.visualiser.empty_graph(graph_id)
-        graph = self.create_div(update_o["graph_id"].component_id, [figure], className="col")
-        graph = self.create_div(load_o.component_id, graph)
+        graph = self.create_div(update_o["graph_id"].component_id, [figure])
+        graph = self.create_div(load_o["graph_content"].component_id, graph,className="col")
         legend = self.create_div(update_o["legend_id"].component_id,[], className="col sidebar")
         elements = options+graph+legend+manual
         container = self.create_div("row-main", elements, className="row flex-nowrap no-gutters")
@@ -92,9 +91,9 @@ class DesignDash(AbstractDash):
             return self.label_color(*args)
         
         self.add_callback(update_inputs_inner, [update_i_i], [update_i_o])
-        self.add_callback(load_inner, [load_i], [load_o],load_s.values())
+        self.add_callback(load_inner, [load_i], load_o.values(),load_s.values())
         self.add_callback(update_graph_inner, update_i.values(), update_o.values())
-        self.add_callback(update_preset_inner, preset_i.values(), preset_o.values(), preset_state.values())
+        self.add_callback(update_preset_inner, preset_i.values(), preset_o.values(), preset_s.values())
         self.add_callback(docs_modal_inner, docs_modal_i.values(), docs_modal_o.values(), doc_modal_s)
         self.add_callback(info_modal_inner, info_modal_i.values(), info_modal_o.values(), info_modal_s)
         self.add_callback(man_tool_inner, man_tool_i.values(), man_tool_o.values(), man_tool_s)
@@ -107,17 +106,26 @@ class DesignDash(AbstractDash):
         self.build()
 
     def update_inputs(self,style):
-        return [[{"label": c, "value": c} for c in self.visualiser.get_design_names()]]
+        all_design_names = self.visualiser.get_design_names()
+        user_dn_file = os.path.join(session.get("user_dir"),user_gns)
+        if not os.path.isfile(user_dn_file):
+            d_names = []
+        else:
+            with open(user_dn_file) as f:
+                d_names = json.load(f)
+        return [[{"label": c, "value": c} for c in 
+                 list(set(all_design_names)&set(d_names))]]
 
     def load(self,click,gns,lp):
         if not gns or not isinstance(self.visualiser, DesignVisual):
             raise PreventUpdate()
         ctx = callback_context
         if ctx.triggered:
+            self.visualiser.reset()
             self.visualiser.set_design_names(gns,lp)
             figure = self.visualiser.build(graph_id=graph_id)
-            d = self.create_div(update_o["graph_id"].component_id, figure, className="col")
-            return d
+            d = self.create_div(update_o["graph_id"].component_id, figure)
+            return d,self.visualiser.set_standard_preset.__name__
         else:
             raise PreventUpdate()
 
@@ -434,7 +442,15 @@ class DesignDash(AbstractDash):
         if adv_modal_i["submit_adv"].component_id in changed_id:
             form = _derive_form(form)
             for k, v in form.items():
-                cur_layout.add_param(k, v)
+                if v == "":
+                    continue
+                p_type = cur_layout.settings[k]
+                try:
+                    cur_layout.add_param(k, p_type(v))
+                except TypeError:
+                    cur_layout.add_param(k, v)
+                    
+                
             return False, c, cur_layout.params
         if adv_modal_i["open_adv"].component_id in changed_id:
             cur_layout = self.visualiser.layout
@@ -452,13 +468,15 @@ class DesignDash(AbstractDash):
                     title = title + f' - {v.__name__}'
                 elif v == bool:
                     marks = {0: "False", 1: "True"}
+                    if isinstance(dv,bool):
+                        dv = int(dv)
                     inp = self.create_slider(k, 0, 1, dv, 1, marks)
                 elif isinstance(v, list):
                     choices = [{"label": c, "value": c} for c in v]
                     inp = self.create_dropdown(k, choices, dv)
                 else:
                     raise NotImplementedError()
-                l_children += self.create_heading_6('', title)
+                l_children += self.create_heading_4('', title)
                 l_children += inp
                 l_children += self.create_line_break(2)
             l_div = self.create_div("layout_settings", l_children)
@@ -504,7 +522,7 @@ class DesignDash(AbstractDash):
                 default_val = int((min_v + max_v) / 2)
                 step = 1
 
-                element += (self.create_heading_6("", name) +
+                element += (self.create_heading_4("", name) +
                             self.create_slider(identifier, min_v, max_v, default_val=default_val, step=step))
                 identifiers[k] = Input(identifier, "value")
                 variable_input_list_map[identifier] = [min_v, max_v]
@@ -524,7 +542,7 @@ class DesignDash(AbstractDash):
 
                 variable_input_list_map[identifier] = [
                     l["value"] for l in inputs]
-                element = (self.create_heading_6(k, name) +
+                element = (self.create_heading_4(k, name) +
                            self.create_radio_item(identifier, inputs, value=default_button))
                 identifiers[k] = Input(identifier, "value")
                 docstring += self._build_docstring(name, v)
@@ -552,7 +570,7 @@ class DesignDash(AbstractDash):
             export_modal_o["data"].component_id, [])
         export_modal = self.create_modal(export_modal_o["id"].component_id,
                                          export_modal_i["close_export"].component_id,
-                                         "Export", export_div)
+                                         "Export Data", export_div)
         adv_button = self.create_div(
             adv_modal_i["open_adv"].component_id, [], className="adv-tip col")
         adv_opn = self.create_div(adv_modal_o["form"].component_id, [])
@@ -609,7 +627,8 @@ class DesignDash(AbstractDash):
                                "node_text",
                                "set_design_names",
                                "get_load_predicates",
-                               "get_loaded_design_names"]
+                               "get_loaded_design_names",
+                               "reset"]
 
         options = {"preset": {},
                    "mode": {},
@@ -665,13 +684,13 @@ class DesignDash(AbstractDash):
         return options
 
     def _generate_inputs_outputs(self, identifiers):
-        preset_identifiers = {"preset": identifiers["preset"]}
+        preset_ids = {"preset": identifiers["preset"]}
         del identifiers["preset"]
         outputs = {k: Output(v.component_id, v.component_property)
                    for k, v in identifiers.items()}
         states = {k: State(v.component_id, v.component_property)
                   for k, v in identifiers.items()}
-        return preset_identifiers, identifiers, outputs, states
+        return preset_ids, identifiers, outputs, states
 
     def _build_docstring(self, doc_name, functions):
         doc_body = self.create_heading_4(doc_name, doc_name)

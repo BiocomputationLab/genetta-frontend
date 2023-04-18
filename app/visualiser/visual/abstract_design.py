@@ -23,6 +23,10 @@ class AbstractDesignVisual(AbstractVisual):
         self._shape_h = ShapeHandler(self._builder)
         self.set_concentric_layout()
 
+    def reset(self):
+        super().reset()
+        self.set_concentric_layout()
+
     def get_design_names(self):
         return self._builder.get_design_names()
     

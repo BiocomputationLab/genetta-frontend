@@ -284,13 +284,18 @@ def _handle_deferals(graph):
 def _cast_properties(properties):
     c_props = {}
     for k,v in properties.items():
-        if urlparse(k).netloc == "":
-            continue
-        if urlparse(v).netloc != "":
-            v = URIRef(v)
-        else:
-            v = Literal(v)
-        c_props[URIRef(k)] = v
+        if not isinstance(v,list):
+            v = [v]
+        for element in v:
+            if element == "":
+                continue
+            if urlparse(k).netloc == "":
+                continue
+            if urlparse(element).netloc != "":
+                element = URIRef(element)
+            else:
+                element = Literal(element)
+            c_props[URIRef(k)] = element
     return c_props
 
 def _derive_fc(interaction,cd,graph):

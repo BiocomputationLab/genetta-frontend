@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+    <div class="col" align="center">
+        <br><br>
+        <h1>Admin Panel</h1>
+        <br><br>
+    </div>
+</div>
+{% if tg_form %}
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h2>Truth Graph</h2>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ tg_form.hidden_tag() }}
+                    <div class="row gy-5">
+                        <div class="col">
+                            {{ tg_form.tg_save(class="btn btn-secondary") }}
+                        </div>
+                        <div class="col">
+                            {{ tg_form.tg_reseed(class="btn btn-secondary") }}
+                        </div>
+                        <div class="col">
+                            {{ tg_form.tg_expand(class="btn btn-secondary") }}
+                        </div>
+                        <div class="col">
+                            {{ tg_form.files() }}
+                            <br>
+                            {{ tg_form.tg_restore(class="btn btn-secondary") }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if drop_projection %}
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Drop Projections</h2>
+            </div>
+            <div class="card-body">
+                <div id="drop_projection">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {{ drop_projection.hidden_tag() }}
+                        <div class="form-group">
+                            {{ drop_projection.graphs.label(for="graphs") }}
+                            {{ drop_projection.graphs(class="form-control") }}
+                            <br>
+                        </div>
+                        {{ drop_projection.submit(class="btn btn-secondary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <br>
+</div>
+{% endblock %}

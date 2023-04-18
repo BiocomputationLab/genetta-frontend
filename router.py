@@ -1,15 +1,22 @@
 import os
 import shutil
-import uuid
+import json
 import time
 
+from xml.sax._exceptions import SAXParseException
+from rdflib.exceptions import ParserError
 from flask import Flask
 from flask import session
 from flask import render_template
 from flask import redirect
 from flask import send_from_directory
 from flask import request
+from flask import url_for
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from flask_login import current_user
+from flask_login import login_user
+from flask_login import logout_user
+from flask_login import login_required
 
 from app.utility import forms
 from app.utility import form_handlers
@@ -17,6 +24,7 @@ from app.utility.sbol_connector.connector import SBOLConnector
 from app.converter.handler import file_convert
 from app.converter.sbol_convert import export
 from app.graph.world_graph import WorldGraph
+from app.utility.login import LoginHandler
 
 from app.visualiser.design import DesignDash
 from app.visualiser.editor import EditorDash
@@ -31,11 +39,22 @@ static_dir = os.path.join(root_dir, "assets")
 template_dir = os.path.join(root_dir, "templates")
 sessions_dir = os.path.join(root_dir, "sessions")
 truth_save_dir = os.path.join(root_dir, "truth_saves")
+example_dir = os.path.join(static_dir, "examples")
+example_file = os.path.join(static_dir, "examples","explanation.json")
+user_gns = "graph_names.json"
 
 server = Flask(__name__, static_folder=static_dir,
                template_folder=template_dir)
 
-graph = WorldGraph()
+
+db_host = os.environ.get('NEO4J_HOST', 'localhost')
+db_port = os.environ.get('NEO4J_PORT', '7687')
+db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
+db_auth = tuple(db_auth.split("/"))
+uri = f'neo4j://{db_host}:{db_port}'
+login_graph_name = "login_manager"
+graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
+
 design_dash = DesignDash(__name__, server, graph)
 editor_dash = EditorDash(__name__, server, graph)
 cypher_dash = CypherDash(__name__, server, graph)
@@ -63,44 +82,132 @@ server.config['SESSION_TYPE'] = 'filesystem'
 server.config['SESSION_FILE_THRESHOLD'] = 100
 server.config['SECRET_KEY'] = "Secret"
 server.config['SESSION_FILE_DIR'] = os.path.join(root_dir, "flask_sessions")
+login_manager = LoginHandler(server,graph.driver,login_graph_name)
+login_manager.login_view = "login"
+fn_size_threshold = os.environ.get('FILESIZE_THRESHOLD', 106384)
+
+
+@login_manager.user_loader
+def load_user(user_name):
+    if (login_manager.admin is not None and
+            user_name == login_manager.admin.username):
+        return login_manager.admin
+    for user in login_manager.get_users():
+        if user.username == user_name:
+            return user
+    return None
+
+
+@server.route('/login', methods=['GET', 'POST'])
+def login():
+    create_user_form = forms.CreateUserForm()
+    create_admin_form = forms.CreateAdminForm()
+    if not current_user.is_authenticated:
+        if login_manager.admin is None:
+            if create_admin_form.validate_on_submit():
+                admin = login_manager.add_admin(create_admin_form.username.data,
+                                                create_admin_form.password.data)
+                login_user(admin)
+                if len(list(set(graph.truth.name) & set(graph.get_graph_names()))) == 0:
+                    enhancer.seed_truth_graph()
+                return redirect(url_for('index'))
+            else:
+                return render_template('signup.html', create_admin_form=create_admin_form)
+        if create_user_form.validate_on_submit():
+            un = create_user_form.username.data
+            pw = create_user_form.password.data
+            user = login_manager.get_user(un, pw)
+            if user is None:
+                if login_manager.does_exist(un):
+                    return render_template('signup.html', create_user_form=create_user_form, 
+                                           invalid_username=True)
+                user = login_manager.add_user(un, pw)
+            login_user(user)
+            next = request.args.get('next')
+            return redirect(next or url_for('index'))
+        else:
+            return render_template('signup.html', create_user_form=create_user_form)
+    next = request.args.get('next')
+    return redirect(next or url_for('index'))
+
+
+@server.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("index")
 
 
 @server.route('/', methods=['GET', 'POST'])
 @server.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
     return render_template('index.html')
 
 
+@server.route('/graph-admin', methods=['GET', 'POST'])
+@login_required
+def graph_admin():
+    if not _is_admin():
+        return render_template('invalid_route.html', invalid_credentials=True)
+    tg_form = forms.add_truth_graph_form(truth_save_dir)
+    project_names = graph.driver.project.names()
+    drop_projection = forms.add_remove_projection_form(project_names)
+    success_string = None
+    if tg_form.validate_on_submit():
+        if tg_form.tg_save.data:
+            _save_truth_graph()
+            success_string = f'Truth Graph Saved.'
+        elif tg_form.tg_reseed.data:
+            graph.truth.drop()
+            enhancer.seed_truth_graph()
+            success_string = f'Reset Truth Graph'
+        elif tg_form.tg_expand.data:
+            enhancer.expand_truth_graph()
+            success_string = f'Expanded Truth Graph'
+        elif tg_form.tg_restore.data:
+            fn = os.path.join(truth_save_dir, request.form["files"])
+            graph.truth.drop()
+            graph.truth.load(fn)
+            success_string = f'Restored Truth Graph {request.form["files"]}'
+    elif drop_projection.validate_on_submit():
+        dg = drop_projection.graphs.data
+        if dg == "Remove All":
+            for n in project_names:
+                graph.driver.project.drop(n)
+        else:
+            graph.driver.project.drop(dg)
+    return render_template('admin.html', tg_form=tg_form,
+                           drop_projection=drop_projection,
+                           success_string=success_string)
+
+
 @server.route('/modify-graph', methods=['GET', 'POST'])
+@login_required
 def modify_graph():
     cf_true = forms.ConnectorFormTrue()
     cf_false = forms.ConnectorFormFalse()
     upload_graph = forms.UploadGraphForm()
     paste_graph = forms.PasteGraphForm()
     sbh_graph = forms.SynbioGraphForm()
-    d_names = graph.get_design_names()
-    remove_graph = forms.add_remove_graph_form(d_names)
-    export_graph = forms.add_export_graph_form(d_names)
-    project_names = graph.driver.project.names()
-    drop_projection = forms.add_remove_projection_form(project_names)
-    tg_form = forms.add_truth_graph_form(truth_save_dir)
-
+    lg_form = forms.LargeGraphForm()
+    remove_graph,export_graph = _add_graph_forms()
     add_graph_fn = None
     err_string = None
-    success_str = None
+    success_string = None
     if "visual_filename" in session.keys():
         add_graph_fn = session["visual_filename"]
         g_name = session["graph_name"]
         ft = session["ft"]
     if upload_graph.validate_on_submit():
-        add_graph_fn,g_name = form_handlers.handle_upload(upload_graph, session["session_dir"])
+        add_graph_fn, g_name = form_handlers.handle_upload(upload_graph, session["user_dir"])
         ft = upload_graph.file_type.data
     elif paste_graph.validate_on_submit():
-        add_graph_fn,g_name = form_handlers.handle_paste(paste_graph, session["session_dir"])
+        add_graph_fn, g_name = form_handlers.handle_paste(paste_graph, session["user_dir"])
         ft = paste_graph.file_type.data
     elif sbh_graph.validate_on_submit():
         try:
-            add_graph_fn,g_name = form_handlers.handle_synbiohub(sbh_graph, session["session_dir"], connector)
+            add_graph_fn, g_name = form_handlers.handle_synbiohub(sbh_graph, session["user_dir"], connector)
         except TypeError:
             add_graph_fn = None
         if add_graph_fn is None:
@@ -109,57 +216,56 @@ def modify_graph():
     elif remove_graph.validate_on_submit():
         gn = remove_graph.graphs.data
         graph.remove_design(gn)
-        d_names.remove(gn)
-        remove_graph = forms.add_remove_graph_form(d_names)
+        remove_graph,_ = _add_graph_forms()
         try:
-            os.remove(os.path.join(session["session_dir"],gn+".xml"))
+            os.remove(os.path.join(session["user_dir"], gn+".xml"))
         except FileNotFoundError:
             pass
-        success_str = f'{gn} Removed.'
+        _remove_user_gn(gn)
+        success_string = f'{gn} Removed.'
     elif export_graph.validate_on_submit():
-        out_dir = os.path.join(session["session_dir"], "designs")
+        out_dir = os.path.join(session["user_dir"], "designs")
         try:
             os.mkdir(out_dir)
         except FileExistsError:
             pass
         fn = export_graph.e_graphs.data+".xml"
-        dfn = os.path.join(session["session_dir"],fn)
-        export(dfn,[export_graph.e_graphs.data])
-        shutil.copyfile(dfn, os.path.join(out_dir,fn))
+        dfn = os.path.join(session["user_dir"], fn)
+        export(dfn, [export_graph.e_graphs.data])
+        shutil.copyfile(dfn, os.path.join(out_dir, fn))
         shutil.make_archive(out_dir, 'zip', out_dir)
         shutil.rmtree(out_dir)
-        return send_from_directory(session["session_dir"], "designs.zip", as_attachment=True)
-    elif drop_projection.validate_on_submit():
-        dg = drop_projection.graphs.data
-        if dg == "Remove All":
-            for n in project_names:
-                graph.driver.project.drop(n)
-        else:
-            graph.driver.project.drop(n)
-    elif tg_form.validate_on_submit():
-        if tg_form.tg_save.data:
-            _save_truth_graph()
-            success_str = f'Truth Graph Saved.'
-        elif tg_form.tg_reseed.data:
-            graph.truth.drop()
-            enhancer.seed_truth_graph()
-            success_str = f'Reset Truth Graph'
-        elif tg_form.tg_expand.data:
-            enhancer.expand_truth_graph()
-            success_str = f'Expanded Truth Graph'
-        elif tg_form.tg_restore.data:
-            fn = os.path.join(truth_save_dir,request.form["files"])
-            graph.truth.drop()
-            graph.truth.load(fn)
-            success_str = f'Restored Truth Graph {request.form["files"]}'
+        return send_from_directory(session["user_dir"], "designs.zip", as_attachment=True)
     if add_graph_fn is not None:
         if g_name == "":
             g_name = add_graph_fn.split(os.path.sep)[-1].split(".")[0]
+        if os.path.getsize(add_graph_fn) > fn_size_threshold:
+            if not lg_form.lg_decline.data and not lg_form.lg_confirm.data:
+                session["ft"] = ft
+                session["visual_filename"] = add_graph_fn
+                session["graph_name"] = g_name
+                return render_template('modify_graph.html', upload_graph=upload_graph,
+                                   paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
+                                   remove_graph=remove_graph,large_graph=lg_form)
+            del session["visual_filename"]
+            del session["graph_name"]
+            del session["ft"]
+            if lg_form.lg_decline.data:
+                try:
+                    os.remove(add_graph_fn)
+                except FileNotFoundError:
+                    pass
+                return render_template('modify_graph.html', upload_graph=upload_graph,
+                        paste_graph=paste_graph, sbh_graph=sbh_graph,
+                        remove_graph=remove_graph,
+                        export_graph=export_graph,
+                        err_string=err_string, success_string=success_string)
         if cf_true.cft_submit.data:
             orig_filename = add_graph_fn
             dg = connector.connect(add_graph_fn)
-            add_graph_fn = orig_filename.split("/")[-1].split(".")[0] + "_connected.xml"
-            add_graph_fn = os.path.join(session['session_dir'], add_graph_fn)
+            add_graph_fn = orig_filename.split(
+                "/")[-1].split(".")[0] + "_connected.xml"
+            add_graph_fn = os.path.join(session["user_dir"], add_graph_fn)
             dg.save(add_graph_fn, "xml")
             os.remove(orig_filename)
             del session["visual_filename"]
@@ -177,70 +283,85 @@ def modify_graph():
             session["visual_filename"] = add_graph_fn
             session["graph_name"] = g_name
             return render_template('modify_graph.html', upload_graph=upload_graph,
-                                paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
-                                drop_projection=drop_projection, remove_graph=remove_graph,
-                                cf_true=cf_true, cf_false=cf_false)
+                                   paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
+                                   remove_graph=remove_graph,cf_true=cf_true, cf_false=cf_false)
 
         elif not os.path.isfile(add_graph_fn):
             return render_template('modify_graph.html', upload_graph=upload_graph,
-                                paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
-                                drop_projection=drop_projection, remove_graph=remove_graph)
+                                   paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
+                                   remove_graph=remove_graph)
 
-        file_convert(graph.driver,add_graph_fn,g_name,convert_type=ft)
+        if g_name in graph.get_design_names():
+            return render_template('modify_graph.html', upload_graph=upload_graph,
+                                    paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
+                                    remove_graph=remove_graph, err_string="Graph name is taken.")
+        _add_user_gn(g_name)
+        success,ret_str = _convert_file(add_graph_fn, g_name, ft)
+        if success:
+            success_string = ret_str
+        else:
+            err_string = ret_str
+        remove_graph,export_graph = _add_graph_forms()
         return render_template('modify_graph.html', upload_graph=upload_graph,
-                            paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
-                            drop_projection=drop_projection, remove_graph=remove_graph, success_str="Graph Added.")
+                               paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
+                               remove_graph=remove_graph, success_string=success_string,err_string=err_string)
 
     return render_template('modify_graph.html', upload_graph=upload_graph,
                            paste_graph=paste_graph, sbh_graph=sbh_graph,
-                           remove_graph=remove_graph,tg_form=tg_form,
-                           drop_projection=drop_projection,
-                           export_graph=export_graph, 
-                           err_string=err_string, success_str=success_str)
+                           remove_graph=remove_graph,
+                           export_graph=export_graph,
+                           err_string=err_string, success_string=success_string)
 
 
 @server.route('/visualiser', methods=['GET', 'POST'])
+@login_required
 def visualiser():
     return redirect(design_dash.pathname)
 
 
 @server.route('/editor', methods=['GET', 'POST'])
+@login_required
 def editor():
     return redirect(editor_dash.pathname)
 
 
 @server.route('/cypher', methods=['GET', 'POST'])
+@login_required
 def cypher():
+    if not _is_admin():
+        return render_template('invalid_route.html', invalid_credentials=True)
     return redirect(cypher_dash.pathname)
 
 
 @server.route('/gds', methods=['GET', 'POST'])
+@login_required
 def gds():
     return redirect(projection_dash.pathname)
 
 
 @server.route('/truth', methods=['GET', 'POST'])
+@login_required
 def truth():
     return redirect(truth_dash.pathname)
 
+
 @server.route('/evaluate', methods=['GET', 'POST'])
+@login_required
 def evaluate():
     upload = forms.UploadDesignForm()
-    d_names = graph.get_design_names()
-    cg = forms.add_evaluate_graph_form(d_names)
+    gns = graph.get_design_names()
+    user_d_names = _get_user_gn(gns)
+    cg = forms.add_evaluate_graph_form(user_d_names)
     gn = None
     if request.method == "POST":
         if upload.validate_on_submit():
-            ft = upload.file_type.data
-            fn,gn = form_handlers.handle_upload(upload, session["session_dir"])
-            gn = f'{session["uid"]}-{gn}'
-            graph.remove_design(gn)
-            file_convert(graph.driver,fn,gn,convert_type=ft)
+            gn, _, error = _upload_graph(upload)
+            if error is not None:
+                return render_template("evaluate.html", upload=upload, cg=cg,error_str=error)
         elif cg.validate_on_submit():
             gn = cg.graphs.data
         if gn is not None:
             feedback = enhancer.evaluate_design(gn, flatten=True)
-            # Attach the descriptions here.
             descriptions = _get_evaluator_descriptions(feedback)
             return render_template("evaluate.html", feedback=feedback,
                                    descriptions=descriptions)
@@ -249,6 +370,7 @@ def evaluate():
 
 
 @server.route('/canonicalise', methods=['GET', 'POST'])
+@login_required
 def canonicalise():
     upload = forms.UploadEnhanceDesignForm()
     d_names = graph.get_design_names()
@@ -261,7 +383,9 @@ def canonicalise():
         if "close" in request.form:
             return render_template("canonicalise.html", upload=upload, cg=cg)
         elif upload.validate_on_submit():
-            gn, rm = _upload_graph(upload)
+            gn, rm, error = _upload_graph(upload)
+            if error is not None:
+                return render_template("canonicalise.html", upload=upload, cg=cg,error_str=error)
         elif cg.validate_on_submit():
             rm = cg.run_mode.data
             gn = cg.graphs.data
@@ -300,11 +424,11 @@ def canonicalise():
             else:
                 session["feedback"] = feedback
                 return render_template("canonicaliser.html", upload=upload, cg=cg, s_changes=changes, gn=gn)
-
     return render_template("canonicaliser.html", upload=upload, cg=cg)
 
 
 @server.route('/enhancement', methods=['GET', 'POST'])
+@login_required
 def enhancement():
     d_names = graph.get_design_names()
     pipelines = ["all"] + enhancer.get_pipeline_names()
@@ -318,7 +442,9 @@ def enhancement():
         if "close" in request.form:
             return render_template("enhancement.html", upload=upload, cg=cg)
         elif upload.validate_on_submit():
-            gn, rm = _upload_graph(upload)
+            gn, rm, error = _upload_graph(upload)
+            if error is not None:
+                return render_template("enhancement.html", upload=upload, cg=cg,error_str=error)
             pipeline = upload.pipelines.data
         elif cg.validate_on_submit():
             rm = cg.run_mode.data
@@ -366,47 +492,124 @@ def enhancement():
                 return render_template("enhancement.html", upload=upload, cg=cg, s_changes=changes, gn=gn)
     return render_template("enhancement.html", upload=upload, cg=cg)
 
+@server.route('/tutorial', methods=['GET', 'POST'])
+def tutorial():
+    return render_template('tutorial.html')
 
-@server.route('/export_graph/<gn>', methods=['GET', 'POST'])
-def export_graph(gn):
-    out_dir = os.path.join(session["session_dir"], "designs")
-    try:
-        os.mkdir(out_dir)
-    except FileExistsError:
-        pass
-    fn = gn + ".xml"
-    dfn = os.path.join(session["session_dir"],fn)
-    export(dfn,[gn])
-    shutil.copyfile(dfn, os.path.join(out_dir,fn))
-    shutil.make_archive(out_dir, 'zip', out_dir)
-    shutil.rmtree(out_dir)
-    return send_from_directory(session["session_dir"], "designs.zip", as_attachment=True)
+@server.route('/examples', methods=['GET', 'POST'])
+def examples():
+    example_design_form = forms.create_example_design_form(example_file)
+    if request.method == "POST":
+        ret_strs = {}
+        for k,v in request.form.items():
+            if k == example_design_form.submit_example.id:
+                continue
+            if v != "y":
+                continue
+            g_name = f'{current_user.get_id()} - {k.split(".")[0]}'
+            _add_user_gn(g_name)
+            fn = os.path.join(example_dir,k)
+            if g_name in graph.get_design_names():
+                ret_strs[f'{g_name}: already exists'] = False
+            else:
+                success,ret_str = _convert_file(fn, g_name, "SBOL")
+                ret_strs[f'{g_name}: {ret_str}'] = success
+        return render_template('examples.html',example_design_form=example_design_form,ret_vals=ret_strs) 
+    return render_template('examples.html',example_design_form=example_design_form)
+
+@server.route('/download_example', methods=['GET', 'POST'])
+def download_example():
+    return send_from_directory(static_dir, "nor_gate.xml", as_attachment=True)
 
 @server.before_request
 def before_request_func():
-    if session.get("uid") is None:
-        session['uid'] = str(uuid.uuid4())
-    if session.get("session_dir") is None:
-        session['session_dir'] = os.path.join(sessions_dir, session['uid'])
+    if current_user.get_id() is None:
+        return
+    user_dir = os.path.join(sessions_dir, current_user.get_id())
     try:
-        os.makedirs(os.path.join(sessions_dir, session['uid']))
+        os.makedirs(user_dir)
     except FileExistsError:
         pass
+    session["user_dir"] = user_dir
     _handle_restore_dir()
+
+
+def _convert_file(fn,name,ct):
+    try:
+        file_convert(graph.driver, fn, name, convert_type=ct)
+    except (SAXParseException,ParserError):
+        return False,"Incorrect file type."
+    except Exception as ex:
+        return False,ex
+    return True, "Graph added successfully."
+
+
+def _add_graph_forms():
+    gns = graph.get_design_names()
+    user_d_names = _get_user_gn(gns)
+    remove_graph = forms.add_remove_graph_form(user_d_names)
+    export_graph = forms.add_export_graph_form(user_d_names)
+    return remove_graph,export_graph
+
+
+def _is_admin():
+    admin = login_manager.admin
+    if admin.username == current_user.get_id() and admin.password == current_user.password:
+        return True
+    return False
+
+
+def _get_user_gn(names):
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
+    if not os.path.isfile(user_gn_file):
+        return []
+    with open(user_gn_file) as f:
+        data = json.load(f)
+        return list(set(data) & set(names))
+
+
+def _add_user_gn(gn):
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
+    data = [gn]
+    if os.path.isfile(user_gn_file):
+        with open(user_gn_file) as f:
+            data += json.load(f)
+    with open(user_gn_file, 'w') as outfile:
+        json.dump(data, outfile)
+
+
+def _remove_user_gn(gn):
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
+    if not os.path.isfile(user_gn_file):
+        return
+    with open(user_gn_file) as f:
+        data = json.load(f)
+    data.remove(gn)
+    with open(user_gn_file, 'w') as outfile:
+        json.dump(data, outfile)
+
 
 def _save_truth_graph():
     if not os.path.isdir(truth_save_dir):
         os.mkdir(truth_save_dir)
-    out_fn = os.path.join(truth_save_dir,time.strftime("%Y%m%d-%H%M%S")+".json")
+    out_fn = os.path.join(
+        truth_save_dir, time.strftime("%Y%m%d-%H%M%S")+".json")
     graph.truth.save(out_fn)
+
 
 def _handle_restore_dir():
     cur_time = time.time()
     times = []
+    if not os.path.isdir(truth_save_dir):
+        os.mkdir(truth_save_dir)
+    if len(os.listdir(truth_save_dir)) == 0:
+        _save_truth_graph()
+        return
+
     for fn in os.listdir(truth_save_dir):
-        fn = os.path.join(truth_save_dir,fn)
+        fn = os.path.join(truth_save_dir, fn)
         times.append(cur_time - os.path.getmtime(fn))
-    min_t = min(times,key=lambda x:float(x))
+    min_t = min(times, key=lambda x: float(x))
     if min_t > 86400:
         _save_truth_graph()
 
@@ -414,19 +617,28 @@ def _handle_restore_dir():
     while len(files) > 5:
         times = []
         for fn in files:
-            fn = os.path.join(truth_save_dir,fn)
-            times.append((cur_time - os.path.getmtime(fn),fn))
-        max_t = max(times,key=lambda x:x[0])
+            fn = os.path.join(truth_save_dir, fn)
+            times.append((cur_time - os.path.getmtime(fn), fn))
+        max_t = max(times, key=lambda x: x[0])
         os.remove(max_t[1])
         files = os.listdir(truth_save_dir)
-        
+
+
 def _upload_graph(upload):
     ft = upload.file_type.data
-    fn,gn = form_handlers.handle_upload(upload, session["session_dir"])
-    rm = upload.run_mode.data
+    fn, gn = form_handlers.handle_upload(upload, session["user_dir"])
+    if hasattr(upload,"run_mode"):
+        rm = upload.run_mode.data
+    else:
+        rm = None
     graph.remove_design(gn)
-    file_convert(graph.driver,fn,gn,convert_type=ft)
-    return gn, rm
+    _add_user_gn(gn)
+    success,ret_str = _convert_file(fn, gn, ft)
+    err_string = None
+    if not success:
+        err_string = ret_str
+    return gn,rm,err_string
+
 
 def _get_evaluator_descriptions(feedback):
     descriptions = {}
@@ -434,7 +646,7 @@ def _get_evaluator_descriptions(feedback):
 
     def ged(d):
         for k, v in d.items():
-            desc = evaluators[k].__doc__ 
+            desc = evaluators[k].__doc__
             if desc is None:
                 desc = ""
             descriptions[k] = desc

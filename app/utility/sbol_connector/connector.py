@@ -1,7 +1,7 @@
 
 import os
 from rdflib import URIRef
-
+from requests.exceptions import ConnectionError
 from app.utility.sbol_connector.sbol_identifiers import identifiers
 from app.utility.sbol_connector.interfaces.lcphub_interface import LCPHubInterface
 from app.utility.sbol_connector.interfaces.sevahub_interface import SevaHubInterface
@@ -101,7 +101,10 @@ class SBOLConnector:
             definition = graph.get_rdf_type(o)
             if definition is not None:
                 continue
-            sub_graph = self.get(o)
+            try:
+                sub_graph = self.get(o)
+            except ValueError:
+                continue
             graph.add_graph(sub_graph)
         return graph
 
@@ -118,7 +121,10 @@ class SBOLConnector:
         return False
                 
     def _handle_get(self,identifier,hub,output):
-        graph = hub.get(identifier,output)
+        try:
+            graph = hub.get(identifier,output)
+        except ConnectionError:
+            return None
         if graph is not None:
             return SBOLGraph(graph)
         return None

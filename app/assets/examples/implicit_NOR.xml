@@ -1,0 +1,234 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#pLlac_sequence/1">
+    <sbol:elements>aattgtgagcggataacaattgacattgtgagcggataacaagatactgagcaca</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pLlac_sequence"/>
+    <sbol:displayId>pLlac_sequence</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#pTeT_sequence/1">
+    <sbol:displayId>pTeT_sequence</sbol:displayId>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:version>1</sbol:version>
+    <sbol:elements>ttgacagcttatcatcgataagctttaat</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pTeT_sequence"/>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#pBAD_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pBAD_sequence"/>
+    <sbol:displayId>pBAD_sequence</sbol:displayId>
+    <sbol:elements>atgccatagcatttttatcc</sbol:elements>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#mCherry_sequence/1">
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>mCherry_sequence</sbol:displayId>
+    <sbol:elements>atggtgagcaagggcgaggaggataacatggccatcatcaaggagttcatgcgcttcaaggtgcacatggagggctccgtgaacggccacgagttcgagatcgagggcgagggcgagggccgcccctacgagggcacccagaccgccaagctgaaggtgaccaagggtggccccctgcccttcgcctgggacatcctgtcccctcagttcatgtacggctccaaggcctacgtgaagcaccccgccgacatccccgactacttgaagctgtccttccccgagggcttcaagtgggagcgcgtgatgaacttcgaggacggcggcgtggtgaccgtgacccaggactcctccctgcaggacggcgagttcatctacaaggtgaagctgcgcggcaccaacttcccctccgacggccccgtaatgcagaagaagaccatgggctgggaggcctcctccgagcggatgtaccccgaggacggcgccctgaagggcgagatcaagcagaggctgaagctgaaggacggcggccactacgacgctgaggtcaagaccacctacaaggccaagaagcccgtgcagctgcccggcgcctacaacgtcaacatcaagttggacatcacctcccacaacgaggactacaccatcgtggaacagtacgaacgcgccgagggccgccactccaccggcggcatggacgagctgtacaag</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mCherry_sequence"/>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#lacI/1">
+    <sbol:displayId>lacI</sbol:displayId>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#lacI_sequence/1"/>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#lacI"/>
+  </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="http://shortbol.org/v2#NOR_gate/1">
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#NOR_gate/pBAD_fc_i_stimulation_with_lacI_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/pBAD_fc_i_stimulation_with_lacI_fc/pBAD_fc_i_stimulation_with_lacI_fc_lacI_fc_i_stimulated/1">
+            <sbol:displayId>pBAD_fc_i_stimulation_with_lacI_fc_lacI_fc_i_stimulated</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pBAD_fc_i_stimulation_with_lacI_fc/pBAD_fc_i_stimulation_with_lacI_fc_lacI_fc_i_stimulated"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>pBAD_fc_i_stimulation_with_lacI_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pBAD_fc_i_stimulation_with_lacI_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/pBAD_fc_i_stimulation_with_lacI_fc/pBAD_fc_i_stimulation_with_lacI_fc_pBAD_fc_i_stimulator/1">
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pBAD_fc_i_stimulation_with_lacI_fc/pBAD_fc_i_stimulation_with_lacI_fc_pBAD_fc_i_stimulator"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/pBAD_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:displayId>pBAD_fc_i_stimulation_with_lacI_fc_pBAD_fc_i_stimulator</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:displayId>NOR_gate</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#NOR_gate/lacI_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#lacI/1"/>
+        <sbol:displayId>lacI_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#NOR_gate/pTeT_fc_i_stimulation_with_lacI_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/pTeT_fc_i_stimulation_with_lacI_fc/pTeT_fc_i_stimulation_with_lacI_fc_pTeT_fc_i_stimulator/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/pTeT_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pTeT_fc_i_stimulation_with_lacI_fc/pTeT_fc_i_stimulation_with_lacI_fc_pTeT_fc_i_stimulator"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>pTeT_fc_i_stimulation_with_lacI_fc_pTeT_fc_i_stimulator</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pTeT_fc_i_stimulation_with_lacI_fc"/>
+        <sbol:version>1</sbol:version>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/pTeT_fc_i_stimulation_with_lacI_fc/pTeT_fc_i_stimulation_with_lacI_fc_lacI_fc_i_stimulated/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+            <sbol:displayId>pTeT_fc_i_stimulation_with_lacI_fc_lacI_fc_i_stimulated</sbol:displayId>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc/1"/>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pTeT_fc_i_stimulation_with_lacI_fc/pTeT_fc_i_stimulation_with_lacI_fc_lacI_fc_i_stimulated"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>pTeT_fc_i_stimulation_with_lacI_fc</sbol:displayId>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:version>1</sbol:version>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#NOR_gate/mCherry_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/mCherry_fc"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#mCherry/1"/>
+        <sbol:displayId>mCherry_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#NOR_gate/pLlac_fc/1">
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pLlac_fc"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#pLlac/1"/>
+        <sbol:displayId>pLlac_fc</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#NOR_gate/pBAD_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pBAD_fc"/>
+        <sbol:displayId>pBAD_fc</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#pBAD/1"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate"/>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#NOR_gate/pLlac_fc_i_stimulation_with_mCherry_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/pLlac_fc_i_stimulation_with_mCherry_fc/pLlac_fc_i_stimulation_with_mCherry_fc_mCherry_fc_i_stimulated/1">
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/mCherry_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pLlac_fc_i_stimulation_with_mCherry_fc/pLlac_fc_i_stimulation_with_mCherry_fc_mCherry_fc_i_stimulated"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+            <sbol:displayId>pLlac_fc_i_stimulation_with_mCherry_fc_mCherry_fc_i_stimulated</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pLlac_fc_i_stimulation_with_mCherry_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/pLlac_fc_i_stimulation_with_mCherry_fc/pLlac_fc_i_stimulation_with_mCherry_fc_pLlac_fc_i_stimulator/1">
+            <sbol:displayId>pLlac_fc_i_stimulation_with_mCherry_fc_pLlac_fc_i_stimulator</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pLlac_fc_i_stimulation_with_mCherry_fc/pLlac_fc_i_stimulation_with_mCherry_fc_pLlac_fc_i_stimulator"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/pLlac_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>pLlac_fc_i_stimulation_with_mCherry_fc</sbol:displayId>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#NOR_gate/pTeT_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/pTeT_fc"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>pTeT_fc</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#pTeT/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#NOR_gate/lacI_fc_i_inhibition_with_pLlac_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc_i_inhibition_with_pLlac_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/lacI_fc_i_inhibition_with_pLlac_fc/lacI_fc_i_inhibition_with_pLlac_fc_lacI_fc_i_inhibitor/1">
+            <sbol:displayId>lacI_fc_i_inhibition_with_pLlac_fc_lacI_fc_i_inhibitor</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000020"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc_i_inhibition_with_pLlac_fc/lacI_fc_i_inhibition_with_pLlac_fc_lacI_fc_i_inhibitor"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000169"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#NOR_gate/lacI_fc_i_inhibition_with_pLlac_fc/lacI_fc_i_inhibition_with_pLlac_fc_pLlac_fc_i_inhibited/1">
+            <sbol:participant rdf:resource="http://shortbol.org/v2#NOR_gate/pLlac_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#NOR_gate/lacI_fc_i_inhibition_with_pLlac_fc/lacI_fc_i_inhibition_with_pLlac_fc_pLlac_fc_i_inhibited"/>
+            <sbol:displayId>lacI_fc_i_inhibition_with_pLlac_fc_pLlac_fc_i_inhibited</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000642"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>lacI_fc_i_inhibition_with_pLlac_fc</sbol:displayId>
+      </sbol:Interaction>
+    </sbol:interaction>
+  </sbol:ModuleDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#mCherry/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#mCherry"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#mCherry_sequence/1"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>mCherry</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#pBAD/1">
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#pBAD_sequence/1"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pBAD"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>pBAD</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#lacI_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:version>1</sbol:version>
+    <sbol:elements>aaagaggagaaaatggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggcgatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcacgcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtggtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatcttctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccattgctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagacacccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctggtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcgcgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcggaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaatgagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatgcgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgacgataccgaagacagctcatgttatatcccgccgttaaccaccatcaaacaggattttcgcctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaagggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacgcaaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcccgactggaaagcgggcaggctgcaaacgacgaaaactacgctttagtagcttaataactctgatagtgctagtgtagatctcccaggcatcaaataaaacgaaaggctcagtcgaaagactgggcctttcgttttatctgttgtttgtcggtgaacgctctctactagagtcacactggctcaccttcgggtgggcctttctgcgtttata</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#lacI_sequence"/>
+    <sbol:displayId>lacI_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#pLlac/1">
+    <sbol:displayId>pLlac</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pLlac"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#pLlac_sequence/1"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#pTeT/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#pTeT"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#pTeT_sequence/1"/>
+    <sbol:displayId>pTeT</sbol:displayId>
+  </sbol:ComponentDefinition>
+</rdf:RDF>

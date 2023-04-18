@@ -1,4 +1,3 @@
-from ast import In
 from collections import OrderedDict
 
 from dash.dependencies import Input, Output, State
@@ -18,7 +17,7 @@ update_i_o = Output("load_i", "options")
 load_i = Input("load_submit", "n_clicks")
 load_s = {"gns": State(update_i_o.component_id, "value"),
           "lp": State("lp", "value")}
-load_o = Output("graph_content", "children")
+load_o = {"graph_content" : Output("graph_content", "children")}
 
 update_o = {"graph_id": Output("content", "children"),
             "legend_id": Output("sidebar-right", "children")}
@@ -145,14 +144,25 @@ select_node_o = {"edge_subject": Output(select_node_s["edge_subject"].component_
                 "node_subject_div": Output("node_subject_div", "style"),
                 "node_object_div": Output("node_object_div", "style")}
 
+# -- Add Node --
+add_node_i = {"close_an": Input("close_an", "n_clicks"),
+              "submit_am": Input("submit_am", "n_clicks")}
+add_node_o = {"id": Output("an_modal", "is_open"),
+              "data": Output("an_data", "data"),
+              "selected_cols" : Output("an_data","selected_rows")}
+add_node_s = {"an_open" : State("an_modal", "is_open"),
+            "node_key": State("node_key", "value"),
+            "node_type": State(e_update_o["node_type"].component_id, "value"),
+            "p_list" : State(properties_node_o["p_list"].component_id,"children")}
+
 # -- Modify --
-modify_graph_i = {"submit_am": Input("submit_am", "n_clicks"),
+modify_graph_i = {"data": Input("an_data", "selected_rows"),
                   "add_edge_submit": Input("add_edge_submit", "n_clicks")}
-modify_graph_s = {"node_key": State("node_key", "value"),
+modify_graph_s = {"data": State(add_node_o["data"].component_id, "data"),
                   "node_type": State(e_update_o["node_type"].component_id, "value"),
                   "p_list" : State(properties_node_o["p_list"].component_id,"children"),
                   "edge_subject": State(select_node_s["edge_subject"].component_id, "children"),
                   "edge_predicate": State(e_update_o["edge_predicate"].component_id, "value"),
                   "edge_object": State(select_node_s["edge_object"].component_id, "children")}
 modify_graph_o = {"graph_container": Output(
-    "graph_container", "children")}
+                "graph_container", "children")}

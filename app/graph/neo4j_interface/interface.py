@@ -16,13 +16,11 @@ from app.graph.neo4j_interface.gds.procedures import Procedures
 from app.graph.utility.model.model import model
 from app.utility.change_log.logger import logger
 
-def _connect_db():
-    db_host = os.environ.get('NEO4J_HOST', 'localhost')
-    db_port = os.environ.get('NEO4J_PORT', '7687')
+def _connect_db(uri,auth):
     attempts = 1
     while attempts < 10:
         try:
-            return GraphDataScience(f'neo4j://{db_host}:{db_port}', auth=("neo4j", "Radeon12300"))
+            return GraphDataScience(uri, auth=auth)
         except UnableToConnectError:
             print(f'Attempt: {attempts} to connect to neo4j db.')
             time.sleep(5)
@@ -32,9 +30,9 @@ def _connect_db():
         raise UnableToConnectError("Can't connect to Neo4j database.")
 
 class Neo4jInterface:
-    def __init__(self,reserved_names=None):
+    def __init__(self,uri,auth,reserved_names=None):
         try:
-            self.driver = _connect_db()
+            self.driver = _connect_db(uri,auth)
         except UnableToConnectError:
             self.driver = None
         self.qry_builder = QueryBuilder()

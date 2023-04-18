@@ -1,0 +1,732 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+    <div class="col" align="center">
+        <h1>Tutorial</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <p align="center">Here we discuss the usage for Genetta, where each section contains a textual walkthrough. The
+            tutorial is broken into two sections depending on your needs and interests. Firstly, the <b>user
+                tutorial</b> covers usage only, such as how graphs are loaded and used and includes complementary
+            videos. The <b>technical tutorial</b> explains how the processes are achieved and how the tool works behind
+            the scenes, such as how networks are formed, modified, represented and visualised. Therefore, the former
+            tutorial will be enough to understand how to use the tool, but the technical tutorial will be valuable if
+            you're interested in how aspects are achieved. However, in this case, we still advise reading the user
+            tutorial before moving on to the technical.
+        </p>
+        <p align="center">
+            If you would like an example file to work with during this tutorial, <a
+                href="{{url_for('download_example', filename='logo.png')}}">click here</a>, and the design used
+            within the videos will be downloaded to your computer.
+        </p>
+        <p align="center">
+            During the textual tutorials, we will refer to images representing the aspect of the application we are
+            referring to. Within these images, numbers have been overlaid and referenced within the text to explain
+            the aspect of the tool we are discussing.
+        </p>
+        </p>
+        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="handle_submit_input('user_tutorial')">User
+                Tutorial</button>
+            <button type="button" class="btn btn-secondary"
+                onclick="handle_submit_input('technical_tutorial')">Technical
+                Tutorial</button>
+        </div>
+        <div id="submit_forms">
+            <div id="user_tutorial">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Modifying graphs and managing data
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://www.youtube.com/embed/sK9VyadfwQ4" title="YouTube video" allowfullscreen></iframe>
+                                  </div>
+                                <p>
+                                    This section concerns the "Modifying Graph" section, which acts as your
+                                    management portal. This section enables you to add, remove and export data you
+                                    provided or
+                                    added using Genetta.
+                                </p>
+                                <img src="{{url_for('static', filename='tutorial_1.png')}}" class="img-fluid"
+                                    style="max-width: 100%; height: auto;">
+                                <h4>Adding Designs (1)</h4>
+                                <p>
+                                    Before any designs can be visualised, edited, enhanced or used, they must be
+                                    provided. Genetta currently supports two primary data formats, SBOL and Genbank.
+                                    However, SBOL is recommended over Genbank because it allows for more rich data
+                                    capture, including functional and structural data. While we understand
+                                    traditional
+                                    data formats such as Genbank are ubiquitous, in nearly all cases, without
+                                    manually
+                                    adding more information or using our enhancement systems, visualisation will be
+                                    worse than if an SBOL file is provided.
+                                    Designs can be uploaded with files, pasted, or records within Synbiohub (a
+                                    genetic
+                                    design and parts repository).
+                                </p>
+
+                                <ul>
+                                    <li>To upload a design, press the upload tab, click choose file and find the
+                                        desired
+                                        file from your computer. Also, the type of information is specified (SBOL or
+                                        Genbank). An optional graph name can be provided; if omitted, the filename
+                                        will
+                                        be used as the design name.</li>
+                                    <li>
+                                        The paste option is identical to the upload option, but instead of providing
+                                        a
+                                        file,
+                                        the file's contents are provided. Because the contents don't have a
+                                        filename,
+                                        the
+                                        graph name will be a random string of characters, so it is advised to give a
+                                        name
+                                        manually.</li>
+                                    <li> The final option is to provide a Synbiohub ID. The Synbiohub ID refers to
+                                        the
+                                        "BBa_R0010" part of the URI: <a
+                                            href="https://synbiohub.org/public/igem/BBa_R0010/1">synbiohub.org/public/igem/BBa_R0010/1</a>.
+                                        Alternatively, the full URI can be provided. Genetta will search for this
+                                        information and automatically download it (providing the ID is available).
+                                        For
+                                        some
+                                        cases, the tool may request extra information for the case when the design
+                                        uses
+                                        remote references. For better visualisation, it is advised to click yes.
+                                    </li>
+                                </ul>
+                                <p>
+                                    For each option, the submit button will take the information and create a named
+                                    design within the application.
+                                </p>
+
+                                <h4>Removing Designs (2)</h4>
+                                <p>
+                                    User designs can be removed when you no longer require them. Note: designs will
+                                    be
+                                    automatically removed after an extended time to ensure there is space for more
+                                    users.
+                                    To remove a design, find the graph name in the dropdown section, click the name,
+                                    and
+                                    press submit. After a short period, the graph will be removed from the options
+                                    and
+                                    the application.
+                                </p>
+
+                                <h4>Exporting Designs (3)</h4>
+                                <p>
+                                    The underlying design data can be exported. In this context, export refers to
+                                    the
+                                    data instead of exporting visualisations of the data (this can be done within
+                                    the
+                                    visualiser). The exported data will also include any information that Genetta
+                                    has
+                                    added, whether manually by the user or by automated tools such as enhancement.
+                                    Furthermore, the exported data will always be an SBOL file, even if provided in
+                                    a
+                                    different format, because other forms, namely, Genbank, cannot capture the type
+                                    of
+                                    data that Genetta may encode.
+                                    To export a design, find the graph name in the dropdown section, click the name,
+                                    and
+                                    press submit. The SBOL file will be served as a download onto your computer.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Visualising
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://www.youtube.com/embed/QHgpn3c6VOA" title="YouTube video" allowfullscreen></iframe>
+                                  </div>
+                                <p>
+                                    This section concerns the "Visualiser" tab, which contains the full-featured
+                                    visualiser for all available designs. The visualiser enables you to customise
+                                    the
+                                    representation of your design via several views and then apply some visual
+                                    additions
+                                    depending on your requirements.
+                                </p>
+                                <img src="{{url_for('static', filename='tutorial_2.png')}}" class="img-fluid"
+                                    style="max-width: 100%; height: auto;">
+                                <h4>Loading designs (1)</h4>
+                                <p>
+                                    The first step is to load the design using the dropdown menu that lists all
+                                    currently stored designs. These designs are added using the Modify Graph page
+                                    discussed previously. Note that the visualisation tool can load multiple designs
+                                    and integrate them into a single graph. The load predicate dictates how multiple
+                                    graphs are connected with options of Union (All data in all graphs are loaded,
+                                    Difference (elements that only exist within one graph are loaded) and
+                                    Intersection
+                                    (elements that exist within all graphs are loaded). To load a design, select the
+                                    design
+                                    name(s) from the first dropdown and the load predicate from the second dropdown
+                                    and press submit. If a single design is loaded, the type of load predicate is
+                                    redundant.
+                                </p>
+                                <h4>Visual Canvas (2)</h4>
+                                <p>
+                                    Once the graph is loaded, it is visualised within the dynamic graph panel,
+                                    allowing you to inspect it manually. Depending on the chosen view, nodes
+                                    <b>(2.1)</b>
+                                    represent single data points within a design, such as genetic parts,
+                                    interactions or
+                                    metadata. They can be moved manually by dragging them with your mouse. Edges
+                                    <b>(2.2)</b>
+                                    represent connections between data in a design, such as interactions between
+                                    entities or
+                                    to describe structure. Edges will take the shortest path between the two
+                                    connected
+                                    nodes.
+                                </p>
+                                <h4>Options (3)</h4>
+                                <p>
+                                    The options panel primarily takes inputs and renders the output from the
+                                    visualiser using asynchronous communication between the client and server,
+                                    allowing users
+                                    to view the graph during computation.
+                                </p>
+                                <p>
+                                    Four buttons provide specialised features.
+                                </p>
+                                <ul>
+                                    <li><b>Documentation (3.1)</b> - Provides information on how each option affects
+                                        the projected graph.</li>
+                                    <li><b>Layout customisation (3.2)</b> - Provides further customisation of the
+                                        layout algorithm used to calculate the positions of nodes on the canvas.
+                                    </li>
+                                    <li><b>Canvas Changes (3.3)</b> - The button allows manual manipulations of the
+                                        canvas and graph, such as colour changes and node removal.</li>
+                                    <li><b>Network information (3.4)</b> - The information button provides
+                                        graph-centric technical information from the node and edge count to more
+                                        specific information, such as the number of components.
+                                    </li>
+                                </ul>
+                                <p>
+                                    The rest of the options are groups of buttons which make specific changes to
+                                    your design when clicked. After a short pause, a new network will be visualised
+                                    when a button is clicked based on the currently active options.
+                                </p>
+                                <p><b>Presets (3.5)</b> are collections of options that, when combined, provide a
+                                    preset insight into the data.</p>
+                                <p><b>Modes (3.6)</b> are similar to the load predicate and allow further data
+                                    manipulation. For example, set operations directly applied to the node or edge
+                                    labels.</p>
+                                <p><b>Views (3.7)</b> are data projections that focus on a specific aspect by
+                                    rearranging, aggregating or making inferences on the complete network—for
+                                    example, Interaction between entities or a parts hierarchy. </p>
+                                <p><b>Layouts (3.8)</b> are algorithms to calculate the coordinate positions of
+                                    nodes on the screen and can be broken into three types force-directed,
+                                    hierarchical or geometric.</p>
+                                <p><b>Several remaining options (3.9)</b> are not displayed here, such as colour,
+                                    text, size and shape based on features and datatypes within the network. For
+                                    example, colours that map to genetic roles.
+                                    Furthermore, the options to export the visual and data representations of the
+                                    current projection. For example, you can export a picture of your network of the
+                                    current visualisation within the canvas, which will be downloaded to your
+                                    computer.</p>
+                                <h4>Legend (4)</h4>
+                                <p>Finally, the legend maps information within non-textual mediums such
+                                    as
+                                    colour to values and is automatically generated from changes made within the
+                                    options
+                                    panel.</p>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Editing
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://www.youtube.com/embed/HDieUBFsfso" title="YouTube video" allowfullscreen></iframe>
+                                  </div>
+                                <p>This section concerns the "Editor" tab, which contains a similar visualisation
+                                    suite to the "Visualiser". However, the editor can modify the projections and
+                                    the disseminated and expanded changes to keep the original data's structure. For
+                                    example, if a user wants to add a new interaction between entities, the
+                                    interaction graph can be projected, and additions changed will be propagated
+                                    backwards.
+                                </p>
+                                <p>
+                                    Note: here, we will only discuss the features within the editor exclusively.
+                                    Therefore, common elements between the visualiser and the editor are not
+                                    explained (see "visualiser" for this).</p>
+                                </p>
+                                <img src="{{url_for('static', filename='tutorial_3.png')}}" class="img-fluid"
+                                    style="max-width: 100%; height: auto;">
+                                <h4>Adding nodes (1)</h4>
+                                <p>Nodes can be added to the network directly by taking several required and
+                                    optional values. The primary requirement is a node key <b>(1.1)</b>, a unique
+                                    name
+                                    (preferably a URI referencing an existing resource) for the node to be added.
+                                    For example, a user who wants to add the Laci coding sequence from the IGEM
+                                    parts repository would use the key
+                                    <a
+                                        href="https://synbiohub.org/public/igem/BBa_R0010/1">synbiohub.org/public/igem/BBa_R0010/1</a>.
+                                    The following required value is the node type <b>(1.2)</b>, which classifies the
+                                    category of information inserted into
+                                    the design. For example, using the case of the LacI gene, the type "CDS" would
+                                    be picked. Metadata <b>(1.3)</b> are optional additions such as sequence data,
+                                    which
+                                    will also be added as properties of the new node depending on the information
+                                    type. When submitting <b>(1.4)</b> nodes to be added to a network, the node key
+                                    will be
+                                    checked to ensure it resolves to a valid resource, for example,
+                                    <a
+                                        href="https://synbiohub.org/public/igem/BBa_R0010/1">synbiohub.org/public/igem/BBa_R0010/1</a>.
+                                    Suppose the IRI provided does
+                                    not resolve to an accessible resource. In that case, Genetta will attempt to
+                                    find a set of candidates which could be used instead.
+                                </p>
+                                <p>When you press the submit button, the editor will offer the original key with a
+                                    set of alternatives that can be picked and added to the network. Finally, when
+                                    the final value of the node is chosen, this node will be automatically added to
+                                    the design, ensuring the information is in line with the underlying structure
+                                    and then added to the canvas.
+                                </p>
+                                <h4>Adding Edges (2)</h4>
+                                <p>Edges representing relationships between nodes can also be integrated into the
+                                    design. The predicate <b>(2.1)</b> is the first choice made and represents the
+                                    type of
+                                    connection between two data points. The predicate options are dependent on the
+                                    current projection. For example, if the interaction graph is projected,
+                                    predicates such as repression, activation and genetic production will be
+                                    options. The subjects <b>(2.2)</b> in a relationship are filtered and presented
+                                    based
+                                    on their types and whether they are valid with the predicate. For example, if
+                                    the user chooses the predicate "protein production", the input node must be a
+                                    coding region and the output subject a protein node. Sequential filtering
+                                    enables invalid information is not accidentally added to the network via a
+                                    projection that does not support it and makes integration easier. Once the
+                                    abstract edge between two data points within the connection is defined, the data
+                                    can be submitted <b>(2.3)</b>.</p>
+                                <p>When you press the submit button, the new edge will be added to the design, and
+                                    the visualisation within the canvas will be automatically updated. Suppose a
+                                    projection of the data is being visualised. In that case, the application will
+                                    expand the new edge and add all the information required for this new piece of
+                                    information to align with the complete data structure.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Database
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://www.youtube.com/embed/3XENRw1_j28" title="YouTube video" allowfullscreen></iframe>
+                                  </div>
+                                <p>This section concerns the "Database" tab, which contains a similar visualisation
+                                    suite to the "Visualiser". However, this tool visualises an underlying network that
+                                    includes data from existing databases and datasets such as the IGEM parts repository
+                                    (IGEM), Cello parts, Synbiohub or Living Computer Project (LCP). While this feature
+                                    provides less of a user-facing application, we believe it is an exciting feature,
+                                    and we plan to use it to provide new automated features.
+                                </p>
+                                <img src="{{url_for('static', filename='tutorial_4.png')}}" class="img-fluid"
+                                    style="max-width: 100%; height: auto;">
+                                <p>Connecting databases provides the benefit of having all known information regarding a
+                                    specific physical or conceptual entity in a single place. Furthermore, when
+                                    represented as a knowledge graph (a standardised semantic graph), information that
+                                    was otherwise hidden due to the disconnected nature or format may be revealed. For
+                                    example, the IGEM does not explicitly encode interactions between records. However,
+                                    the LCP dataset uses many genetic parts encoded within IGEM and does explicitly
+                                    encode these interactions. By connecting these datasets, information that is known
+                                    but potentially missing within a design can be identified.
+                                </p>
+                                <ul>
+                                    <li><b>Canonical</b> - Each part (Node) is unique within the network (No sequence is
+                                        duplicated). No duplicates enable computational comparison of parts between the
+                                        database network and designs.</li>
+                                    <li><b>Confidence</b> - Edges within the network encoded a level of confidence, i.e.
+                                        how likely we believe a piece of information is correct. Because data on
+                                        databases is often not validated, encoding confidence provides context when
+                                        exploring the data.</li>
+                                    <li><b>Provenance</b> - Parts (Nodes) within the network are connected to parts with
+                                        similar sequences. Edges between similar parts enable the quick identification
+                                        of alternative entities or identify where the entity may have been derived from.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="technical_tutorial">
+                <img src="{{url_for('static', filename='tutorial_5.png')}}" class="img-fluid"
+                    style="max-width: 100%; height: auto;">
+                <p>The image above abstractly represents the modules involved in visualisation and editor tools. While
+                    it also handles the database module because it uses the exact mechanisms as the visualiser to
+                    present the network, we will discuss this separately. </p>
+                <div class="accordion" id="accordion_technical_tutorial">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Modifying graphs and managing data
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordion_technical_tutorial">
+                            <div class="accordion-body">
+                                <h4>Adding Designs</h4>
+                                <h5>Input (B1)</h5>
+                                <p>
+                                    Before any designs can be visualised, edited, enhanced or used, they must be
+                                    provided. Genetta currently supports two primary data formats, SBOL and Genbank.
+                                    However, SBOL is recommended over Genbank because it allows for more rich data
+                                    capture, including functional and structural data. While we understand traditional
+                                    data formats such as Genbank are ubiquitous, in nearly all cases, without manually
+                                    adding more information or using our enhancement systems, visualisation will be
+                                    worse than if an SBOL file is provided. Designs can be uploaded with files, pasted,
+                                    or records within Synbiohub.
+                                    The submit button will take the information for each option and create a named
+                                    graph. Genetta stores the input data as a labelled graph. </p>
+                                <h5>Conversion (B2)</h5>
+                                <p>An initial step is to convert the input data into a shape valid for the knowledge
+                                    graph. Genetta contains an internal ontology containing several classes, each
+                                    defining a set of requirements which must be fulfilled to be eligible to become an
+                                    instance of that class. Furthermore, the data model defines an inheritance hierarchy
+                                    where more specific classes inherit information from more general classes. For
+                                    example, the DNA class is derived from a physical entity class, and then an RBS
+                                    class is derived from the DNA class. These features combined mean that all converted
+                                    data is always the most specific object possible.
+                                </p>
+                                <p>
+                                    Conversion to a knowledge graph provides several benefits, such as a structure
+                                    tailored for a network approach, and new input data types can be quickly introduced.
+                                    It must be noted, however, that all exported data will still be SBOL compliant.
+                                </p>
+                                <h5>Graph (B3)</h5>
+                                <p>All data within Genetta is stored within a single "world graph". Practically, this is
+                                    a <a href="https://neo4j.com/">neo4j</a> graph database management system that
+                                    allows storing and accessing graphs whose sizes are infeasible to hold in memory.
+                                    Therefore, behind the scenes, all designs currently stored in Genetta are stored
+                                    within a single graph where nodes and edges shared between designs will be
+                                    connected. Furthermore, the database information discussed later is also stored
+                                    within this "world graph". To identify ownership, i.e. what pieces of data belong to
+                                    which design, nodes, and edges contain a property defining what graphs own them.
+                                    Practically, storing all information within a single graph helps reduce the
+                                    application's size because duplicates are not stored within multiple graphs.
+                                    However, it also allows reasoning on a larger dataset instead of single designs,
+                                    which is beneficial for identifying any general patterns that may occur.</p>
+                                <p>Furthermore, because the data has been converted in line with an ontology, the
+                                    persistent graph is a knowledge graph with semantic labels on nodes and edges and
+                                    specific constraints specifying what nodes can connect. The resultant knowledge
+                                    graph is one where data will automatically connect when introduced, and the semantic
+                                    labels and structure allow for more abstract questions to be asked. </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Visualising
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordion_technical_tutorial">
+                            <div class="accordion-body">
+                                <p>The visualisation tool uses a pipeline system, where the currently loaded graph is
+                                    provided, and the output is all the information required to visualise a
+                                    comprehensible representation. Here, each section explains a specific point within
+                                    the image above.</p>
+                                <h4>Graph Builder (B4)</h4>
+                                <p>
+                                    Multipartite graphs (graphs that contain many classes of nodes), such as the full
+                                    graph
+                                    described above, can rarely be successfully visualised in their entirety, mainly
+                                    because
+                                    the domain of data being presented is too large. Therefore, specific views of this
+                                    data
+                                    are projected (usually bipartite or monopartite). These views focus on a
+                                    particular
+                                    aspect of the data, such as the interactions between physical entities or the
+                                    conceptual
+                                    hierarchy common within synthetic biology. Building a specific projection is unique
+                                    (building an interaction network differs from a parts hierarchy), but some
+                                    high-level
+                                    processes persist.
+                                </p>
+                                <ul>
+                                    <li>A projection will likely only represent one or two classes. Therefore, we query
+                                        the data using the semantic labels for the classes in question, and this step
+                                        may be required to produce an understandable representation.
+                                    </li>
+                                    <li>
+                                        An optional step to scale the level of detail within the graph to further fit
+                                        the requirements of a user. Scaling abstraction is achieved by transitive
+                                        closure, which involves traversing the graph from a node looking for a target
+                                        node and collapsing the traversed path.
+                                    </li>
+                                    <li>
+                                        Another optional step is graph comparison (when multiple graphs are loaded).
+                                        Graph comparison is achieved using the operations intersection, union, and
+                                        difference.
+                                    </li>
+                                </ul>
+                                <h4>Visualisation</h4>
+                                <p>
+                                    The second group of modules is responsible for taking the projected graph and
+                                    presenting it visually according to user requirements. The modules use <a
+                                        href="https://dash.plotly.com/cytoscape">dash-Cytoscape</a>, which allows for
+                                    much of the functionality offered within the commonly used Cytoscape combined with
+                                    the dynamism Plotly Dash provides.
+                                </p>
+                                <h5>Visualiser (B5)</h5>
+                                <p>
+                                    The visualiser module computes visual elements such as layout, colour,
+                                    shape,
+                                    and
+                                    size to help the user further comprehend the data. The module receives the
+                                    projection
+                                    and a set of requirements (user inputs) from the dashboard. For each requirement,
+                                    each
+                                    node and edge is provided with a value (size of a node, for example). Finally, the
+                                    visual elements are combined with the projection graph (nodes are given screen
+                                    positions, RGB colours, for example) and sent back to the dashboard to be presented
+                                    to
+                                    the user.
+                                </p>
+                                <h5>Dashboard (B6)</h5>
+                                <p>
+                                    The dashboard is the user interface of Genet and takes inputs, begins
+                                    the
+                                    pipeline
+                                    of processes previously discussed and renders the output from the visualiser. A
+                                    significant advantage of the dashboard and the technology it is built on is that
+                                    user
+                                    inputs are sent via callbacks to enable asynchronous communication between client
+                                    and
+                                    server, allowing a user to view the graph during computation.
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Editing
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordion_technical_tutorial">
+                            <div class="accordion-body">
+                                <p>This section concerns the "Editor" tab, an extension to the visualiser tool that can
+                                    take information from the user and integrate it into the design. The key feature is
+                                    the ability to take information that is not specified within the structure of the
+                                    underlying data model and transform it into a valid format which is then integrated
+                                    into the design data.
+                                </p>
+                                <p>This section covers two modules within the image, B7, the extension of the editor
+                                    dashboard, and B8, which handles expanding and integrating incoming data.</p>
+                                <h4>Editor Dashboard (B7)</h4>
+                                <p>The editor dashboard exposes two new tabs, the ability to add new nodes and another
+                                    to add new edges. When a network is projected (as is done within the visualiser), a
+                                    set of valid node types and edge types are provided to the user. These types are
+                                    specific to the current projection and are calculated within the expansion builder
+                                    module. </p>
+                                <p>Here are examples of what data is presented based on types of projection and types
+                                    chosen by the user.</p>
+                                <ul>
+                                    <li>If the structural hierarchy is projected, interaction nodes and edges will not
+                                        be offered as new information to be added because it is not the type of
+                                        information being displayed here.
+                                    </li>
+                                    <li>
+                                        If a genetic part node is chosen to be added, the optional metadata will present
+                                        specific information, such as sequence data.
+                                    </li>
+                                    <li>
+                                        Only valid nodes will be offered as subjects if an interaction predicate is
+                                        chosen when an interaction network is projected, such as coding regions and
+                                        promoters with a protein production interaction.
+                                    </li>
+                                </ul>
+                                <p>The dynamic system, which constrains user input based on previous inputs, ensures
+                                    that only valid information is sent back to the builder and reduces the likelihood
+                                    that wrong inputs will corrupt a design.</p>
+                                <p>Finally, when the expansion builder (discussed below) returns an updated view, the
+                                    editor automatically updates the figure, which provides quick feedback to the user
+                                    as the new information will be automatically and quickly visualised in the canvas.
+                                </p>
+                                <h4>Expansion Builder (B8)</h4>
+                                <p>The expansion builder is the central computational unit for the editor tool. It takes
+                                    information from projected representations which are likely not in line with the
+                                    underlying data structure, expands this information and then adds it to the
+                                    underlying
+                                    network, ensuring the same form is kept and that connections between old and new
+                                    information are made where necessary.
+                                    While it is true that each projection module integrates the data differently (adding
+                                    interactions is not the same as genetic parts, for example), some specific processes
+                                    are
+                                    worth discussing.</p>
+                                <h5>Expanding Edges</h5>
+                                <p>In most cases, a user will add a new edge to denote some connection between entities,
+                                    whether structural or functional. For example, a new interaction between two
+                                    physical
+                                    entities is made using a new edge. However, the underlying data structure will
+                                    likely
+                                    not encode an interaction by a single edge. Take SBOL, for example, where
+                                    interactions
+                                    are captured using several classes such as the Interaction, Participation,
+                                    FunctionalComponent and ModuleDefinition classes with many edges between the
+                                    instances
+                                    of these classes.</p>
+                                <p>Therefore, for each projection, a method for mapping this likely abstract piece of
+                                    information is in place, which will expand into all the required information to
+                                    align
+                                    with the underlying structure.</p>
+                                <h5>Integrating abstract entities</h5>
+                                <p>A significant challenge with the expansion is when the detail of a design is highly
+                                    abstracted, such as in the protein interaction network, an abstraction that displays
+                                    what the presence of a protein has upon the production of other proteins within the
+                                    design. These projections are achieved using transitive closure to collapse paths to
+                                    create a simplified representation. However, when a user specifies a new interaction
+                                    between two proteins, it is unclear what this means when considering the larger
+                                    design.
+                                    For example, take our protein interaction abstraction. When a user defines that p1
+                                    repressed p2, they do not state direct repression; instead, p1 represses a
+                                    transcription
+                                    factor downstream of the p2 coding region. Therefore, the implicit reference encoded
+                                    within the new projected data must be found.</p>
+                                <p>Retake the protein example to calculate the likely transcription factor. The complete
+                                    interaction network is projected then a walk is performed from p1 to p2. We assume
+                                    that
+                                    the promoter element closest to p2 on this projection is the subject of this
+                                    interaction. A new repression interaction is created between p1 and the identified
+                                    promoter if a promoter is found.</p>
+
+                                <p>Once the data is integrated into the entire network, the view is updated by adding
+                                    the
+                                    new projected data into the projected network. The updating is a simple process
+                                    because
+                                    both sides have the same level of detail and can be combined.</p>
+
+                                <h5>Exporting data</h5>
+                                As discussed, the underlying data model for Genetta is not a specific available
+                                standard. Therefore, the issue of how the internal representation is exported when
+                                changes have been made is raised when the original data model does not directly map to
+                                the internal model. A changelog is updated to capture these changes when changes are
+                                made to the design within Genetta. The changelog is simply an ordered list of changes as
+                                they were made. When the design is exported, each change described within the log is
+                                applied to the original data model. This approach defers computation until export
+                                reducing the unnecessary computation and ensuring that the original design is not
+                                corrupted.
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Database
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#accordion_technical_tutorial">
+                            <div class="accordion-body">
+                                <p>As discussed, Genetta contains an underlying database which does not represent a
+                                    single
+                                    design but larger datasets containing genetic parts commonly used within the
+                                    designs.
+                                    While this provides a lesser opportunity directly for users, it is an exciting
+                                    feature
+                                    that will be used within some of the upcoming features of Genetta. Despite this, we
+                                    will
+                                    discuss briefly how this application builds a unified semantic network from several
+                                    data
+                                    sources that may be disparate or related in specific aspects.</p>
+                                <h4>Feature requirements</h4>
+                                <p>The focus of building this database is to have three main features within the
+                                    network.</p>
+                                <h5>Canonical</h5>
+                                <p>A primary issue is that, despite standard data enforcing structural standardisation,
+                                    i.e. how data can connect, there is no assurance that the references are canonical,
+                                    i.e., each part refers to a single virtual entity. Therefore, the final network must
+                                    identify that these two virtual parts reference the same physical entity.</p>
+                                <h5>Confidence</h5>
+                                <p>A problem with existing databases is an unknown confidence in the underlying
+                                    information. Most data sources do not have mechanisms to ensure that the information
+                                    uploaded by users is correct or accurate. However, if the same information is
+                                    described
+                                    within several datasets, the user has more confidence in accuracy and correctness.
+                                    The
+                                    confidence of a connection can be encoded as weight and set based on the number of
+                                    times
+                                    it was encountered during integration.</p>
+                                <h5>Provenance</h5>
+                                <p>Provenance within the context of the datasets refers to connections to genetic parts
+                                    based on changes made. For example, if a genetic part is taken and modified within a
+                                    dataset, the new part is classified as derived from the original. Capturing
+                                    provenance
+                                    within this context allows the ability to track the history of an entity but also
+                                    enables the clustering of very similar entities.</p>
+                                <h4>The proccess</h4>
+                                <p>Below is a detailed overview of the build and integration steps when seeding the
+                                    database.</p>
+                                <h5>Building datasets</h5>
+                                <p>
+                                    The first stage of creating a centralised knowledge graph is to build individual
+                                    constituent datasets. Because the quality and size of these datasets can be
+                                    variable,
+                                    the dataset that is finally integrated is a subset of the original set where
+                                    low-quality
+                                    or unwanted entities are pruned and duplicates merged.
+                                </p>
+                                <h5>Dataset integration</h5>
+                                <p>
+                                    The final stage combines all information within the built datasets, ensuring no
+                                    duplicates, edges encode confidence and provenance between entities are described.
+                                </p>
+                                <img src="{{url_for('static', filename='database_build.png')}}" class="img-fluid"
+                                    style="max-width: 100%; height: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+{% endblock %}

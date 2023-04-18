@@ -7,6 +7,9 @@ class InteractionIoViewBuilder(AbstractViewBuilder):
     def __init__(self,graph):
         super().__init__(graph)
 
+    def _subgraph(self, edges=[], nodes=[],new_graph=None):
+        return ViewGraph(super()._subgraph(edges,nodes,new_graph))
+    
     def build(self,predicate="ALL"):
         edges = []
         i_graph = self._subgraph(new_graph=produce_interaction_graph(self._graph,predicate=predicate))

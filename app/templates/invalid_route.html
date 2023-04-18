@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+    <div class="col" align="center">
+        <br><br>
+        <h1>Invalid Route</h1>
+        <br><br>
+        {% if invalid_credentials %}
+        <h3>Invalid Credentials</h3>
+        <p>Please sign in as admin to access these options.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

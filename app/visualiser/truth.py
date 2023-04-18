@@ -29,13 +29,14 @@ class TruthDash(AbstractDash):
         update_i.update(identifiers)
         preset_i.update(preset_identifiers)
         preset_o.update(preset_output)
+        #load_o.update({k:Output(v.component_id,v.component_property) for k,v in preset_ids.items()})
 
         manual = self._create_manual_toolbar()
         form_div = self.create_div(graph_type_o["id"].component_id, form_elements)
-        options = self.create_sidebar(not_modifier_identifiers["sidebar_id"], "Options", form_div, className="col sidebar")
+        options = self.create_sidebar(not_modifier_identifiers["sidebar_id"], "Options", form_div, className="col-sm-auto sidebar")
         figure, legend = self.visualiser.build(graph_id=graph_id, legend=True)
         graph = self.create_div(update_o["graph_id"].component_id, figure, className="col")
-        graph = self.create_div(load_o.component_id, graph)
+        graph = self.create_div(load_o["graph_content"].component_id, graph,className="col")
         legend = self.create_legend(legend)
         legend = self.create_div(update_o["legend_id"].component_id,legend, className="col sidebar")
         elements = options+graph+legend+manual
@@ -46,7 +47,6 @@ class TruthDash(AbstractDash):
             export_modal_i[sf] = Input(sf, "n_clicks")
 
         # Bind the callbacks
-
         def update_preset_inner(preset_name, *states):
             return self.update_preset(preset_name, maps, states)
 
@@ -61,9 +61,6 @@ class TruthDash(AbstractDash):
 
         def man_tool_inner(*args):
             return self.man_modal(*args)
-
-        def modify_node_inner(t_delete, t_merge, elems, data):
-            return self.modify_nodes(t_delete, t_merge, elems, data)
 
         def advanced_modal_inner(*args):
             return self.advanced_modal(*args)
@@ -80,13 +77,11 @@ class TruthDash(AbstractDash):
         def label_color_inner(*args):
             return self.label_color(*args)
         
-
         self.add_callback(update_graph_inner, update_i.values(), update_o.values())
         self.add_callback(update_preset_inner, preset_i.values(), preset_o.values(), preset_state.values())
         self.add_callback(docs_modal_inner, docs_modal_i.values(), docs_modal_o.values(), doc_modal_s)
         self.add_callback(info_modal_inner, info_modal_i.values(), info_modal_o.values(), info_modal_s)
         self.add_callback(man_tool_inner, man_tool_i.values(), man_tool_o.values(), man_tool_s)
-        self.add_callback(modify_node_inner, modify_node_i.values(),modify_node_o, modify_node_s)
         self.add_callback(advanced_modal_inner, adv_modal_i.values(), adv_modal_o.values(), adv_modal_s)
         self.add_callback(export_img_inner,export_img_i, export_img_o)
         self.add_callback(export_modal_inner, export_modal_i.values(), export_modal_o.values(), export_modal_s)
@@ -189,6 +184,8 @@ class TruthDash(AbstractDash):
         Data table.
         Global information
         '''
+        if self.visualiser.get_loaded_design_names() == [None]:
+            return [hFalse, []]
         changed_id = [p['prop_id'] for p in callback_context.triggered][0]
         if info_modal_i["open_info"].component_id in changed_id:
             builder = self.visualiser._builder
@@ -306,6 +303,18 @@ class TruthDash(AbstractDash):
             return [hFalse, []]
         return [is_open, []]
 
+    def export_graph_img(self, get_jpg_clicks, get_png_clicks, get_svg_clicks):
+        action = 'store'
+        input_id = None
+        ctx = callback_context
+        if ctx.triggered:
+            input_id = ctx.triggered[0]["prop_id"].split(".")[0]
+            if input_id != "tabs":
+                action = "download"
+        else:
+            raise PreventUpdate()
+        return [{'type': input_id, 'action': action}]
+    
     def _generate_node_edge_tables(self, builder):
         view = builder.view
         nodes = builder.view.nodes()
@@ -348,57 +357,6 @@ class TruthDash(AbstractDash):
             is_hidden = True
         return [is_hidden, style]
 
-    def modify_nodes(self, t_remove, t_modify, elements, data):
-        changed_id = [p['prop_id'] for p in callback_context.triggered][0]
-        if not elements or not data:
-            return [elements]
-
-        if modify_node_i["t-remove"].component_id in changed_id:
-            ids_to_remove = {ele_data['id'] for ele_data in data}
-            [self.visualiser._builder.view.remove_node(
-                int(d)) for d in ids_to_remove]
-            new_elements = [
-                ele for ele in elements if str(ele['data']['id']) not in ids_to_remove]
-            return [new_elements]
-
-        elif modify_node_i["t-modify"].component_id in changed_id:
-            merging_node = data.pop(0)["id"]
-            ids_to_merge = {ele_data['id'] for ele_data in data}
-            self.visualiser._builder.view.merge_nodes(
-                merging_node, ids_to_merge)
-            new_elements = []
-            for ele in elements:
-                if str(ele["data"]["id"]) in ids_to_merge:
-                    continue
-                if "source" in ele["data"] or "target" in ele["data"]:
-                    if str(ele["data"]["source"]) in ids_to_merge:
-                        ele["data"]["source"] = merging_node
-                        if "id" in ele["data"]:
-                            del ele["data"]["id"]
-                    if str(ele["data"]["target"]) in ids_to_merge:
-                        ele["data"]["target"] = merging_node
-                        if "id" in ele["data"]:
-                            del ele["data"]["id"]
-                    if (ele["data"]["source"] == merging_node
-                            and ele["data"]["target"] == merging_node):
-                        continue
-                new_elements.append(ele)
-
-            index = 0
-            # When edges are still present but source or dest nodes are removed.
-            nids = {str(ele_data["data"]['id'])
-                    for ele_data in new_elements if "id" in ele_data["data"]}
-            while index < len(new_elements):
-                e = new_elements[index]
-                if "source" in e["data"] or "target" in e["data"]:
-                    if e["data"]["source"] not in nids:
-                        del new_elements[index]
-                    if e["data"]["target"] not in nids:
-                        del new_elements[index]
-                index += 1
-            return [new_elements]
-        return [elements]
-
     def advanced_modal(self, n1, n2, n3, is_open, form):
         c = []
         changed_id = [p['prop_id'] for p in callback_context.triggered][0]
@@ -424,13 +382,15 @@ class TruthDash(AbstractDash):
                     title = title + f' - {v.__name__}'
                 elif v == bool:
                     marks = {0: "False", 1: "True"}
+                    if isinstance(dv,bool):
+                        dv = int(dv)
                     inp = self.create_slider(k, 0, 1, dv, 1, marks)
                 elif isinstance(v, list):
                     choices = [{"label": c, "value": c} for c in v]
                     inp = self.create_dropdown(k, choices, dv)
                 else:
                     raise NotImplementedError()
-                l_children += self.create_heading_6('', title)
+                l_children += self.create_heading_4('', title)
                 l_children += inp
                 l_children += self.create_line_break(2)
             l_div = self.create_div("layout_settings", l_children)
@@ -476,7 +436,7 @@ class TruthDash(AbstractDash):
                 default_val = int((min_v + max_v) / 2)
                 step = 1
 
-                element += (self.create_heading_6("", name) +
+                element += (self.create_heading_4("", name) +
                             self.create_slider(identifier, min_v, max_v, default_val=default_val, step=step))
                 identifiers[k] = Input(identifier, "value")
                 variable_input_list_map[identifier] = [min_v, max_v]
@@ -496,7 +456,7 @@ class TruthDash(AbstractDash):
 
                 variable_input_list_map[identifier] = [
                     l["value"] for l in inputs]
-                element = (self.create_heading_6(k, name) +
+                element = (self.create_heading_4(k, name) +
                            self.create_radio_item(identifier, inputs, value=default_button))
                 identifiers[k] = Input(identifier, "value")
                 docstring += self._build_docstring(name, v)
@@ -524,7 +484,7 @@ class TruthDash(AbstractDash):
             export_modal_o["data"].component_id, [])
         export_modal = self.create_modal(export_modal_o["id"].component_id,
                                          export_modal_i["close_export"].component_id,
-                                         "Export", export_div)
+                                         "Export Data", export_div)
         adv_button = self.create_div(
             adv_modal_i["open_adv"].component_id, [], className="adv-tip col")
         adv_opn = self.create_div(adv_modal_o["form"].component_id, [])
@@ -581,7 +541,8 @@ class TruthDash(AbstractDash):
                                "node_text",
                                "set_design_names",
                                "get_load_predicates",
-                               "get_loaded_design_names"]
+                               "get_loaded_design_names",
+                               "reset"]
 
         options = {"preset": {},
                    "mode": {},

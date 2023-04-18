@@ -15,7 +15,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_tree_mode,
                             self.set_hierarchy_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_hierarchy_node_color,
                             self.add_hierarchy_edge_color,
                             self.add_node_name_labels, 
@@ -47,7 +47,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_network_mode,
                             self.set_interaction_explicit_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_role_node_color,
                             self.add_type_edge_color,
                             self.add_edge_no_labels,
@@ -63,7 +63,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_network_mode,
                             self.set_interaction_verbose_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_role_node_color,
                             self.add_type_edge_color,
                             self.add_edge_no_labels,
@@ -79,7 +79,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_network_mode,
                             self.set_interaction_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_role_node_color,
                             self.add_type_edge_color,
                             self.add_edge_no_labels,
@@ -95,7 +95,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_network_mode,
                             self.set_interaction_genetic_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_type_node_color,
                             self.add_type_edge_color,   
                             self.add_edge_no_labels,
@@ -111,7 +111,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_network_mode,
                             self.set_interaction_protein_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_type_edge_color,
                             self.add_type_node_color,
                             self.add_node_name_labels,
@@ -127,7 +127,7 @@ class DesignVisual(AbstractDesignVisual):
         '''
         preset_functions = [self.set_network_mode,
                             self.set_interaction_io_view,
-                            self.set_dagre_layout,
+                            self.set_cola_layout,
                             self.add_type_edge_color,
                             self.add_standard_node_color,
                             self.add_node_name_labels,

@@ -37,9 +37,6 @@ class AbstractDatabase(ABC):
             existing_ints = {}
         if existing_non_dna is None:
             existing_non_dna = {}
-        dups = []
-        sims = []
-        dup_i = []
         for cd in graph.get_component_definitions():
             cd_types = graph.get_types(cd)
             if ids.roles.DNARegion in cd_types or ids.roles.DNA in cd_types:
@@ -49,7 +46,6 @@ class AbstractDatabase(ABC):
                 if cd_seq in existing_seqs:
                     graph.replace_component_definition(cd,existing_seqs[cd_seq])
                     self._graph.synonyms.positive(existing_seqs[cd_seq],cd)
-                    dups.append((existing_seqs[cd_seq],cd))
                     continue
                 o_type_map = self._add_cd(cd,graph,cd_types,model_roots,o_type_map)
                 highest_score = [0,None]
@@ -58,7 +54,6 @@ class AbstractDatabase(ABC):
                     if score > highest_score[0]:
                         highest_score = [score,v]
                 if highest_score[0] > threshold:
-                    sims.append((highest_score[1],cd))
                     self._graph.derivatives.positive(highest_score[1],cd,highest_score[0])
                 existing_seqs[cd_seq] = cd
             else:
@@ -69,7 +64,6 @@ class AbstractDatabase(ABC):
                     name = self._get_name(e)
                     if cd_name in name or name in cd_name:
                         self._graph.synonyms.positive(e,cd)
-                        dups.append((e,cd))
                         break
                 else:
                     o_type_map = self._add_cd(cd,graph,cd_types,model_roots,o_type_map)
@@ -90,7 +84,6 @@ class AbstractDatabase(ABC):
             if i_type in existing_ints:
                 for i_parts in existing_ints[i_type]:
                     if e_parts == i_parts:
-                        dup_i.append(i)
                         break
                 else:
                     self._add_interaction(i,graph,model_roots,o_type_map)
@@ -99,16 +92,6 @@ class AbstractDatabase(ABC):
                 self._add_interaction(i,graph,model_roots,o_type_map)
                 existing_ints[i_type] = [e_parts]
                 
-        print(len(dups),len(sims))
-        print("Duplicates:")
-        for d in dups:
-            print(d)
-        print("Similars:")
-        for e in sims:
-            print(e)
-        print("Redundant Interactions:")
-        for i in dup_i:
-            print(i)
         return existing_seqs,existing_ints,existing_non_dna
 
     

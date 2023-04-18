@@ -58,7 +58,7 @@ class ViewGraph:
         self._graph = graph if graph is not None else nx.MultiDiGraph()
 
     def resolve_node(func):
-        def inner(self,n=None,reserved=True):
+        def inner(self,n=None,reserved=False):
             if isinstance(n,Node):
                 n = n.id
             return func(self,n,reserved=reserved)
@@ -249,12 +249,12 @@ class ViewGraph:
             props = self._graph.nodes[n].copy()
             labels = props["key"]
             del props["key"]
-            n = self._node(labels,id=n,**props)
+            n = self._node(labels,id=n,properties=props)
 
             props = self._graph.nodes[v].copy()
             labels = props["key"]
             del props["key"]
-            v = self._node(labels,id=v,**props)
+            v = self._node(labels,id=v,properties=props)
             yield n,v
 
 

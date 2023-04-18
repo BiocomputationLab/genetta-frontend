@@ -1,0 +1,99 @@
+{% block content %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='2_custom.css')}}"> {% if title %}
+    <title>Genetta - {{ title }}</title>
+    {% else %}
+    <title>Genetta </title>
+    {% endif %}
+</head>
+
+<body style="background-image: url('{{url_for('static', filename='network.jpeg')}}');height: 100vh">
+    <div id="app" class="container">
+        <div class="row">
+            <div class="col" align="center">
+                <img src="{{url_for('static', filename='logo.png')}}" class="rounded float-left">
+                <br><br>
+                {% if invalid_username %}
+                <h3>Invalid Username</h3>
+                <p>Invalid username, please pick another.</p>
+                {% endif %}
+                {% if create_user_form %}
+
+            </div>
+            <div class="col">
+                <h3>Login</h3>
+                <p><b>If this is your first time</b> - Please create a username and password. Note: this
+                    account is arbitary and doesn't need authentication. It is simply a name to keep track of your data
+                    so others can't change your work and you can access it in future.</p>
+                <p><b>If you have an account before</b> - use your credentials to access previous data.</p>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ create_user_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ create_user_form.username.label(for="username") }}<br>
+                        {{ create_user_form.username(class="form-control-file", rows=1) }}<br>
+                        {% for error in create_user_form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <br>
+                    </div>
+                    <div class="form-group">
+                        {{ create_user_form.password.label(for="password") }}<br>
+                        {{ create_user_form.password(class="form-control-file") }}<br>
+                        {% for error in create_user_form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <br>
+                    </div>
+                    {{ create_user_form.submit(class="btn btn-secondary") }}
+                </form>
+                <br><br>
+                {% endif %}
+                {% if create_admin_form %}
+                <h3>Please create admin credentials.</h3>
+                <p>This is the time this instance of Genetta is active.
+                    Admin credentials are required to make changes to the system.
+                </p>
+                <p>This may take a few minutes to initialise the tool.</p>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {{ create_admin_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ create_admin_form.username.label(for="username") }}<br>
+                        {{ create_admin_form.username(class="form-control-file", rows=1) }}<br>
+                        {% for error in create_admin_form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <br>
+                    </div>
+                    <div class="form-group">
+                        {{ create_admin_form.password.label(for="password") }}<br>
+                        {{ create_admin_form.password(class="form-control-file") }}<br>
+                        {% for error in create_admin_form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <br>
+                    </div>
+                    {{ create_admin_form.submit(class="btn btn-secondary") }}
+                </form>
+                <br><br>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='bootstrap.js')}}"></script>
+    <script src="{{url_for('static', filename='visual.js')}}"></script>
+</body>
+
+</html>
+{% endblock %}

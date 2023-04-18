@@ -2,7 +2,9 @@
 <br>
 <div class="container">
     <div class="row">
-        <h1>Enhancer</h1>
+        <div class="col-md">
+            <h1>Enhancer</h1>
+        </div>
     </div>
     <div class="row">
         <h6>It is advised the design is passed through the canonicaliser before enhancement for the best results.</h6>
@@ -14,9 +16,9 @@
         <div class="col-md">
             <div class="card search-result">
                 <div class="card-body">
-                    {% if err_string%}
+                    {% if error_str%}
                     <h5>
-                        <font color="red">ERROR: </font><br>{{err_string}}
+                        <font color="red">ERROR: </font><br>{{error_str}}
                     </h5>
                     {% endif %}
                     <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">

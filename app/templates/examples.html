@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block content %}
+    <div class="row">
+        <div class="col" align="center">
+            <h1>Examples</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" align="center">
+            {% if ret_vals %}
+                
+                <div class="row gy-5" align="center">
+                    <div class="col">
+                        {% for string,is_success in ret_vals.items() %}
+                        <h5>
+                            {% if is_success %}
+                            <font color="green">Success: </font>{{string}}
+                            {% else %}
+                            <font color="red">Error: </font>{{string}}
+                            {% endif %}
+                        </h5>
+                        {% endfor %}
+                    </div>
+                </div>
+                <br>
+
+            {% endif %}
+            {% if example_design_form %}
+            <p>Select any example designs to be added to your collection.</p>
+            <form action="" method="post" enctype="multipart/form-data">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Filename</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Stage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for field in example_design_form.examples %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{field.label}}</td>
+                            <td>{{field.description}}</td>
+                            <td>{{field}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ example_design_form.submit_example(class="btn btn-secondary") }}
+                <br><br><br>
+            </form>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

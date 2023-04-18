@@ -1,10 +1,15 @@
 from app.graph.truth_graph.truth_graph import TruthGraph
 from app.graph.design_graph.design_graph import DesignGraph
 from app.graph.neo4j_interface.interface import Neo4jInterface
-reserved_names = ["truth_graph"]
+known_reserved_names = ["truth_graph"]
 class WorldGraph:
-    def __init__(self):
-        self.driver = Neo4jInterface(reserved_names=reserved_names)
+    def __init__(self,db_uri,db_auth,reserved_names=None):
+        if reserved_names is None:
+            reserved_names = []
+        reserved_names += known_reserved_names
+        self.reserved_names = reserved_names
+        
+        self.driver = Neo4jInterface(db_uri,db_auth,reserved_names=reserved_names)
         self.truth = TruthGraph(reserved_names[0],self.driver)
 
     def new_design(self,graph_name):
@@ -21,7 +26,11 @@ class WorldGraph:
     
     def get_design_names(self):
         gns = self.driver.node_property("graph_name",distinct=True)
-        gns = list(set(gns) - set(reserved_names))
+        gns = list(set(gns) - set(self.reserved_names))
+        return list(set(gns))
+
+    def get_graph_names(self):
+        gns = self.driver.node_property("graph_name",distinct=True)
         return list(set(gns))
 
     def remove_design(self,graph):
