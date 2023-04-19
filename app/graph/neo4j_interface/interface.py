@@ -326,7 +326,6 @@ class Neo4jInterface:
             #print("WARN:: Empty Cypher Query Entered.")
             return []
         if self.driver is None:
-            self.driver = _connect_db()
             print("WARN:: No connection to neo4j graph.")
         return self.driver.run_cypher(cypher_str)
 

@@ -55,9 +55,7 @@ class LoginHandler(LoginManager):
         return [self._node_to_user(u) for u in self._node_query(user_type)]
 
     def is_user(self, user):
-        print(user.username, user.password)
         for eu in self.get_users():
-            print(eu.username, eu.password)
             existing_user = eu
             if existing_user == user:
                 return True
