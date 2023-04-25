@@ -10,6 +10,9 @@ services:
     env_file:
       - 'docker_env_genetta'
     restart: on-failure
+    depends_on:
+      database:
+        condition: service_healthy
   database:
     image: neo4j:latest
     env_file:
@@ -19,6 +22,12 @@ services:
     ports:
       - '7474:7474'
       - '7687:7687'
+    healthcheck:
+      test: wget http://localhost:7474 || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 30
+      start_period: 5s
       
 volumes:
   dbdata:
