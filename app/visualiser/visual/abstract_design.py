@@ -33,7 +33,9 @@ class AbstractDesignVisual(AbstractVisual):
     def get_load_predicates(self):
         return self._builder.get_load_predicates()
 
-    def set_design_names(self,names,load_predicate):
+    def set_design_names(self,names,load_predicate=None):
+        if load_predicate is None:
+            load_predicate = list(self.get_load_predicates())[0]
         self._builder.set_design_names(names,load_predicate)
     
     def get_loaded_design_names(self):

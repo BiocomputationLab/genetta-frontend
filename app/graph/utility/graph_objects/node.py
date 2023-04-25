@@ -147,6 +147,8 @@ class Node:
         del self.properties[k]
         
 def _get_name(subject):
+    if len(subject) == 1:
+        return subject
     split_subject = _split(subject)
     if len(split_subject[-1]) == 1 and split_subject[-1].isdigit():
         return split_subject[-2]
