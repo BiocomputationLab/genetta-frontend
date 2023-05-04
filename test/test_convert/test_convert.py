@@ -1,4 +1,3 @@
-from code import interact
 import sys
 import os
 import unittest
@@ -14,6 +13,13 @@ from app.graph.world_graph import WorldGraph
 from app.converter.utility.graph import SBOLGraph
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 
+db_host = os.environ.get('NEO4J_HOST', 'localhost')
+db_port = os.environ.get('NEO4J_PORT', '7687')
+db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
+db_auth = tuple(db_auth.split("/"))
+uri = f'neo4j://{db_host}:{db_port}'
+login_graph_name = "login_manager"
+
 class TestConvert(unittest.TestCase):
     def setUp(self):
         pass
@@ -26,7 +32,7 @@ class TestConvert(unittest.TestCase):
         fn = os.path.join("..","files","nor_full.xml")
         sbol_graph = SBOLGraph(fn)
         gn = "test_sbol"
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         sb_convert(fn,graph.driver,gn)
         dg = graph.get_design(gn)
 
@@ -44,7 +50,7 @@ class TestConvert(unittest.TestCase):
         fn = os.path.join("..","files","interaction.xml")
         sbol_graph = SBOLGraph(fn)
         gn = "interaction"
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         sb_convert(fn,graph.driver,gn)
         dg = graph.get_design(gn)
 
@@ -65,7 +71,7 @@ class TestConvert(unittest.TestCase):
         sg2 = SBOLGraph(fn2)
         gn1 = "sb1"
         gn2 = "sb2"
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         sb_convert(fn1,graph.driver,gn1)
         sb_convert(fn2,graph.driver,gn2)
         dg1 = graph.get_design([gn1])
@@ -81,7 +87,7 @@ class TestConvert(unittest.TestCase):
     def test_gbk(self):
         fn = os.path.join("..","files","nor_reporter.gb")
         gn = "test_gbk"
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         gb_convert(fn,graph.driver,gn)
         dg = graph.get_design(gn)
         pes = dg.get_physicalentity()
@@ -94,7 +100,7 @@ class TestConvert(unittest.TestCase):
     def test_gbk2(self):
         fn = os.path.join("..","files","0xF6.gbk")
         gn = "test_gbk"
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn)
         gb_convert(fn,graph.driver,gn)
         dg = graph.get_design(gn)

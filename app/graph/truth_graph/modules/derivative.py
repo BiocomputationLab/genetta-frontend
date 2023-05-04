@@ -16,10 +16,12 @@ class DerivativeModule(AbstractModule):
         return self._to_graph(res)
 
 
-    def positive(self,subject,derivative,score):
+    def positive(self,subject,derivative,score=None):
         subject = self._cast_node(subject)
         derivative = self._cast_node(derivative)
         # Check if the subject is in the graph.
+        if score is None:
+            score = self._standard_modifier
         if score < 1:
             score = int(score *100)
         res = self._tg.edge_query(n=subject,v=derivative,e=p_derivative)

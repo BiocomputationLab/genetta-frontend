@@ -5,7 +5,7 @@ from app.converter.utility.sbol_generator import SBOLGenerator
 from pysbolgraph.SBOL2Serialize import serialize_sboll2
 from pysbolgraph.SBOL2Graph import SBOL2Graph
 from app.converter.utility.identifiers import identifiers
-from  app.converter.sbol_convert import convert as sbol_convert
+from app.converter.sbol_convert import convert as sbol_convert
 
 blacklist_features = ["source", "exon"]
 

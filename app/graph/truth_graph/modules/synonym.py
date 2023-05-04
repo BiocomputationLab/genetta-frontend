@@ -20,7 +20,7 @@ class SynonymModule(AbstractModule):
             if res != []:
                 assert(len(res) == 1)
                 return self._to_graph(self._tg.edge_query(n=res[0],threshold=threshold))
-        return []
+        return self._to_graph([])
 
 
     def positive(self,subject,synonym):

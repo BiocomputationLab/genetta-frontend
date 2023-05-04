@@ -27,12 +27,15 @@ from app.converter.sbol_convert import export
 from app.graph.world_graph import WorldGraph
 from app.utility.login import LoginHandler
 
-from app.visualiser.design import DesignDash
-from app.visualiser.editor import EditorDash
-from app.visualiser.cypher import CypherDash
-from app.visualiser.projection import ProjectionDash
-from app.visualiser.truth import TruthDash
-from app.enhancer.enhancer import Enhancer
+from app.graph_query.handler import GraphQueryHandler
+from app.tools.visualiser.design import DesignDash
+from app.tools.visualiser.editor import EditorDash
+from app.tools.visualiser.cypher import CypherDash
+from app.tools.visualiser.projection import ProjectionDash
+from app.tools.visualiser.truth import TruthDash
+from app.tools.enhancer.enhancer import Enhancer
+from app.tools.kg_expansion.builder import TruthGraphBuilder
+from app.tools.evaluator.evaluator import Evaluator
 
 root_dir = "app"
 static_dir = os.path.join(root_dir, "assets")
@@ -56,12 +59,17 @@ login_graph_name = "login_manager"
 
 logger = ChangeLogger()
 graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name],logger=logger)
+tg_interface = GraphQueryHandler(graph.truth)
 
+# Tools
 design_dash = DesignDash(__name__, server, graph)
 editor_dash = EditorDash(__name__, server, graph)
 cypher_dash = CypherDash(__name__, server, graph)
 projection_dash = ProjectionDash(__name__, server, graph)
 truth_dash = TruthDash(__name__, server, graph)
+enhancer = Enhancer(graph)
+evaluator = Evaluator(graph)
+tg_builder = TruthGraphBuilder(graph.truth)
 
 design_dash.app.enable_dev_tools(debug=True)
 cypher_dash.app.enable_dev_tools(debug=True)
@@ -76,7 +84,8 @@ app = DispatcherMiddleware(server, {
     editor_dash.pathname: editor_dash.app.server,
 })
 connector = SBOLConnector()
-enhancer = Enhancer(graph)
+
+
 
 server.config['SESSION_PERMANENT'] = True
 server.config['SESSION_TYPE'] = 'filesystem'
@@ -110,7 +119,7 @@ def login():
                                                 create_admin_form.password.data)
                 login_user(admin)
                 if len(list(set(graph.truth.name) & set(graph.get_graph_names()))) == 0:
-                    enhancer.seed_truth_graph()
+                    tg_builder.seed()
                 return redirect(url_for('index'))
             else:
                 return render_template('signup.html', create_admin_form=create_admin_form)
@@ -362,7 +371,7 @@ def evaluate():
         elif cg.validate_on_submit():
             gn = cg.graphs.data
         if gn is not None:
-            feedback = enhancer.evaluate_design(gn, flatten=True)
+            feedback = evaluator.evaluate(gn, flatten=True)
             descriptions = _get_evaluator_descriptions(feedback)
             return render_template("evaluate.html", feedback=feedback,
                                    descriptions=descriptions)
@@ -643,7 +652,7 @@ def _upload_graph(upload):
 
 def _get_evaluator_descriptions(feedback):
     descriptions = {}
-    evaluators = {k.__class__.__name__: k for k in enhancer.get_evaluators()}
+    evaluators = {k.__class__.__name__: k for k in evaluator.get_evaluators()}
 
     def ged(d):
         for k, v in d.items():
