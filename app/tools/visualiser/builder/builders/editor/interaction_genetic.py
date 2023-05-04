@@ -22,8 +22,7 @@ class EditorInteractionGeneticViewBuilder(InteractionGeneticViewBuilder):
         return g
 
     def get_edge_types(self):
-        return [model.identifiers.objects.repression,
-                model.identifiers.objects.activation]
+        return [model.identifiers.objects.repression]
     
     def get_node_types(self):
         dna_p = model.identifiers.objects.dna
@@ -40,11 +39,8 @@ class EditorInteractionGeneticViewBuilder(InteractionGeneticViewBuilder):
         mediator_dict = {(promoter_o,activation_o,cds_o):self._pac,
                          (promoter_o,repression_o,promoter_o):self._prp,
                          (promoter_o,repression_o,cds_o):self._prc,
-                         (promoter_o,activation_o,promoter_o) : self._pap,
                          (cds_o,repression_o,promoter_o) : self._crp,
-                         (cds_o,repression_o,cds_o) : self._crc,
-                         (cds_o,activation_o,cds_o) : self._cac,
-                         (cds_o,activation_o,promoter_o) : self._cap}
+                         (cds_o,repression_o,cds_o) : self._crc}
 
         # Genetic Graphs are Multi-barpartite. 
         # Therefore, inferences must be rule based.
@@ -99,7 +95,6 @@ class EditorInteractionGeneticViewBuilder(InteractionGeneticViewBuilder):
         repressor_p = model.identifiers.predicates.repressor
         product_p = model.identifiers.predicates.product
         template_p = model.identifiers.predicates.template
-        repressor_p = model.identifiers.predicates.repressor
         protein = model.identifiers.objects.protein
         gp = model.identifiers.objects.genetic_production
 
@@ -141,37 +136,44 @@ class EditorInteractionGeneticViewBuilder(InteractionGeneticViewBuilder):
             edges += self._interaction(protein,promoter2,repression)
         return edges
 
-    def _prc(self):
+    def _prc(self,promoter,cds,repression):
         # Case 4 - Promoter -> Repression -> CDS
         # Same as Case 3
-        pass
-    
-    def _pap(self):
-        # Case 5 - Promoter -> Activation -> Promoter 
-        # ??
-        pass
-    
-    def _crp(self):
+        return self._prp(promoter,cds,repression)
+        
+    def _crp(self,cds,promoter,repression):
         # Case 6 - CDS (C1) -> Repression -> Promoter (P1)
         # Does CDS generate protein?
         # No - Create protein + genetic production
         # Create Protein -> Repression -> Promoter
-        pass
+        gp = str(model.identifiers.objects.genetic_production)
+        repressor_p = model.identifiers.predicates.repressor
+        product_p = model.identifiers.predicates.product
+        template_p = model.identifiers.predicates.template
+        edges = []
+        assert(len(cds) == 1)
+        assert(len(promoter) == 1)
+        p1 = list(cds.values())[0]
+        cds_ints = self._graph.get_interactions(p1,template_p)
+        if cds_ints == []:
+            protein = _build_protein(p1.get_key())
+            protein_d = {product_p : protein}
+            cds = {template_p : p1}
+            edges += self._interaction(cds,protein_d,gp)
+        else:
+            assert(len(cds_ints) == 1)
+            i_eles = self._graph.get_interaction_elements(cds_ints[0].n,product_p)
+            assert(len(i_eles) == 1)
+            protein = i_eles[0].v 
 
-    def _crc(self):
+        protein = {repressor_p: protein}
+        edges += self._interaction(protein,promoter,repression)
+        return edges
+
+    def _crc(self,cds1,cds2,repression):
         # Case 7 - CDS (C1) -> Repression -> CDS (C2)
         # Same as case 6
-        pass
-
-    def _cac(self):
-        # Case 8 - CDS (C1) -> Activation -> CDS (C2)
-        # ??
-        pass
-
-    def _cap(self):
-        # Case 9 - CDS (C1) -> Activation -> Promoter (P1)
-        # ??
-        pass
+        return self._crp(cds1,cds2,repression)
 
 def _build_protein(uri):
     return Node(f'{_get_namespace(uri)}{_get_name(uri)}p/1',
