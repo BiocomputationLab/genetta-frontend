@@ -13,17 +13,24 @@ from app.graph.truth_graph.modules.synonym import SynonymModule
 from app.graph.truth_graph.modules.interaction import InteractionModule
 from app.graph.truth_graph.modules.derivative import DerivativeModule
 from app.graph.utility.graph_objects.edge import Edge
+from app.graph.utility.graph_objects.reserved_edge import ReservedEdge
 from app.graph.utility.graph_objects.node import Node
 from app.graph.utility.model.model import model
 
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 dfn = os.path.join(curr_dir,"..","..","files","nor_full.xml")
 confidence = str(model.identifiers.external.confidence)
+db_host = os.environ.get('NEO4J_HOST', 'localhost')
+db_port = os.environ.get('NEO4J_PORT', '7687')
+db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
+db_auth = tuple(db_auth.split("/"))
+uri = f'neo4j://{db_host}:{db_port}'
+login_graph_name = "login_manager"
 
 class TestTruthGraph(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.wg = WorldGraph()
+        self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tg = self.wg.truth
         self.module = AbstractModule(self.tg)
 
@@ -73,7 +80,7 @@ class TestTruthGraph(unittest.TestCase):
 class TestModule(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.wg = WorldGraph()
+        self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tg = self.wg.truth
         self.module = AbstractModule(self.tg)
 
@@ -110,14 +117,14 @@ class TestModule(unittest.TestCase):
         self.edges = [self.edge,self.edge2,self.edge3,self.edge4,
                     self.edge5,self.edge6,self.edge7,self.edge8,self.edge9]
         for e in self.edges:
-            self.tg.driver.remove_edge(e)
+            self.tg.driver.remove_edges(e)
             self.tg.driver.remove_node(e.n)
             self.tg.driver.remove_node(e.v)
         self.tg.driver.submit()
 
     def tearDown(self):
         for e in self.edges:
-            self.tg.driver.remove_edge(e)
+            self.tg.driver.remove_edges(e)
             self.tg.driver.remove_node(e.n)
             self.tg.driver.remove_node(e.v)
         self.tg.driver.submit()
@@ -316,7 +323,7 @@ class TestModule(unittest.TestCase):
 class TestSynonymModule(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.wg = WorldGraph()
+        self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tg = self.wg.truth
         self.module = SynonymModule(self.tg)
 
@@ -352,7 +359,7 @@ class TestSynonymModule(unittest.TestCase):
         node = Node("https://synbiohub.org/public/igem/BBa_K823003/1",model.identifiers.objects.physical_entity)
         vertex = Node("pveg")
         edge = Edge(node,vertex,model.identifiers.external.synonym)
-        self.tg.remove_edge(edge)
+        self.tg.remove_edges(edge)
         self.tg.driver.submit()
         
 
@@ -386,7 +393,7 @@ class TestSynonymModule(unittest.TestCase):
         node = Node("https://synbiohub.org/public/igem/BBa_K823003/1",model.identifiers.objects.physical_entity)
         vertex = Node("pveg")
         edge = Edge(node,vertex,model.identifiers.external.synonym)
-        self.tg.remove_edge(edge)
+        self.tg.remove_edges(edge)
         self.tg.driver.submit()
         
 
@@ -405,7 +412,7 @@ class TestSynonymModule(unittest.TestCase):
         node = Node("https://synbiohub.org/public/igem/BBa_K823003/1",model.identifiers.objects.physical_entity)
         vertex = Node("pveg")
         edge = Edge(node,vertex,model.identifiers.external.synonym)
-        self.tg.remove_edge(edge)
+        self.tg.remove_edges(edge)
         self.tg.driver.submit()
 
         for i in range(0,2):
@@ -430,7 +437,7 @@ class TestSynonymModule(unittest.TestCase):
         node = Node("https://synbiohub.org/public/igem/BBa_K823003/1",model.identifiers.objects.physical_entity)
         vertex = Node("pveg")
         edge = Edge(node,vertex,model.identifiers.external.synonym)
-        self.tg.remove_edge(edge)
+        self.tg.remove_edges(edge)
         self.tg.driver.submit()
 
         for i in range(0,2):
@@ -444,7 +451,7 @@ class TestSynonymModule(unittest.TestCase):
 class TestInteractionModule(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.wg = WorldGraph()
+        self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tg = self.wg.truth
         self.module = InteractionModule(self.tg)
 
@@ -467,78 +474,120 @@ class TestInteractionModule(unittest.TestCase):
         expected.graph_name = self.tg.name
         self.assertEqual(actual,expected)
     
-    def _assert_edge_count_equal(self,actuals,expecteds):
-        for e in expecteds:
-            e.n.properties["graph_name"] = self.tg.name
-            e.n.graph_name = self.tg.name
-            e.v.properties["graph_name"] = self.tg.name
-            e.v.graph_name = self.tg.name
-            e.properties["graph_name"] = self.tg.name
-            e.graph_name = self.tg.name
-
     def test_interaction_positive(self):
         node = Node("https://synbiohub.org/public/igem/tetR/1",model.identifiers.objects.dna)
         vertex = Node("https://synbiohub.org/public/igem/repression/1",model.identifiers.objects.repression)
-        edge = Edge(vertex,node,model.identifiers.predicates.repressor)
-        self.tg.remove_edge(edge)
+        edge = model.identifiers.predicates.repressor
+        e_edge = Edge(vertex,node,model.identifiers.predicates.repressor,graph_name=self.tg.name)
+        self.tg.remove_edges(e_edge)
         self.tg.driver.submit()
         
-        self.module.positive(edge)
-        res = self.module.get(edge.n,edge.v,edge.get_type(),threshold=5)
-        self.assertTrue(len(res) == 1)
-        res = res[0]
-        self._edge_equal(res,edge)
-        self.assertEqual(res.confidence,5)
-        self.module.positive(edge)
-        res = self.module.get(edge.n,edge.v,edge.get_type(),threshold=5)
-        self.assertTrue(len(res) == 1)
-        res = res[0]
-        self._edge_equal(res,edge)
-        self.assertEqual(res.confidence,10)
+        self.module.positive(vertex,node,edge)
+        res = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(res.edges())
+        self.assertTrue(len(edges) == 1)
+        edges = edges[0]
+        self._edge_equal(edges,e_edge)
+        self.assertEqual(edges.confidence,5)
+        self.module.positive(vertex,node,edge)
+        res = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(res.edges())
+        self.assertTrue(len(edges) == 1)
+        edges = edges[0]
+        self._edge_equal(edges,e_edge)
+        self.assertEqual(edges.confidence,10)
 
-        self.module.negative(edge)
-        self.module.negative(edge)
+        self.module.negative(vertex,node,edge)
+        self.module.negative(vertex,node,edge)
 
     def test_interaction_get(self):
-        node = Node("https://synbiohub.org/public/igem/tetR/1",model.identifiers.objects.dna)
-        vertex = Node("https://synbiohub.org/public/igem/repression/1",model.identifiers.objects.repression)
-        edge = Edge(vertex,node,model.identifiers.predicates.repressor)
-        self.tg.remove_edge(edge)
+        node = Node("https://synbiohub.org/public/igem/test_synonym_get_object1/1",model.identifiers.objects.dna)
+        node2 = Node("https://synbiohub.org/public/igem/test_synonym_get_object2/1",model.identifiers.objects.dna)
+        vertex = Node("https://synbiohub.org/public/igem/test_synonym_get_object3/1",model.identifiers.objects.repression)
+        edge = model.identifiers.predicates.repressor
+        e_edge = Edge(vertex,node,model.identifiers.predicates.repressor,graph_name=self.tg.name)
+        self.tg.remove_edges(e_edge)
         self.tg.driver.submit()
         
-        self.module.positive(edge)
-        res = self.module.get(edge.n,edge.v,edge.get_type(),threshold=5)
-        self._edge_equal(res[0],edge)
+        self.module.positive(vertex,node,edge)
+        res = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(res.edges())
+        self._edge_equal(edges[0],e_edge)
 
     def test_synonym_negative(self):
-        node = Node("https://synbiohub.org/public/igem/tetR/1",model.identifiers.objects.dna)
-        vertex = Node("https://synbiohub.org/public/igem/repression/1",model.identifiers.objects.repression)
-        edge = Edge(vertex,node,model.identifiers.predicates.repressor)
-        self.tg.remove_edge(edge)
+        node = Node("https://synbiohub.org/public/igem/test_synonym_get_object1/1",model.identifiers.objects.dna)
+        node2 = Node("https://synbiohub.org/public/igem/test_synonym_get_object2/1",model.identifiers.objects.dna)
+        vertex = Node("https://synbiohub.org/public/igem/test_synonym_get_object3/1",model.identifiers.objects.repression)
+        edge = model.identifiers.predicates.repressor
+        e_edge = Edge(vertex,node,model.identifiers.predicates.repressor,graph_name=self.tg.name)
+        self.tg.remove_edges(e_edge)
         self.tg.driver.submit()
 
         for i in range(0,2):
-            self.module.positive(edge)
+            self.module.positive(vertex,node,edge)
 
-        res = self.module.get(edge.n,edge.v,edge.get_type(),threshold=5)
-        self.assertTrue(len(res),1)
-        res = res[0]
-        self.assertEqual(res.confidence,10)
+        g = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(g.edges())
+        self.assertTrue(len(edges),1)
+        edges = edges[0]
+        self.assertEqual(edges.confidence,10)
 
         for i in range(0,2):
-            self.module.negative(edge)
+            self.module.negative(vertex,node,edge)
         
-        res = self.module.get(edge.n,edge.v,edge.get_type(),threshold=5)
-        self.assertEqual(res,[])
+        g = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(g.edges())
+        self.assertEqual(edges,[])
 
-        self.module.negative(edge)
-        res = self.module.get(edge.n,edge.v,edge.get_type(),threshold=5)
-        self.assertEqual(res,[])
+        self.module.negative(vertex,node,edge)
+        g = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(g.edges())
+        self.assertEqual(edges,[])
+
+
+    def test_synonym_get_object(self):
+        node = Node("https://synbiohub.org/public/igem/test_synonym_get_object1/1",model.identifiers.objects.dna)
+        node2 = Node("https://synbiohub.org/public/igem/test_synonym_get_object2/1",model.identifiers.objects.dna)
+        vertex = Node("https://synbiohub.org/public/igem/test_synonym_get_object3/1",model.identifiers.objects.repression)
+        edge = model.identifiers.predicates.repressor
+        e_edge1 = Edge(vertex,node,model.identifiers.predicates.repressor,graph_name=self.tg.name)
+        e_edge2 = Edge(vertex,node2,model.identifiers.predicates.repressor,graph_name=self.tg.name)
+        self.tg.remove_edges(e_edge1)
+        self.tg.remove_edges(e_edge2)
+        self.tg.driver.submit()
+
+        for i in range(0,2):
+            self.module.positive(vertex,node,edge)
+            self.module.positive(vertex,node2,edge)
+
+
+        g = self.module.get(object=node)
+        edges = list(g.edges())
+        self.assertCountEqual(edges,[e_edge1,e_edge2])
+
+        for i in range(0,2):
+            self.module.negative(vertex,node,edge)
+            self.module.negative(vertex,node2,edge)
+        
+        g = self.module.get(vertex,node,edge,threshold=5)
+        edges = list(g.edges())
+        self.assertEqual(edges,[])
+        g = self.module.get(vertex,node2,edge,threshold=5)
+        edges = list(g.edges())
+        self.assertEqual(edges,[])
+
+        self.module.negative(vertex,node,edge)
+        g = self.module.get(vertex,node,edge,threshold=5)
+        self.assertEqual(edges,[])
+        self.module.negative(vertex,node2,edge)
+        g = self.module.get(vertex,node2,edge,threshold=5)
+        self.assertEqual(edges,[])
+        
 
 class TestDerivativeModule(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.wg = WorldGraph()
+        self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tg = self.wg.truth
         self.module = DerivativeModule(self.tg)
 
@@ -547,7 +596,7 @@ class TestDerivativeModule(unittest.TestCase):
                     model.identifiers.objects.physical_entity)
         vertex = Node("https://synbiohub.org/public/igem/BBa_K823004/1")
         edge = Edge(node,vertex,model.identifiers.external.derivative)
-        self.tg.remove_edges(edge)
+        self.tg.remove_edgess(edge)
         self.tg.driver.submit()
         self.module.positive(node,vertex)
         res = self.module.get(node,vertex,threshold=5)
@@ -558,7 +607,7 @@ class TestDerivativeModule(unittest.TestCase):
                     model.identifiers.objects.physical_entity)
         vertex = Node("https://synbiohub.org/public/igem/BBa_K823004/1")
         edge = Edge(node,vertex,model.identifiers.external.derivative)
-        self.tg.remove_edges(edge)
+        self.tg.remove_edgess(edge)
         self.tg.driver.submit()
         for a in range(0,5):
             self.module.positive(node,vertex)
@@ -572,7 +621,7 @@ class TestDerivativeModule(unittest.TestCase):
                     model.identifiers.objects.physical_entity)
         vertex = Node("https://synbiohub.org/public/igem/BBa_K823004/1")
         edge = Edge(node,vertex,model.identifiers.external.derivative)
-        self.tg.remove_edges(edge)
+        self.tg.remove_edgess(edge)
         self.tg.driver.submit()
         for a in range(0,5):
             self.module.positive(node,vertex)

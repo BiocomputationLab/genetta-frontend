@@ -1,9 +1,7 @@
-from app.utility.change_log.logger import logger
-
 update_clauses = ["CREATE", "SET"]
 
 class Operations:
-    def __init__(self, graph_object, index, use_properties=True):
+    def __init__(self, graph_object, index, use_properties=True,logger=None):
         self.graph_object = graph_object
         self.index = index
         self.ops = {self.create: None, self.match: None,
@@ -11,6 +9,7 @@ class Operations:
                     self.remove:None,self.remove_properties:None,
                     self.add_label:None, self.replace_label: None}
         self.use_properties = use_properties
+        self.logger = logger
 
     def enable_create(self):
         self.ops[self.create] = True
@@ -157,8 +156,8 @@ class Operations:
 
 
 class NodeOperations(Operations):
-    def __init__(self, graph_object, index, use_properties=True):
-        super().__init__(graph_object, index, use_properties)
+    def __init__(self, graph_object, index, use_properties=True,logger=None):
+        super().__init__(graph_object, index, use_properties,logger=logger)
 
     def generate(self,log=True):
         return super().generate("n",log=log)
@@ -166,8 +165,8 @@ class NodeOperations(Operations):
     def create(self,log=True):
         qry = f'CREATE (n{self.index}:{self.list_to_query(self.graph_object.get_labels())} '
         qry += f'{{{self.get_properties()}}})'
-        if log:
-            logger.add_node(self.graph_object,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.add_node(self.graph_object,self.graph_object.graph_name)
         return qry
 
     def match(self,use_id=False,log=True):
@@ -176,20 +175,20 @@ class NodeOperations(Operations):
     def set(self, new_props,log=True):
         qry = super().set(new_props,"n")
         self.graph_object.update(new_props)
-        if log:
-            logger.replace_node_property(self.graph_object,
+        if log and self.logger is not None:
+            self.logger.replace_node_property(self.graph_object,
                 new_props,self.graph_object.graph_name)
         return qry
 
     def replace(self, new_props,log=True):
         self.graph_object.replace(new_props)
-        if log:
-            logger.replace_node_property(self.graph_object,new_props,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.replace_node_property(self.graph_object,new_props,self.graph_object.graph_name)
         return super().replace(new_props,"n")
 
     def remove(self,log=True):
-        if log:
-            logger.remove_node(self.graph_object,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.remove_node(self.graph_object,self.graph_object.graph_name)
         return super().remove("n")
 
     def add_label(self,label,log=True):
@@ -201,15 +200,15 @@ class NodeOperations(Operations):
         return qry
 
     def replace_label(self, old, new,log=True):
-        if log:
-            logger.replace_node(old,new,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.replace_node(old,new,self.graph_object.graph_name)
         return f'''REMOVE n{self.index}:`{old}`
                    SET n{self.index}:`{new}`'''
     
 
 class EdgeOperations(Operations):
-    def __init__(self, graph_object, index, n_index, v_index, use_properties=True):
-        super().__init__(graph_object, index, use_properties)
+    def __init__(self, graph_object, index, n_index, v_index, use_properties=True,logger=None):
+        super().__init__(graph_object, index, use_properties,logger=logger)
         self.n_index = n_index
         self.v_index = v_index
 
@@ -226,8 +225,8 @@ class EdgeOperations(Operations):
         qry += f'(n{self.n_index})'
         qry += f'-[r{self.index}:{"`"+self.graph_object.get_type()+"`"} {{{self.get_properties()}}}]->'
         qry += f'(n{self.v_index})'
-        if log:
-            logger.add_edge(self.graph_object,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.add_edge(self.graph_object,self.graph_object.graph_name)
         return qry
 
     def match(self,use_id,log=True):
@@ -243,21 +242,21 @@ class EdgeOperations(Operations):
 
     def set(self, new_props,log=True):
         self.graph_object.update(new_props)
-        if log:
-            logger.replace_edge_property(self.graph_object,
+        if log and self.logger is not None:
+            self.logger.replace_edge_property(self.graph_object,
                 new_props,self.graph_object.graph_name)
         return super().set(new_props,"e")
 
     def replace(self, new_props,log=True):
         self.graph_object.replace(new_props)
-        if log:
-            logger.replace_edge_property(self.graph_object,
+        if log and self.logger is not None:
+            self.logger.replace_edge_property(self.graph_object,
                 new_props,self.graph_object.graph_name)
         return super().replace(new_props,"e")
 
     def remove(self,log=True):
-        if log:
-            logger.remove_edge(self.graph_object,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.remove_edge(self.graph_object,self.graph_object.graph_name)
         return super().remove("e")
 
     def add_label(self,label,log=True):
@@ -269,7 +268,7 @@ class EdgeOperations(Operations):
         return qry
 
     def replace_label(self, old, new,log=True):
-        if log:
-            logger.replace_edge(old,new,self.graph_object.graph_name)
+        if log and self.logger is not None:
+            self.logger.replace_edge(old,new,self.graph_object.graph_name)
         return f'''REMOVE e{self.index}:`{old}`
                    SET e{self.index}:`{new}`'''

@@ -42,22 +42,24 @@ class DesignProteinProduction(AbstractEnhancement):
                              (n,nv_product)]
                     self._add_interaction(graph,v,edges)
 
-class TruthProteinProduction(DesignProteinProduction):
+class TruthProteinProduction(AbstractEnhancement):
     '''
     It is assumed that all CDS express proteins.
     '''
     def __init__(self, world_graph, miner):
         super().__init__(world_graph, miner)
     
-    def enhance(self, mode="automated"):
-        return super().enhance(self._wg.truth.name, mode)
+    def enhance(self):
+        graph = self._wg.truth
+        for cds in graph.get_cds():
+            for i in graph.interactions.get(object=cds):
+                if i.n.get_type() == str(nv_pp):
+                    break
+            else:
+                n = self._add_related_node(graph,cds,nv_pp)
+                v = self._add_related_node(graph,cds,nv_p)
+                self._wg.truth.interactions.positive(n,cds,nv_template,100)
+                self._wg.truth.interactions.positive(n,v,nv_product,100)
 
-    def apply(self, replacements):
-        return super().apply(replacements, self._wg.truth.name)
 
-    def _add_interaction(self,graph,interaction,entities):
-        edges = []
-        for e,i_type in entities:
-            self._wg.truth.interactions.positive(interaction,e,i_type)
-            edges.append((interaction,e,i_type))
-        graph.add_edges(edges)
+

@@ -17,6 +17,10 @@ class TruthGraph(DesignGraph):
         self.derivatives = DerivativeModule(self)
         self._np = {"graph_name": self.name}
 
+
+    def query(self):
+        raise NotImplementedError()
+    
     def add_node(self,key,type=None,**kwargs):
         kwargs.update(self._np)
         return super().add_node(key,type,**kwargs)
@@ -50,10 +54,8 @@ class TruthGraph(DesignGraph):
         self.driver.set_edge(edge, {p_confidence: confidence})
         return self.driver.submit()
 
-
     def node_query(self, n=[], **kwargs):
         return self._node_query(n,**kwargs)
-
 
     def edge_query(self, n=None, v=None, e=None, threshold=0, **kwargs):
         n = self._add_node_gn(n)

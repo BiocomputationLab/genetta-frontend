@@ -57,9 +57,6 @@ class HierarchyEvaluator(AbstractEvaluator):
             _walk(root,1,roots)
             hierarchies.append(r_level.copy())
             r_level.clear() 
-        for levels in hierarchies:
-            for level in levels:
-                print([str(s) for s in level])
         return {"score": int(score),
                 "comments": comments}
 

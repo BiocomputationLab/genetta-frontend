@@ -20,6 +20,7 @@ from flask_login import login_required
 
 from app.utility import forms
 from app.utility import form_handlers
+from app.utility.change_log.logger import ChangeLogger
 from app.utility.sbol_connector.connector import SBOLConnector
 from app.converter.handler import file_convert
 from app.converter.sbol_convert import export
@@ -31,7 +32,6 @@ from app.visualiser.editor import EditorDash
 from app.visualiser.cypher import CypherDash
 from app.visualiser.projection import ProjectionDash
 from app.visualiser.truth import TruthDash
-from app.validator.validator import Validator
 from app.enhancer.enhancer import Enhancer
 
 root_dir = "app"
@@ -53,7 +53,9 @@ db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
 db_auth = tuple(db_auth.split("/"))
 uri = f'neo4j://{db_host}:{db_port}'
 login_graph_name = "login_manager"
-graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
+
+logger = ChangeLogger()
+graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name],logger=logger)
 
 design_dash = DesignDash(__name__, server, graph)
 editor_dash = EditorDash(__name__, server, graph)
@@ -75,7 +77,6 @@ app = DispatcherMiddleware(server, {
 })
 connector = SBOLConnector()
 enhancer = Enhancer(graph)
-validator = Validator(graph)
 
 server.config['SESSION_PERMANENT'] = True
 server.config['SESSION_TYPE'] = 'filesystem'
@@ -231,7 +232,7 @@ def modify_graph():
             pass
         fn = export_graph.e_graphs.data+".xml"
         dfn = os.path.join(session["user_dir"], fn)
-        export(dfn, [export_graph.e_graphs.data])
+        export(dfn, [export_graph.e_graphs.data],logger)
         shutil.copyfile(dfn, os.path.join(out_dir, fn))
         shutil.make_archive(out_dir, 'zip', out_dir)
         shutil.rmtree(out_dir)

@@ -20,7 +20,6 @@ class Enhancer:
     def get_evaluators(self):
         evaluators = []
         def ge(evaluator):
-            evaluators.append(evaluator)
             for e in evaluator:
                 evaluators.append(e)
                 ge(e)
@@ -48,8 +47,8 @@ class Enhancer:
             seeder.build()
             self._graph.truth.save(tg_initial_fn)
     
-    def expand_truth_graph(self,mode="automated"):
-        self._truth_enhancements.enhance(self._graph.truth.name,mode=mode)
+    def expand_truth_graph(self):
+        self._truth_enhancements.enhance()
 
     def apply_truth(self,replacements,graph_name,feedback=None):
         return self._truth_enhancements.apply(replacements,graph_name,feedback=feedback)

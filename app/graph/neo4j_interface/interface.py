@@ -14,7 +14,6 @@ from app.graph.neo4j_interface.query_builder import QueryBuilder
 from app.graph.neo4j_interface.gds.project import Projection
 from app.graph.neo4j_interface.gds.procedures import Procedures
 from app.graph.utility.model.model import model
-from app.utility.change_log.logger import logger
 
 def _connect_db(uri,auth):
     attempts = 1
@@ -30,12 +29,13 @@ def _connect_db(uri,auth):
         raise UnableToConnectError("Can't connect to Neo4j database.")
 
 class Neo4jInterface:
-    def __init__(self,uri,auth,reserved_names=None):
+    def __init__(self,uri,auth,reserved_names=None,logger=None):
         try:
             self.driver = _connect_db(uri,auth)
         except UnableToConnectError:
             self.driver = None
-        self.qry_builder = QueryBuilder()
+        self.logger = logger
+        self.qry_builder = QueryBuilder(logger=logger)
         self.project = Projection(self)
         self.procedures = Procedures(self)
         if reserved_names is None:
@@ -198,7 +198,8 @@ class Neo4jInterface:
                     self.qry_builder.add_match_edge(edge)
                     self.qry_builder.add_remove_edge_property(edge, {"graph_name": graph_name})
         self.submit()
-        logger.remove_graph(graph_name)
+        if self.logger is not None:
+            self.logger.remove_graph(graph_name)
 
     def drop_graph(self,graph_name):
         if not isinstance(graph_name, list):
@@ -225,6 +226,7 @@ class Neo4jInterface:
             e = e.get_type()
         qry = self.qry_builder.edge_query(n, v, e, n_props.copy(), v_props.copy(),
                                           e_props.copy(), directed=directed, exclusive=exclusive, predicate=predicate)
+        #print(qry)
         results = []
         for index, record in self._run(qry).iterrows():
             n = record["n"]

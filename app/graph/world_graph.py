@@ -3,13 +3,15 @@ from app.graph.design_graph.design_graph import DesignGraph
 from app.graph.neo4j_interface.interface import Neo4jInterface
 tg_name = "truth_graph"
 class WorldGraph:
-    def __init__(self,db_uri,db_auth,reserved_names=None):
+    def __init__(self,db_uri,db_auth,reserved_names=None,logger=None):
         if reserved_names is None:
             reserved_names = []
         reserved_names += [tg_name]
         self.reserved_names = reserved_names
         
-        self.driver = Neo4jInterface(db_uri,db_auth,reserved_names=reserved_names)
+        self.driver = Neo4jInterface(db_uri,db_auth,
+                                     reserved_names=reserved_names,
+                                     logger=logger)
         self.truth = TruthGraph(tg_name,self.driver)
 
     def new_design(self,graph_name):
@@ -52,7 +54,6 @@ class WorldGraph:
             d = self.get_design(graph)
             out_locs.append(d.export(dir=dir,original=original))
         return out_locs
-    
 
     def get_truth(self,edge,threshold=None):
         return self.truth.get(edge,threshold=threshold)
@@ -60,6 +61,5 @@ class WorldGraph:
     def drop_truth_graph(self):
         self.truth.drop()
 
-        
     def get_projected_names(self):
         return self.driver.project.names()

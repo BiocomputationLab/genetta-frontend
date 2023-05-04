@@ -5,7 +5,6 @@ from flask import session
 from app.graph.utility.graph_objects.node import Node
 from app.graph.utility.graph_objects.edge import Edge
 
-#default_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),"logs")
 class ChangeLogger:
     def __init__(self):
         pass
@@ -120,7 +119,5 @@ class ChangeLogger:
                 "key" : edge.get_type(),
                 "properties" : edge.get_properties(),
                 "graph_type" : "edge"}
-    
-logger = ChangeLogger()
 
 

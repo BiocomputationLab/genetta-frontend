@@ -83,8 +83,6 @@ class PathwayEvaluator(AbstractEvaluator):
                 inputs += self._interaction_walk_i(o, graph)
 
         elif len(outputs) == 0:
-            # Set outputs as nodes that connect to the node the input connects to
-            # (See notebook) its essentially the node which edge makes it a cycle.
             comments["Design"] = f'Cyclic Pathway, No Inputs explicity defined.'
             for i in inputs:
                 outputs += self._interaction_walk_o(i, graph)                

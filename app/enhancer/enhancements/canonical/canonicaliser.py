@@ -165,8 +165,3 @@ class DesignCanonicaliser(AbstractEnhancement):
                                             p_obj,d["score"],
                                             d["comment"])
         return changes
-
-
-class TruthCanonicaliser(AbstractEnhancement):
-    def __init__(self, world_graph, miner):
-        super().__init__(world_graph, miner)

@@ -10,12 +10,10 @@ class DerivativeModule(AbstractModule):
     def __init__(self,truth_graph):
         super().__init__(truth_graph)
     
-    def get(self,subject=None,derivative=None,threshold=90):
+    def get(self,subject=None,derivative=None,threshold=90,directed=True):
         e = Edge(n=subject,v=derivative,type=p_derivative)
-        res = self._tg.edge_query(e=e)
-        if len(res) != 0:
-            return self._cast_condfidence(res)
-        return []
+        res = self._tg.edge_query(e=e,directed=directed)
+        return self._to_graph(res)
 
 
     def positive(self,subject,derivative,score):

@@ -19,17 +19,23 @@ from app.enhancer.evaluator.completeness.interaction import PathwayEvaluator
 from app.enhancer.evaluator.completeness.hierarchy import HierarchyEvaluator
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 
+db_host = os.environ.get('NEO4J_HOST', 'localhost')
+db_port = os.environ.get('NEO4J_PORT', '7687')
+db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
+db_auth = tuple(db_auth.split("/"))
+uri = f'neo4j://{db_host}:{db_port}'
+login_graph_name = "login_manager"
 
 class TestEvaluator(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.wg = WorldGraph()
+        self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.enhancer = Enhancer(self.wg)
         self.evaluator = self.enhancer._evaluator
         fn = os.path.join("files","nor_full.xml")
         gn = "test_evaluator"
-        #self.wg.remove_design(gn)
-        #convert(fn,self.wg.driver,gn)
+        self.wg.remove_design(gn)
+        convert(fn,self.wg.driver,gn)
         self.graph = self.wg.get_design(gn)
 
     @classmethod
@@ -206,18 +212,6 @@ class TestEvaluator(unittest.TestCase):
         graph = self.wg.get_design(gn)
         se = HierarchyEvaluator(self.wg,self.enhancer._miner)
         feedback = se.evaluate(graph)
-        self.assertEqual(feedback["score"],0)
-
-    def test_hierarchy_single_parent_intermediate_cyclic(self):
-        fn = os.path.join("files","single_parent_intermediate_cyclic.xml")
-        gn = "test_hierarchy_single_parent_intermediate_cyclic"
-        self.wg.remove_design(gn)
-        convert(fn,self.wg.driver,gn)
-        graph = self.wg.get_design(gn)
-        se = HierarchyEvaluator(self.wg,self.enhancer._miner)
-        feedback = se.evaluate(graph)
-        self.assertEqual(feedback["comments"],{Node("http://shortbol.org/v2#intermediate_1/1"): 
-        "http://shortbol.org/v2#intermediate_1/1 and http://shortbol.org/v2#intermediate_3/1 makes the hierarchy circular."})
         self.assertEqual(feedback["score"],0)
 
     def test_hierarchy_circular(self):

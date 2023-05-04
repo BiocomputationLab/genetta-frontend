@@ -38,6 +38,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('truth') }}">Database</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('canonicalise') }}">Canonicalise</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -48,6 +51,8 @@
                             <li><a class="dropdown-item" href="{{ url_for('examples') }}">Examples</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('evaluate') }}">Evaluator</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('graph_admin') }}">Admin</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('gds') }}">GDS</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('cypher') }}">Cypher</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
