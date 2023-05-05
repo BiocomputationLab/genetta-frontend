@@ -3,10 +3,11 @@ from  app.graph.neo4j_interface.operations import NodeOperations
 from  app.graph.neo4j_interface.operations import EdgeOperations
 
 class QueryBuilder:
-    def __init__(self):
+    def __init__(self,logger=None):
         self.index = 1
         self.nodes = {}
         self.edges = {}
+        self.logger = logger
         
     def is_node_staged(self, n):
         return n in self.nodes
@@ -213,7 +214,10 @@ class QueryBuilder:
         for index, (k, v) in enumerate(items.items()):
             if k == "graph_name":
                 continue
-            v = v if isinstance(v, list) else f'"{v}"'
+            if isinstance(v,list):
+                pass
+            else:
+                v = f'"{v}"'
             f_str += f'`{k}`: {v}'
             if index != len(items) - 1:
                 f_str += ","
@@ -239,7 +243,7 @@ class QueryBuilder:
 
     def _add_node(self,node):
         if node not in self.nodes:
-            no = NodeOperations(node,self.index)
+            no = NodeOperations(node,self.index,logger=self.logger)
             self.nodes[node] = no
         self.index += 1
 
@@ -251,7 +255,7 @@ class QueryBuilder:
         n_index = self.nodes[edge.n].index
         v_index = self.nodes[edge.v].index
         if edge not in self.edges:
-            no = EdgeOperations(edge,self.index,n_index,v_index)
+            no = EdgeOperations(edge,self.index,n_index,v_index,logger=self.logger)
             self.edges[edge] = no
         self.index += 1
 
@@ -267,6 +271,21 @@ class QueryBuilder:
             where += f"{intersection}(a IN {str(gn)} WHERE a IN {code}.`graph_name`)"
         return where
 
+    def _lists(self,props,where,code,intersection):
+        to_del = []
+        for k,v in props.items():
+            if k == "graph_name":
+                where = self._graph_name(props,where,code,intersection)
+                to_del.append(k)
+            elif isinstance(v,list):
+                if where != "":
+                    where = f"({where}) AND "
+                where += f"ALL(a IN {str(v)} WHERE a IN {code}.`{k}`)"
+                to_del.append(k)
+        for td in to_del:
+            del props[td]
+        return where,props
+    
     def _edge_match(self, n=None, v=None, e=None, n_props={}, v_props={}, 
                     e_props={},directed=True,exclusive=False,predicate="ALL"):
         def _cast_node(n,code):
@@ -292,14 +311,15 @@ class QueryBuilder:
             e_props.update(e.get_properties())
         n,n_where = _cast_node(n,"n")
         v,v_where = _cast_node(v,"v")
-        n_where = self._graph_name(n_props,n_where,"n",predicate)
-        v_where = self._graph_name(v_props,v_where,"v",predicate)
-        e_where = self._graph_name(e_props,"","e",predicate)
+        n_where,n_props = self._lists(n_props,n_where,"n",predicate)
+        v_where,v_props = self._lists(v_props,v_where,"v",predicate)
+        e_where,e_props = self._lists(e_props,"","e",predicate)
 
         if isinstance(e, list):
             e = ":" + ""+"|".join(["`" + edge + "`" for edge in e])
         else:
             e = f':`{e}`' if e else ""
+        
 
         n = f'(n{n} {{{self.dict_to_query(n_props)}}})'
         e = f'[e{e} {{{self.dict_to_query(e_props)}}}]'

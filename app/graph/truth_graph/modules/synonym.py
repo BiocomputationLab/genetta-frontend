@@ -14,13 +14,13 @@ class SynonymModule(AbstractModule):
         e = Edge(n=subject,v=synonym,type=p_synonym)
         res = self._tg.edge_query(e=e)
         if len(res) != 0:
-            return self._cast_condfidence(res)
+            return self._to_graph(res)
         if synonym is not None:
             res = self._tg.node_query(name=synonym)
             if res != []:
                 assert(len(res) == 1)
-                return self._tg.edge_query(n=res[0],threshold=threshold)
-        return []
+                return self._to_graph(self._tg.edge_query(n=res[0],threshold=threshold))
+        return self._to_graph([])
 
 
     def positive(self,subject,synonym):

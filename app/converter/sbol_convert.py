@@ -8,7 +8,6 @@ from app.converter.utility.graph import SBOLGraph
 from app.converter.utility.common import map_to_nv, derive_graph_name, get_interaction_properties
 from app.graph.utility.model.model import model as model
 from app.converter.utility.identifiers import identifiers
-from app.utility.change_log.logger import logger
 accepted_file_types = ['xml', 'ttl', 'sbol', 'rdf']
 
 
@@ -102,7 +101,7 @@ def convert(filename, neo_graph, graph_name):
     neo_graph.submit(log=False)
 
 
-def export(fn, gn):
+def export(fn, gn, logger):
     c_dict = {"add": {"node": _add_node,
                       "edge": _add_edge},
               "remove": {"node": _remove_node,

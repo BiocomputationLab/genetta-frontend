@@ -17,10 +17,18 @@ from app.converter.utility.graph import SBOLGraph
 from app.graph.utility.graph_objects.node import Node
 from app.graph.utility.model.model import model
 from app.converter.utility.identifiers import identifiers
-from app.visualiser.builder.editor import EditorBuilder
+from app.tools.visualiser.builder.editor import EditorBuilder
 
 
 curr_dir = os.path.dirname(os.path.realpath(__file__))
+
+db_host = os.environ.get('NEO4J_HOST', 'localhost')
+db_port = os.environ.get('NEO4J_PORT', '7687')
+db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
+db_auth = tuple(db_auth.split("/"))
+uri = f'neo4j://{db_host}:{db_port}'
+login_graph_name = "login_manager"
+
 ids = model.identifiers
 nor_fn = os.path.join("..","files","nor_full.xml")
 class TestExport(unittest.TestCase):
@@ -35,7 +43,7 @@ class TestExport(unittest.TestCase):
         fn = os.path.join("..","files","nor_full.xml")
         pre_graph = SBOLGraph(fn)
         gn = "test_no_changes"
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         convert(fn,graph.driver,gn)
         dg = graph.get_design(gn)
         out_fn = export(fn,gn)
@@ -46,7 +54,7 @@ class TestExport(unittest.TestCase):
     def test_add_physical_entity(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -86,7 +94,7 @@ class TestExport(unittest.TestCase):
     def test_add_conceptual_entity(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -110,7 +118,7 @@ class TestExport(unittest.TestCase):
     def test_remove_physical_entity(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -137,7 +145,7 @@ class TestExport(unittest.TestCase):
     def test_remove_conceptual_entity(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -160,7 +168,7 @@ class TestExport(unittest.TestCase):
     def test_replace_node_label(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -187,7 +195,7 @@ class TestExport(unittest.TestCase):
     def test_replace_node_properties(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -215,7 +223,7 @@ class TestExport(unittest.TestCase):
     def test_add_hasPart(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -248,7 +256,7 @@ class TestExport(unittest.TestCase):
     def test_add_interaction_parts(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -284,7 +292,7 @@ class TestExport(unittest.TestCase):
     def test_add_interaction(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -325,7 +333,7 @@ class TestExport(unittest.TestCase):
     def test_remove_edge_has_part(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -356,7 +364,7 @@ class TestExport(unittest.TestCase):
     def test_remove_edge_interaction(self):
         fn = os.path.join("..","files","empty_graph.xml")
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(fn,graph.driver,gn[0])
         dg = graph.get_design(gn)
@@ -400,7 +408,7 @@ class TestExport(unittest.TestCase):
 
     def test_edit_design(self): 
         gn = ["test_no_changes"]
-        graph = WorldGraph()
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         graph.remove_design(gn[0])
         convert(nor_fn,graph.driver,gn[0])
         dg = graph.get_design(gn)

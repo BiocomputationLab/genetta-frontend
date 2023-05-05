@@ -3,7 +3,8 @@ from abc import ABC
 from app.graph.utility.model.model import model
 from app.graph.utility.graph_objects.edge import Edge
 from app.graph.utility.graph_objects.node import Node
-
+from app.graph.truth_graph.modules.viewgraph import ViewGraph
+import networkx as nx
 confidence = str(model.identifiers.external.confidence)
 p_synonym = str(model.identifiers.external.synonym)
 
@@ -13,6 +14,16 @@ class AbstractModule(ABC):
         self._standard_modifier = 5
         self._upper_threshold = 100
         self._lower_threshold = 0
+    
+
+    def _to_graph(self,edges):
+        g = ViewGraph()
+        for edge in edges:
+            edge = self._cast_condfidence([edge])[0]
+            g.add_node(edge.n)
+            g.add_node(edge.v)
+            g.add_edge(edge)
+        return g
     
     def positive(self,edges):
         return self._change(edges,self._standard_modifier)
