@@ -334,6 +334,7 @@ class TestEditor(unittest.TestCase):
         self.wg.driver.submit()
 
     def test_add_edges_interaction_genetic_pac(self):
+        # Redundant Test
         self.builder.set_interaction_genetic_view()
         self.builder.build()
         node1 = self.get_node(model.identifiers.objects.promoter)
@@ -410,8 +411,58 @@ class TestEditor(unittest.TestCase):
             self.wg.driver.remove_edge(r.n,r.v,r.get_type())
         self.wg.driver.submit()
 
+    def test_add_edges_interaction_genetic_prc(self):
+        self.builder.set_interaction_genetic_view()
+        self.builder.build()
+        node1 = self.get_node(model.identifiers.objects.promoter,True)
+        node2 = self.get_node(model.identifiers.objects.cds)
+        print(node1,node2)
+        self.builder.add_node(node1.get_key(),node1.get_type())
+        self.builder.add_node(node2.get_key(),node2.get_type())
+        e = str(model.identifiers.objects.repression)
+        inps,outs = model.interaction_predicates(model.get_class_code(e))
+        n = {str(inps[0][1]["key"]) : node1}
+        v = {str(outs[0][1]["key"]) : node2}
+        pre_res = self.dg.edges()
+        self.builder.add_edges(n,v,e)
+        res = self.dg.edges()
+        new_edges = list(set(res) - set(pre_res))
+        self.assertTrue(len(new_edges) == 10,len(new_edges))        
+        pre_res = self.dg.edges()
+        self.builder.add_edges(n,v,e)
+        res = self.dg.edges()
+        res = list(set(res) - set(pre_res))
+        self.assertTrue(len(res) == 0)
+        for r in new_edges:
+            self.wg.driver.remove_edge(r.n,r.v,r.get_type())
+        self.wg.driver.submit()
 
-    def test_add_edges_cds_promoter_repression_no_protein(self):
+    def test_add_edges_interaction_genetic_crp(self):
+        self.builder.set_interaction_genetic_view()
+        self.builder.build()
+        node1 = self.get_node(model.identifiers.objects.cds,True)
+        node2 = self.get_node(model.identifiers.objects.promoter)
+        self.builder.add_node(node1.get_key(),node1.get_type())
+        self.builder.add_node(node2.get_key(),node2.get_type())
+        e = str(model.identifiers.objects.repression)
+        inps,outs = model.interaction_predicates(model.get_class_code(e))
+        n = {str(inps[0][1]["key"]) : node1}
+        v = {str(outs[0][1]["key"]) : node2}
+        pre_res = self.dg.edges()
+        self.builder.add_edges(n,v,e)
+        res = self.dg.edges()
+        new_edges = list(set(res) - set(pre_res))
+        self.assertTrue(len(new_edges) == 5)        
+        pre_res = self.dg.edges()
+        self.builder.add_edges(n,v,e)
+        res = self.dg.edges()
+        res = list(set(res) - set(pre_res))
+        self.assertTrue(len(res) == 0)
+        for r in new_edges:
+            self.wg.driver.remove_edge(r.n,r.v,r.get_type())
+        self.wg.driver.submit()
+
+    def test_add_edges_crp_no_protein(self):
         self.builder.set_interaction_genetic_view()
         self.builder.build()
         node1 = Node("www.test.org/PsuedoNode1",model.identifiers.objects.cds)
@@ -436,14 +487,14 @@ class TestEditor(unittest.TestCase):
             self.wg.driver.remove_edge(r.n,r.v,r.get_type())
         self.wg.driver.submit()
 
-    def test_add_edges_cds_promoter_repression_no_protein(self):
+    def test_add_edges_interaction_genetic_crc(self):
         self.builder.set_interaction_genetic_view()
         self.builder.build()
-        node1 = Node("www.test.org/PsuedoNode1",model.identifiers.objects.cds)
-        node2 = Node("www.test.org/PsuedoNode2",model.identifiers.objects.promoter)
+        node1 = self.get_node(model.identifiers.objects.cds,True)
+        node2 = self.get_node(model.identifiers.objects.cds)
         self.builder.add_node(node1.get_key(),node1.get_type())
         self.builder.add_node(node2.get_key(),node2.get_type())
-        e = self.builder.get_view_edge_types()[0]
+        e = str(model.identifiers.objects.repression)
         inps,outs = model.interaction_predicates(model.get_class_code(e))
         n = {str(inps[0][1]["key"]) : node1}
         v = {str(outs[0][1]["key"]) : node2}
@@ -451,9 +502,7 @@ class TestEditor(unittest.TestCase):
         self.builder.add_edges(n,v,e)
         res = self.dg.edges()
         new_edges = list(set(res) - set(pre_res))
-        for e in new_edges:
-            print(e)
-        self.assertTrue(len(new_edges) == 12)        
+        self.assertTrue(len(new_edges) == 5)        
         pre_res = self.dg.edges()
         self.builder.add_edges(n,v,e)
         res = self.dg.edges()
@@ -462,7 +511,8 @@ class TestEditor(unittest.TestCase):
         for r in new_edges:
             self.wg.driver.remove_edge(r.n,r.v,r.get_type())
         self.wg.driver.submit()
-
+    
+    
     def get_node(self,n_type,use_second=False):
         for n in self.builder.view.nodes():
             if n.get_type() == str(n_type):

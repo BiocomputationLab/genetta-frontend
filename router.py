@@ -322,6 +322,10 @@ def modify_graph():
                            export_graph=export_graph,
                            err_string=err_string, success_string=success_string)
 
+@server.route('/truth-query', methods=['GET', 'POST'])
+@login_required
+def truth_query():
+    return # Go from ere...
 
 @server.route('/visualiser', methods=['GET', 'POST'])
 @login_required

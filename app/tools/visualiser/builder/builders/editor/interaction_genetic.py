@@ -138,8 +138,20 @@ class EditorInteractionGeneticViewBuilder(InteractionGeneticViewBuilder):
 
     def _prc(self,promoter,cds,repression):
         # Case 4 - Promoter -> Repression -> CDS
-        # Same as Case 3
-        return self._prp(promoter,cds,repression)
+        # Find what activates cds pass to prp
+        assert(len(cds) == 1)
+        assert(len(promoter) == 1)
+        cds_n = list(cds.values())[0]
+        activated_p = model.identifiers.predicates.activated
+        activator_p = model.identifiers.predicates.activator
+        repressed_p = model.identifiers.predicates.repressed
+        cds_ints = self._graph.get_interactions(cds_n,activated_p)
+        if len(cds_ints) == 0:
+            return []
+        i_eles = self._graph.get_interaction_elements(cds_ints[0].n,activator_p)
+        assert(len(i_eles) == 1)
+        promoter2 = {repressed_p:i_eles[0].v}
+        return self._prp(promoter,promoter2,repression)
         
     def _crp(self,cds,promoter,repression):
         # Case 6 - CDS (C1) -> Repression -> Promoter (P1)
@@ -172,8 +184,19 @@ class EditorInteractionGeneticViewBuilder(InteractionGeneticViewBuilder):
 
     def _crc(self,cds1,cds2,repression):
         # Case 7 - CDS (C1) -> Repression -> CDS (C2)
-        # Same as case 6
-        return self._crp(cds1,cds2,repression)
+        # Find what activates cds2 then pass to crp
+        assert(len(cds2) == 1)
+        cds_n = list(cds2.values())[0]
+        activated_p = model.identifiers.predicates.activated
+        activator_p = model.identifiers.predicates.activator
+        repressed_p = model.identifiers.predicates.repressed
+        cds_ints = self._graph.get_interactions(cds_n,activated_p)
+        if len(cds_ints) == 0:
+            return []
+        i_eles = self._graph.get_interaction_elements(cds_ints[0].n,activator_p)
+        assert(len(i_eles) == 1)
+        promoter2 = {repressed_p:i_eles[0].v}
+        return self._crp(cds1,promoter2,repression)
 
 def _build_protein(uri):
     return Node(f'{_get_namespace(uri)}{_get_name(uri)}p/1',
