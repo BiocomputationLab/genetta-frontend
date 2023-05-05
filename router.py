@@ -249,27 +249,6 @@ def modify_graph():
     if add_graph_fn is not None:
         if g_name == "":
             g_name = add_graph_fn.split(os.path.sep)[-1].split(".")[0]
-        if os.path.getsize(add_graph_fn) > fn_size_threshold:
-            if not lg_form.lg_decline.data and not lg_form.lg_confirm.data:
-                session["ft"] = ft
-                session["visual_filename"] = add_graph_fn
-                session["graph_name"] = g_name
-                return render_template('modify_graph.html', upload_graph=upload_graph,
-                                   paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
-                                   remove_graph=remove_graph,large_graph=lg_form)
-            del session["visual_filename"]
-            del session["graph_name"]
-            del session["ft"]
-            if lg_form.lg_decline.data:
-                try:
-                    os.remove(add_graph_fn)
-                except FileNotFoundError:
-                    pass
-                return render_template('modify_graph.html', upload_graph=upload_graph,
-                        paste_graph=paste_graph, sbh_graph=sbh_graph,
-                        remove_graph=remove_graph,
-                        export_graph=export_graph,
-                        err_string=err_string, success_string=success_string)
         if cf_true.cft_submit.data:
             orig_filename = add_graph_fn
             dg = connector.connect(add_graph_fn)
@@ -301,6 +280,28 @@ def modify_graph():
                                    paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
                                    remove_graph=remove_graph)
 
+        elif os.path.getsize(add_graph_fn) > fn_size_threshold:
+            if not lg_form.lg_decline.data and not lg_form.lg_confirm.data:
+                session["ft"] = ft
+                session["visual_filename"] = add_graph_fn
+                session["graph_name"] = g_name
+                return render_template('modify_graph.html', upload_graph=upload_graph,
+                                   paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
+                                   remove_graph=remove_graph,large_graph=lg_form)
+            del session["visual_filename"]
+            del session["graph_name"]
+            del session["ft"]
+            if lg_form.lg_decline.data:
+                try:
+                    os.remove(add_graph_fn)
+                except FileNotFoundError:
+                    pass
+                return render_template('modify_graph.html', upload_graph=upload_graph,
+                        paste_graph=paste_graph, sbh_graph=sbh_graph,
+                        remove_graph=remove_graph,
+                        export_graph=export_graph,
+                        err_string=err_string, success_string=success_string)
+            
         if g_name in graph.get_design_names():
             return render_template('modify_graph.html', upload_graph=upload_graph,
                                     paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
