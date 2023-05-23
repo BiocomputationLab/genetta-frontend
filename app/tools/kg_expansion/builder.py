@@ -15,14 +15,14 @@ class TruthGraphBuilder:
         from app.tools.kg_expansion.seeder.seeder import Seeder
         if os.path.isfile(tg_initial_fn):
             print("Truth Graph present, building from file.")
-            self._graph.truth.drop()
-            self._graph.truth.load(tg_initial_fn)
+            self._graph.drop()
+            self._graph.load(tg_initial_fn)
         else:
-            self._graph.truth.drop()
-            seeder = Seeder(self._graph.truth,self._miner)
+            self._graph.drop()
+            seeder = Seeder(self._graph,self._miner)
             seeder.enable_all()
             seeder.build()
-            self._graph.truth.save(tg_initial_fn)
+            self._graph.save(tg_initial_fn)
     
     def expand(self):
         for mod in self._modules:
