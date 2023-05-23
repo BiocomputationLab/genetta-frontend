@@ -27,7 +27,6 @@ from app.converter.sbol_convert import export
 from app.graph.world_graph import WorldGraph
 from app.utility.login import LoginHandler
 
-from app.graph_query.handler import GraphQueryHandler
 from app.tools.visualiser.design import DesignDash
 from app.tools.visualiser.editor import EditorDash
 from app.tools.visualiser.cypher import CypherDash
@@ -59,7 +58,6 @@ login_graph_name = "login_manager"
 
 logger = ChangeLogger()
 graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name],logger=logger)
-tg_interface = GraphQueryHandler(graph.truth)
 
 # Tools
 design_dash = DesignDash(__name__, server, graph)
