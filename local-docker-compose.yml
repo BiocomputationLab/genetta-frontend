@@ -14,7 +14,7 @@ services:
       database:
         condition: service_healthy
   database:
-    image: neo4j:latest
+    image: neo4j:5.7
     env_file:
       - 'docker_env_neo4j'
     volumes:
