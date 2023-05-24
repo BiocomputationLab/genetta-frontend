@@ -130,6 +130,13 @@ class AbstractDash:
         else:
             return [div]
 
+    def create_location(self,identifier,add=False,**kwargs):
+        loc = dcc.Location(id=identifier, refresh=False,**kwargs)
+        if add:
+            return self._create_element(loc)
+        else:
+            return [loc]
+        
     def create_button(self, identifier, name=None, href=None, add=False, **kwargs):
         if href is None:
             if not name:

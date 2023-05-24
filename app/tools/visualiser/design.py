@@ -36,14 +36,16 @@ class DesignDash(AbstractDash):
         acc_elements = [("Load Design", inp)]
         load_accordion = self.create_accordion("proj_accordion", acc_elements)
         
+        location = self.create_location(load_page_i.component_id)
         manual = self._create_manual_toolbar()
         form_div = self.create_div(graph_type_o["id"].component_id, form_elements)
         options = self.create_sidebar(not_modifier_identifiers["sidebar_id"], "Options", form_div, className="col-sm-auto sidebar")
         figure = self.visualiser.empty_graph(graph_id)
         graph = self.create_div(update_o["graph_id"].component_id, [figure])
-        graph = self.create_div(load_o["graph_content"].component_id, graph,className="col")
+        graph = self.create_div(load_o["graph_content"].component_id,graph)
+        graph = self.create_div(load_page_o.component_id, graph,className="col")
         legend = self.create_div(update_o["legend_id"].component_id,[], className="col sidebar")
-        elements = options+graph+legend+manual
+        elements = location+options+graph+legend+manual
         container = self.create_div("row-main", elements, className="row flex-nowrap no-gutters")
         self.app.layout = self.create_div("main", load_accordion+container, className="container-fluid")[0]
 
@@ -51,6 +53,9 @@ class DesignDash(AbstractDash):
             export_modal_i[sf] = Input(sf, "n_clicks")
 
         # Bind the callbacks
+        def load_page_inner(pathname):
+            return self.load_page(pathname)
+        
         def update_inputs_inner(style):
             return self.update_inputs(style)
 
@@ -90,6 +95,7 @@ class DesignDash(AbstractDash):
         def label_color_inner(*args):
             return self.label_color(*args)
         
+        self.add_callback(load_page_inner, [load_page_i], [load_page_o])
         self.add_callback(update_inputs_inner, [update_i_i], [update_i_o])
         self.add_callback(load_inner, [load_i], load_o.values(),load_s.values())
         self.add_callback(update_graph_inner, update_i.values(), update_o.values())
@@ -105,6 +111,14 @@ class DesignDash(AbstractDash):
         self.add_callback(label_color_inner,[label_color_i], [label_color_o])
         self.build()
 
+    def load_page(self,pathname):
+        figure = self.visualiser.empty_graph(graph_id)
+        graph = self.create_div(update_o["graph_id"].component_id, [figure])
+        graph = self.create_div(load_o["graph_content"].component_id,graph)
+        self.visualiser.reset()
+        self.visualiser.set_design_names(None,None)
+        return graph
+    
     def update_inputs(self,style):
         all_design_names = self.visualiser.get_design_names()
         user_dn_file = os.path.join(session.get("user_dir"),user_gns)

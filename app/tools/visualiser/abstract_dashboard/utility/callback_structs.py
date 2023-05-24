@@ -12,6 +12,9 @@ update_i = OrderedDict()
 not_modifier_identifiers = {"sidebar_id": "sidebar-left",
                             "utility_id": "utility"}
 
+load_page_i = Input("url","pathname")
+load_page_o = Output("load_div","children")
+
 update_i_i = Input(graph_id, "style")
 update_i_o = Output("load_i", "options")
 load_i = Input("load_submit", "n_clicks")
