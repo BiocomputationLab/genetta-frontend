@@ -235,6 +235,40 @@ def create_example_design_form(expanation_file, **kwargs):
         data = {"label":k.split(".")[0],"description":v}
         identifier = k
         examples.append((identifier,BooleanField,data))
-    stage_form = form_from_fields([(field_id,f_type(**data)) for field_id,f_type,data in examples])
+    stage_form = form_from_fields([(field_id,f_type(**data)) 
+                                   for field_id,f_type,data in examples])
     setattr(ExampleDesignForm, "examples",FormField(stage_form))
     return ExampleDesignForm(**kwargs)
+
+
+def add_remove_design_admin_form(user_designs,**kwargs):
+    class DesignsForm(FlaskForm):
+        class Meta:
+            csrf = False
+        submit_rda = SubmitField('Submit')
+    d_forms = []
+    for user,d_names in user_designs.items():
+        for d_name in d_names:
+            data = {"label":d_name,"description": user}
+            identifier = d_name
+            d_forms.append((identifier,BooleanField,data))
+    stage_form = form_from_fields([(field_id,f_type(**data)) 
+                                   for field_id,f_type,data in d_forms])
+    setattr(DesignsForm, "d_forms",FormField(stage_form))
+    return DesignsForm(**kwargs)
+
+def add_remove_user_admin_form(d_names,**kwargs):
+    class UsersForm(FlaskForm):
+        class Meta:
+            csrf = False
+        submit_rua = SubmitField('Submit')
+    u_forms = []
+    for d_name in d_names:
+        print(d_name)
+        data = {"label":d_name}
+        identifier = d_name
+        u_forms.append((identifier,BooleanField,data))
+    stage_form = form_from_fields([(field_id,f_type(**data)) 
+                                   for field_id,f_type,data in u_forms])
+    setattr(UsersForm, "u_forms",FormField(stage_form))
+    return UsersForm(**kwargs)

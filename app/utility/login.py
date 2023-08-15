@@ -3,10 +3,8 @@ from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
 from flask_login import LoginManager
 
-
 admin_type = "ADMIN"
 user_type = "USER"
-
 
 class LoginHandler(LoginManager):
     def __init__(self, server, neo_interface, login_graph_name):
@@ -27,6 +25,11 @@ class LoginHandler(LoginManager):
         user = User(username, password, self)
         self._add_user(user)
         return user
+    
+    def remove_user(self,username):
+        self.driver.remove_node(key=username,type=user_type,
+                                properties={"graph_name":self.name})
+        self.driver.submit(log=False)
 
     def get_admin(self):
         res = self._node_query(admin_type)
