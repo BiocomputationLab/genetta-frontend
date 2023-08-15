@@ -17,6 +17,7 @@ services:
     image: neo4j:5.7
     env_file:
       - 'docker_env_neo4j'
+    restart: on-failure
     volumes:
       - dbdata:/data
     ports:
