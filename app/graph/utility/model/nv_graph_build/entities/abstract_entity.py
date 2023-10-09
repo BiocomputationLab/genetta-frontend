@@ -3,6 +3,7 @@ from identifiers import identifiers
 from equivalent.abstract_equivalent import PhysicalEquivalent
 from equivalent.abstract_equivalent import ConceptualEquivalent
 from property.property import Alias
+from property.property import CommonlyUsedWith
 default_properties = [Alias]
 
 
@@ -25,7 +26,12 @@ class PhysicalEntity(Entity):
             equiv = [PhysicalEquivalent()]
         else:
             equiv = equivalents
-        super().__init__(disjoint, properties=properties,
+        if properties == []:
+            props = [CommonlyUsedWith(PhysicalEntity)]
+        else:
+            props = properties
+
+        super().__init__(disjoint, properties=props,
                          equivalents=equiv, restrictions=restrictions)
 
 class ConceptualEntity(Entity):

@@ -51,8 +51,19 @@ class SBOLGraph:
             self._remove_triples([(s,p,o)])
             self._add_triples([(s,p,BNode(new))])
 
+
+    def replace_object(self,old,new):
+        self.replace_uri(old,new)
+        self.replace_property(new,identifiers.predicates.persistent_identity,_get_pid(new))
+        self.replace_property(new,identifiers.predicates.display_id,Literal(_get_name(new)))
+
     def replace_sequence(self,subject,seq):
-        seqs = self.get_sequence_names(subject)[0]
+        seqs = self.get_sequence_names(subject)
+        if len(seqs) == 0:
+            sn = self.create_sequence_name(subject)
+            self.add_sequence(sn,Literal(seq),identifiers.objects.naseq)
+            return 
+        seqs = seqs[0]
         if len(self.search((None,identifiers.predicates.sequence,seqs))) == 1:
             self._remove_triples([(seqs,identifiers.predicates.elements,None)])
             self._add_triples([(seqs,identifiers.predicates.elements,seq)])
@@ -60,6 +71,7 @@ class SBOLGraph:
             sn = self.create_sequence_name(subject)
             self.add_sequence(sn,Literal(seq),identifiers.objects.naseq)
             self._remove_triples([(subject,identifiers.predicates.sequence,seqs)])
+        self.remove_sequence(seqs)
     
     def replace_property(self,subject,predicate,property):
         self._remove_triples(self.search((subject,predicate,None)))
@@ -77,6 +89,7 @@ class SBOLGraph:
     def replace_definition(self,component,old,new):
         self.replace_triple((component,identifiers.predicates.definition,old),
                             (component,identifiers.predicates.definition,new))
+
 
     def get_all_instances(self):
         return [i[0] for i in self.graph.get_instances()]
@@ -322,6 +335,43 @@ class SBOLGraph:
             return [i[0] for i in self.graph.get_subject(identifiers.predicates.participation,participation)]
         return [i[0] for i in self.graph.get_instances(identifiers.objects.interaction)]
 
+    def get_start(self,location):
+        try:
+            return self.graph.get_object(location,identifiers.predicates.start,True)[2]
+        except IndexError:
+            return None
+        
+    def get_end(self,location):
+        try:
+            return self.graph.get_object(location,identifiers.predicates.end,True)[2]
+        except IndexError:
+            return None
+        
+    def get_at(self,location):
+        try:
+            return self.graph.get_object(location,identifiers.predicates.at,True)[2]
+        except IndexError:
+            return None
+        
+    def get_sc_subject(self,sc):
+        try:
+            return self.graph.get_object(sc,identifiers.predicates.sequence_constraint_subject,True)[2]
+        except IndexError:
+            return None
+        
+    def get_sc_object(self,sc):
+        try:
+            return self.graph.get_object(sc,identifiers.predicates.sequence_constraint_object,True)[2]
+        except IndexError:
+            return None
+        
+    def get_sc_restriction(self,sc):
+        try:
+            return self.graph.get_object(sc,identifiers.predicates.sequence_constraint_restriction,True)[2]
+        except IndexError:
+            return None
+
+        
     def is_discontinued(self,subject):
         return self.get_property(subject,identifiers.predicates.discontinued) == Literal("true")
 
@@ -397,7 +447,8 @@ class SBOLGraph:
         triples = [(uri,RDF.type,type)]
         triples.append((uri,identifiers.predicates.persistent_identity,_get_pid(uri)))
         triples.append((uri,identifiers.predicates.display_id,Literal(_get_name(uri))))
-        triples.append((uri,identifiers.predicates.version,Literal(1)))
+        if self.search((uri,identifiers.predicates.version,None)) == []:
+            triples.append((uri,identifiers.predicates.version,Literal(1)))
         return triples
 
     def add_sequence(self,uri,sequence,encoding):
@@ -406,11 +457,11 @@ class SBOLGraph:
         triples.append((uri,identifiers.predicates.encoding,encoding))
         self._add_triples(triples)
         
-    def add_component_definition(self,uri,type,role=None,components=[],sas=[],sequence=None,properties={}):
+    def add_component_definition(self,uri,etype,role=None,components=[],sas=[],sequence=None,properties={}):
         if not isinstance(uri,URIRef):
             uri = URIRef(uri)
         triples = self._generic_generation(uri,identifiers.objects.component_definition)
-        triples.append((uri,identifiers.predicates.type,type))
+        triples.append((uri,identifiers.predicates.type,etype))
         if role is not None:
             triples.append((uri,identifiers.predicates.role,role))
         if sequence is not None:
@@ -421,6 +472,11 @@ class SBOLGraph:
         for sa in sas:
             triples.append((uri,identifiers.predicates.sequence_annotation,URIRef(sa)))
         for k,v in properties.items():
+            int_res = self.search((uri,URIRef(k),None))
+            if int_res != []:
+                self.remove_triple(int_res[0])
+                int_res = int_res[0][2]
+                v = int_res + [str(v)]
             triples.append((uri,URIRef(k),v))
         self._add_triples(triples)
 
@@ -588,11 +644,7 @@ class SBOLGraph:
         return URIRef(self.build_children_uri(int,f'{_get_name(cd)}_{_get_name(part_type)}'))
 
     def save(self,out_fn):
-        pysbolG = SBOL2Graph()
-        pysbolG += self.graph.graph
-        s = serialize_sboll2(pysbolG).decode("utf-8")
-        with open(out_fn, 'w') as o:
-            o.write(s)
+        self.graph.graph.serialize(destination=out_fn,format="xml")  
 
 
 def _get_pid(subject):

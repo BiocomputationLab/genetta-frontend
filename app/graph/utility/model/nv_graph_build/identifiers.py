@@ -26,6 +26,7 @@ class Predicates:
     def __init__(self, namespaces):
         namespaces = namespaces
         self.rdf_type = URIRef(RDF.type)
+        self.synonym = URIRef("http://purl.obolibrary.org/obo/NCIT_C52469")
 
 class Roles:
     def __init__(self, namespaces):
@@ -100,4 +101,6 @@ class Roles:
         self.drop = URIRef(namespaces.nv + "Drop")
         self.external_machine = URIRef(namespaces.nv + "ExternalMachine")
 
+
+        self.synonym = URIRef("http://purl.obolibrary.org/obo/NCIT_C52469")
 identifiers = Identifiers()

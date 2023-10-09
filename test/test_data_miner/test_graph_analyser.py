@@ -41,7 +41,6 @@ class TestGraphAnalyser(unittest.TestCase):
         fragments = ["pveg"]
         graphs = [self.dm.get_external(r) for r in list(self.dm.query_external(fragments[0],lazy=True))[0]]
         for r in self.analyser.get_leafs(graphs,e_type,fragments):
-            print(r)
             response = requests.get(r)
             self.assertTrue(response.status_code == 200)
 

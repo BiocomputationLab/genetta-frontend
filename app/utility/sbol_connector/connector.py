@@ -1,6 +1,6 @@
 
 import os
-from rdflib import URIRef
+from rdflib import URIRef,Graph
 from requests.exceptions import ConnectionError
 from app.utility.sbol_connector.sbol_identifiers import identifiers
 from app.utility.sbol_connector.interfaces.lcphub_interface import LCPHubInterface
@@ -119,6 +119,32 @@ class SBOLConnector:
             if definition is None:
                 return True
         return False
+    
+
+    def split(self,filename,gn):
+        try:
+            graph = SBOLGraph(filename)
+        except Exception as ex:
+            return [(filename,gn)]
+
+        graphs = []
+        for collect in graph.get_collections():
+            c_name = graph.get_name(collect)
+            col_gn = f'{gn}-{c_name}'
+            for member in graph.get_members(collect):
+                member_type = graph.get_rdf_type(member)
+                if member_type == identifiers.objects.component_definition:
+                    s_trips = graph.subgraph(member)
+                    sub_graph = Graph()
+                    [sub_graph.add(trip) for trip in s_trips]
+                    new_gn = f'{col_gn}-{graph.get_name(member)}'
+                    new_fn = f'{os.path.split(filename)[0]}{os.path.sep}{new_gn}.xml'
+                    sub_graph.serialize(new_fn,"xml") 
+                    graphs.append((new_fn,new_gn))
+        if len(graphs) == 0:
+            return [(filename,gn)]
+        
+        return graphs
                 
     def _handle_get(self,identifier,hub,output):
         try:

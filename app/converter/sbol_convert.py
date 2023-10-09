@@ -4,6 +4,8 @@ from pysbolgraph.SBOL2Serialize import serialize_sboll2
 from pysbolgraph.SBOL2Graph import SBOL2Graph
 from urllib.parse import urlparse
 
+import networkx as nx
+
 from app.converter.utility.graph import SBOLGraph
 from app.converter.utility.common import map_to_nv, derive_graph_name, get_interaction_properties
 from app.graph.utility.model.model import model as model
@@ -43,6 +45,12 @@ s_md = identifiers.objects.module_definition
 fc_md = identifiers.objects.functional_component
 s_cd = identifiers.objects.component_definition
 
+hpart = model.identifiers.predicates.hasPart
+hpos = model.identifiers.predicates.hasPosition
+pof = model.identifiers.predicates.positionOf
+position_o = model.identifiers.objects.position
+next_p = model.identifiers.predicates.next
+
 encoding_dict = {identifiers.objects.DNA: identifiers.objects.naseq,
                  identifiers.objects.DNARegion: identifiers.objects.naseq,
                  identifiers.objects.RNA: identifiers.objects.naseq,
@@ -57,7 +65,6 @@ def convert(filename, neo_graph, graph_name):
     object_type_map = {}
     if graph_name is None or graph_name == "":
         graph_name = derive_graph_name(neo_graph)
-
     def _add_node(name, type=None, props=None):
         properties = _get_properties(name, sbol_graph, graph_name)
         if props is not None:
@@ -71,33 +78,44 @@ def convert(filename, neo_graph, graph_name):
 
     for cd in sbol_graph.get_component_definitions():
         properties = ([(nv_characteristic, physical_entity)] +
-                      [(nv_role, r) for r in (sbol_graph.get_roles(cd)+sbol_graph.get_types(cd))])
+                      [(nv_role, r) for r in (sbol_graph.get_roles(cd)+
+                                              sbol_graph.get_types(cd))])
 
         s, p, o = map_to_nv(cd, properties, model_roots, model)
         sequence = sbol_graph.get_sequences(cd)
         if len(sequence) > 0:
             assert(len(sequence) == 1)
-            props = {model.identifiers.predicates.hasSequence: sequence[0]}
+            props = {nv_hasSequence: sequence[0]}
         else:
             props = None
         n = _add_node(s, o, props)
         object_type_map[s] = o
-        for p, o in _map_entities(cd, sbol_graph, model):
-            o = _add_node(o)
-            _add_edge(n, o, p)
+        prev_pos = None
+        for sc in create_ordered_components(cd,sbol_graph):
+            sc = _add_node(sc)
+            _add_edge(n, sc, hpart)
+            pos_name = f'{_get_prefix(n.get_key())}_{sc.name}_position'
+            pos = _add_node(pos_name,position_o)
+            _add_edge(n,pos,hpos)
+            _add_edge(pos,sc,pof)
+            if prev_pos is not None:
+                _add_edge(prev_pos,pos,next_p)
+            prev_pos = pos
 
     for i in sbol_graph.get_interactions():
         roles = ([(nv_characteristic, interaction)] +
                  [(nv_role, r) for r in (sbol_graph.get_types(i))])
         s, p, o = map_to_nv(i, roles, model_roots, model)
         n = _add_node(s, o)
-        for s, p, o in get_interaction_properties(i, o, object_type_map, model, sbol_graph):
+        for s, p, o in get_interaction_properties(i, o, object_type_map, 
+                                                  model, sbol_graph):
             if p == RDF.type:
                 s = _add_node(s, o)
             else:
                 s = _add_node(s)
                 o = _add_node(o)
                 _add_edge(s, o, p)
+
     neo_graph.submit(log=False)
 
 
@@ -118,12 +136,16 @@ def export(fn, gn, logger):
     for change in changes:
         g = c_dict[change["action"]][change["type"]](change, g)
     g = _handle_deferals(g)
+    '''
+    g.prune_duplicates()
     pysbolG = SBOL2Graph()
     pysbolG += g
     sbol = serialize_sboll2(pysbolG).decode("utf-8")
 
     with open(fn, 'w') as o:
-        o.write(sbol)    
+        o.write(sbol)
+    '''
+    g.save(fn)    
     logger.remove_graph(gn)
     return fn
 
@@ -144,7 +166,8 @@ def _add_node(change, graph):
             del properties[nv_hasSequence]
         else:
             sn = None
-        graph.add_component_definition(node.get_key(), o_type, o_role, sequence=sn,properties=properties)
+        graph.add_component_definition(node.get_key(), o_type, o_role, 
+                                       sequence=sn,properties=properties)
     elif model.is_derived(URIRef(node.get_type()), nv_conceptual_entity):
         # Need to derive its parent.
         # A deferal its potential participants and parent are known.
@@ -218,7 +241,7 @@ def _replace_node(change, graph):
     pred = change["predicate"]
     obj = change["object"]
     if pred == "uri":
-        graph.replace_uri(subj,URIRef(obj))
+        graph.replace_object(subj,URIRef(obj))
     elif URIRef(pred) == nv_hasSequence:
         graph.replace_sequence(subj,Literal(obj))
     elif URIRef(pred) == DCTERMS.description:
@@ -347,27 +370,123 @@ def _derive_edge_role(o_type):
     otcc = model.get_class_code(o_type)
     return model.get_equivalent_properties(otcc)[0][1]["key"]
 
-def _map_entities(cd, sbol_graph, model):
-    triples = []
-    part_of = model.identifiers.predicates.hasPart
-    for sc in [sbol_graph.get_definition(c) for c in sbol_graph.get_components(cd)]:
-        triples.append((part_of, sc))
-    return triples
-
 def _get_properties(entity, graph, graph_name):
     properties = {}
-    if isinstance(entity, URIRef):
-        properties["dtype"] = "URI"
-    elif isinstance(entity, BNode):
-        properties["dtype"] = "BNode"
-    else:
-        properties["dtype"] = "Literal"
     meta = graph.get_metadata(entity)
     properties["name"] = _get_name(entity)
     properties["graph_name"] = [graph_name]
     if len(meta) > 0:
         properties[DCTERMS.description] = meta
     return properties
+
+def create_ordered_components(root,graph):
+    # The idea here is that there could be examples 
+    # where a design has annotations and constraints 
+    # that overlap or provide the same information for 
+    # visualisation.
+    # Therefore the aim is to normalise the data that we want, 
+    # that is what parts precede other parts.
+    # The extract methods will return lists of tuples (doubles) 
+    # that have two parts which n[0] precedes n[1]
+    sequence_annotations = extract_sequence_annotation(root,graph)
+    sequence_constraints = extract_sequence_constraints(root,graph)
+    # Use this directed graph lib to create a directed 
+    # walk through the graph (order)
+    G = nx.DiGraph()
+    G.add_edges_from(sequence_constraints)
+    G.add_edges_from(sequence_annotations)
+    try:
+        top = nx.topological_sort(G)
+        # ordered_components is just names we use this as a 
+        # reference to order the dicts below.
+        ordered_components = [t for t in top]
+    except nx.NetworkXUnfeasible:
+        raise ValueError(f'Error, {_get_name(root)} contains ' + 
+                         f'constraints or annotations that create ' + 
+                         f'a circular constraint (A set of components ' + 
+                         'are resticting and restricted.) ')
+
+    temp_components = graph.get_components(root)
+    components = []
+    unknown_position_components = []
+    if len(temp_components) == 1:
+        components.insert(0,graph.get_definition(temp_components[0]))
+    else:
+        components = [None] * len(temp_components)
+        for component in temp_components:
+            try:
+                c_index = ordered_components.index(component)
+                components[c_index] = graph.get_definition(component)
+            except ValueError:
+                # When a Component has no user defined position. 
+                # (No Constraint or Annotation)
+                unknown_position_components.append(component)                
+
+    # All components that don't have a position yet.
+    for c in unknown_position_components:
+        c_index = get_unknown_position(c[2],components)
+        components[c_index] = graph.get_definition(c)
+    return components
+
+def get_unknown_position(component,components):
+    '''
+    When the relative or absolute postion of a 
+    component is not known in relation to its neighbours.
+    Currently it just finds the first element that has not 
+    been filled, however perhaps some more complex 
+    computation can be applied.
+    '''
+    for index, c in enumerate(components):
+        if c == None:
+            return index
+
+def extract_sequence_annotation(root,graph):
+    # SequenceAnnotations although not as direct as 
+    # constraints give us information into visualsation.
+    # If the location is < another then it must be located downstream.
+    # Return - List of ordered Components
+    component_locations = []
+    for sa in graph.get_sequence_annotations(root,graph):
+        seq_anno_component = graph.get_component(sa)
+        if seq_anno_component is None:
+            continue
+        seq_anno_locations  = graph.get_locations(sa)
+        for location in seq_anno_locations:
+            location_type = graph.get_rdf_type(location)
+            if location_type == identifiers.objects.range:
+                location = graph.get_start(location)
+                component_locations.append({"name" : seq_anno_component,
+                                            "location":int(location)})
+
+            elif location_type == identifiers.objects.cut:
+                location = graph.get_at(location)
+                component_locations.append({"name" : seq_anno_component,
+                                            "location":int(location)})
+        
+    # A little unusual here, even though 
+    # we sort the components based on location, 
+    # we need to format them in the 
+    # same way constraints are formatted.
+    component_locations = sorted(component_locations, 
+                                 key = lambda i: i['location'])
+    sequence_annotations = []
+    for index,o in enumerate(component_locations):
+        if index != len(component_locations) - 1:
+            sequence_annotations.append((o["name"],
+                component_locations[index+1]["name"]))
+    return sequence_annotations
+
+def extract_sequence_constraints(root,graph):
+    # The function will find all constraints relating to root, find 
+    # there participants and create a ordered double (n[0] precedes n[1])
+    constraints = []
+    for sc in graph.get_sequence_constraints(root):
+        subject = graph.get_sc_subject(sc)
+        object = graph.get_sc_object(sc)
+        restriction = graph.get_sc_restriction(sc)
+        if restriction == identifiers.predicates.precedes:
+            constraints.append((subject,object))
+    return constraints
 
 def _get_name(subject):
     split_subject = _split(subject)
@@ -388,3 +507,10 @@ def _isfloat(x):
         return True
     except ValueError:
         return False
+
+def _get_prefix(subject):
+    split_subject = _split(subject)
+    if split_subject[-1].isdigit():
+        return subject[:-2]
+    else:
+        return subject

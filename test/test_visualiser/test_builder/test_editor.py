@@ -416,7 +416,6 @@ class TestEditor(unittest.TestCase):
         self.builder.build()
         node1 = self.get_node(model.identifiers.objects.promoter,True)
         node2 = self.get_node(model.identifiers.objects.cds)
-        print(node1,node2)
         self.builder.add_node(node1.get_key(),node1.get_type())
         self.builder.add_node(node2.get_key(),node2.get_type())
         e = str(model.identifiers.objects.repression)

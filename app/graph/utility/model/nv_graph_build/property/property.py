@@ -41,6 +41,18 @@ class HasPart(Property):
         props = [Confidence()]
         super().__init__(range,props)
 
+class HasPosition(Property):
+    def __init__(self,range=None):
+        super().__init__(range)
+
+class PositionOf(Property):
+    def __init__(self,range=None):
+        super().__init__(range)
+
+class Next(Property):
+    def __init__(self,range=None):
+        super().__init__(range)
+        
 class HasSequence(Property):
     def __init__(self):
         super().__init__(String)
@@ -53,6 +65,10 @@ class ConsistsOf(Property):
     def __init__(self,range=None):
         super().__init__(range)
 
+class HasInteraction(Property):
+    def __init__(self,range=None):
+        super().__init__(range)
+
 class Direction(Property):
     def __init__(self,value):
         r = [Input(),Output()]
@@ -61,4 +77,7 @@ class Direction(Property):
 class Confidence(Property):
     def __init__(self):
         super().__init__(Integer,default_value=Literal(50))
-    
+
+class CommonlyUsedWith(Property):
+    def __init__(self,range=None):
+        super().__init__(range)

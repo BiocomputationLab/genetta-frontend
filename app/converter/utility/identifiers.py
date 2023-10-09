@@ -123,6 +123,7 @@ class Predicates:
         self.member = URIRef(self.namespaces.sbol + 'member')
         self.refinement = URIRef(self.namespaces.sbol + "refinement")
         self.model = URIRef(self.namespaces.sbol + "model")
+        self.precedes = URIRef(self.namespaces.sbol + "precedes")
 
         self.mutable_notes = URIRef(self.namespaces.synbiohub + 'mutableNotes')
         self.mutable_description = URIRef(self.namespaces.synbiohub + 'mutableDescription')

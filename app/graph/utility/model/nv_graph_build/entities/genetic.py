@@ -1,7 +1,9 @@
 from entities.abstract_entity import PhysicalEntity
+from entities.position import Position
 from equivalent import physcial_equivalent as pe
-from property.property import HasPart,HasSequence
-
+from property.property import HasPart
+from property.property import HasSequence
+from property.property import HasPosition
 # -------------- DNA --------------
 class DNA(PhysicalEntity):
     def __init__(self,equivalents=[],properties=[]):
@@ -9,7 +11,9 @@ class DNA(PhysicalEntity):
             r = [pe.DNARoleEquivalent()]
         else:
             r = equivalents
-        p = properties + [HasPart(PhysicalEntity),HasSequence()]
+        p = properties + [HasPart(PhysicalEntity),
+                          HasSequence(),
+                          HasPosition(Position)]
         super().__init__(equivalents=r,properties=p)
 
 class Promoter(DNA):

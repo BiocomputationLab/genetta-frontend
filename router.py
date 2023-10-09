@@ -336,12 +336,15 @@ def modify_graph():
             return render_template('modify_graph.html', upload_graph=upload_graph,
                                     paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
                                     remove_graph=remove_graph, err_string="Graph name is taken.")
-        _add_user_gn(g_name)
-        success,ret_str = _convert_file(add_graph_fn, g_name, ft)
+        
+        for agf,gn in connector.split(add_graph_fn,g_name):
+            _add_user_gn(gn)
+            success,ret_str = _convert_file(agf, gn, ft)
         if success:
             success_string = ret_str
         else:
             err_string = ret_str
+            
         remove_graph,export_graph = _add_graph_forms()
         return render_template('modify_graph.html', upload_graph=upload_graph,
                                paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
@@ -632,7 +635,8 @@ def _get_user_gn(names,user=None):
 
 
 def _add_user_gn(gn):
-    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),
+                                user_gns)
     data = [gn]
     if os.path.isfile(user_gn_file):
         with open(user_gn_file) as f:

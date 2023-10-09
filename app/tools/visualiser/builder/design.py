@@ -7,6 +7,7 @@ from app.tools.visualiser.builder.builders.design.interaction_protein import Int
 from app.tools.visualiser.builder.builders.design.interaction_verbose import InteractionVerboseViewBuilder
 from app.tools.visualiser.builder.builders.design.interaction_io import InteractionIoViewBuilder
 from app.tools.visualiser.builder.builders.design.pruned import PrunedViewBuilder
+from app.tools.visualiser.builder.builders.design.position import PositionViewBuilder
 from app.tools.visualiser.builder.builders.full import FullViewBuilder
 
 predicates = {"Intersection":"ALL",
@@ -50,6 +51,10 @@ class DesignBuilder(AbstractBuilder):
     def set_interaction_io_view(self):
         self._view_builder = InteractionIoViewBuilder(self._dg)
 
+    
+    def set_positional_view(self):
+        self._view_builder = PositionViewBuilder(self._dg)
+        
     def get_design_names(self):
         return self._graph.get_design_names()
 

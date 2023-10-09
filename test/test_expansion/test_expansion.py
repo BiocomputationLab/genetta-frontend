@@ -73,7 +73,6 @@ class TestExpansion(unittest.TestCase):
     def test_build_ecoli(self):
         ds = [s for s in self.seeder._datasets if s.__class__.__name__ == "Cello"][0]
         graph = ds._build_ecoli()
-        print(len(graph),len(graph.get_component_definitions()),len(graph.get_interactions()))
         cds = graph.get_component_definitions()
         mds = graph.get_module_definition()
         for cd in cds:
