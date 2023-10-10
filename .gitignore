@@ -137,3 +137,4 @@ app/enhancer/data_miner/database/interfaces/records/hubs/*/*.xml
 app/enhancer/seeder/*.xml
 app/truth_saves/*
 app/enhancer/data_miner/database/interfaces/records/gbk/*
+app/tools/data_miner/database/interfaces/records/
