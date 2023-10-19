@@ -9,6 +9,6 @@ class SynonymViewBuilder(AbstractViewBuilder):
         return ViewGraph(super()._subgraph(edges,nodes,new_graph))
 
     def build(self,predicate="ALL"):
-        return self._subgraph(self._graph.synonyms.get())
+        return self._subgraph(list(self._graph.synonyms.get().synonyms()))
 
 
