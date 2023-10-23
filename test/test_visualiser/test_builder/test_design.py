@@ -178,7 +178,7 @@ class TestViews(unittest.TestCase):
         self.builder.set_positional_view()
         self.builder.build()
         graph = self.builder.view
-        self.assertTrue(len(graph) > 0)     
+        self.assertTrue(len(graph) > 0) 
 
     def test_positional_multiple(self):
         gn1 = "test_positional_multiple"
@@ -194,6 +194,12 @@ class TestViews(unittest.TestCase):
         self.builder.build()
         graph1 = self.builder.view
         edges1 = list(graph1.edges())
+
+    def test_positional_circular(self):
+        self.builder.set_positional_circular_view()
+        self.builder.build()
+        graph = self.builder.view
+        self.assertTrue(len(graph) > 0)    
 
     def test_views_multiple_graphs_any(self):
         gn1 = "test_wg_get_all1"

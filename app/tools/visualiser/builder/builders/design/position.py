@@ -32,3 +32,38 @@ class PositionViewBuilder(AbstractViewBuilder):
             edges.append(Edge(posof, v, nex.get_type(),**nex.properties))
 
         return self._subgraph(edges)
+    
+
+class PositionCircularViewBuilder(AbstractViewBuilder):
+    def __init__(self,graph):
+        super().__init__(graph)
+
+    def _subgraph(self, edges=[],nodes=[], new_graph=None):
+        return ViewGraph(super()._subgraph(edges,nodes,new_graph))
+
+    def build(self,predicate="ALL"):
+        edges = []
+        for position in self._graph.get_position(predicate=predicate):
+            posof = self._graph.get_positionof(position,predicate="ANY")
+            assert(len(posof) == 1)
+            posof = posof[0].v
+            nex = self._graph.get_next(position,predicate=predicate)
+            if len(nex) == 0:
+                continue
+            assert(len(nex) == 1)
+            nex = nex[0]
+            v = self._graph.get_positionof(nex.v,predicate="ANY")
+            assert(len(v) == 1)
+            v = v[0].v
+            edges.append(Edge(posof, v, nex.get_type(),**nex.properties))
+        edge_v = [e.v for e in edges]
+        edge_n = [e.n for e in edges]
+        for n in edge_n:
+            if n in edge_v:
+                continue
+            for v in edge_v:
+                if v in edge_n:
+                    continue
+                edges.append(Edge(v,n, "End",{}))
+
+        return self._subgraph(edges)
