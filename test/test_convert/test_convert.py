@@ -63,6 +63,23 @@ class TestConvert(unittest.TestCase):
         self.assertCountEqual(ints,s_i)
         dg.drop()
 
+    def test_sbol_sequence(self):
+        fn1 = os.path.join("..","files","convert_sequence.xml")
+        sg1 = SBOLGraph(fn1)
+        gn1 = "sb1"
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
+        sb_convert(fn1,graph.driver,gn1)
+        dg1 = graph.get_design([gn1])
+        s_cds = sg1.get_component_definitions()
+        for pe in dg1.get_physicalentity():
+            for cd in s_cds:
+                if str(cd) == str(pe.get_key()):
+                    if len(sg1.get_sequence_names(cd)) > 0:
+                        self.assertTrue(hasattr(pe,"hasSequence"))
+                    break
+            else:
+                self.fail()
+        dg1.drop()
 
     def test_sbol_overlap(self):
         fn1 = os.path.join("..","files","sbol_overlap1.xml")
@@ -82,7 +99,6 @@ class TestConvert(unittest.TestCase):
         self.assertCountEqual(pes,s_cds)
         dg1.drop()
         dg2.drop()
-
     
     def test_gbk(self):
         fn = os.path.join("..","files","nor_reporter.gb")
@@ -111,16 +127,68 @@ class TestConvert(unittest.TestCase):
             self.assertIn(e.v,pes)
         dg.drop()
 
-    def test_sbol_collection(self):
-        fn = os.path.join("..","files","iGEM_2016_interlab_collection_connected.xml")
-        gn = "test_sbol_collection"
+    def test_sbol_positional_relative(self):
+        fn = os.path.join("..","files","canonical_AND.xml")
+        sbol_graph = SBOLGraph(fn)
+        gn = "test_sbol_positional_relative"
         graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
-        graph.remove_design(gn)
         sb_convert(fn,graph.driver,gn)
         dg = graph.get_design(gn)
-        pes = dg.get_physicalentity()
-        root = pes.pop(0)
-        for e in dg.get_haspart(root):
-            self.assertEqual(root,e.n)
-            self.assertIn(e.v,pes)
-        dg.drop()
+        
+
+        s_cds = [str(s) for s in sbol_graph.get_component_definitions()]
+        pes = [p.get_key() for p in dg.get_physicalentity()]
+        self.assertCountEqual(pes,s_cds)
+
+        s_i = [str(s) for s in sbol_graph.get_interactions()]
+        ints = [p.get_key() for p in dg.get_interaction()]
+        self.assertCountEqual(ints,s_i)
+
+        positions = dg.get_position()
+        seen_pos = []
+        for p in positions:
+            po = dg.get_positionof(p)
+            nex = dg.get_next(p)
+            self.assertEqual(len(po),1)
+            po = po[0]
+            self.assertNotIn(po.v,seen_pos)
+            seen_pos.append(po.v)
+            if len(nex) > 0:
+                self.assertEqual(len(nex),1)
+                nex = nex[0]
+                self.assertEqual(nex.n.get_type(),nex.v.get_type())
+            else:
+                self.assertEqual(len(nex),0)
+
+    def test_sbol_absolute(self):
+        fn = os.path.join("..","files","0xF6.xml")
+        sbol_graph = SBOLGraph(fn)
+        gn = "test_sbol_absolute"
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
+        sb_convert(fn,graph.driver,gn)
+        dg = graph.get_design(gn)
+        
+
+        s_cds = [str(s) for s in sbol_graph.get_component_definitions()]
+        pes = [p.get_key() for p in dg.get_physicalentity()]
+        self.assertCountEqual(pes,s_cds)
+
+        s_i = [str(s) for s in sbol_graph.get_interactions()]
+        ints = [p.get_key() for p in dg.get_interaction()]
+        self.assertCountEqual(ints,s_i)
+
+        positions = dg.get_position()
+        seen_pos = []
+        for p in positions:
+            po = dg.get_positionof(p)
+            nex = dg.get_next(p)
+            self.assertEqual(len(po),1)
+            po = po[0]
+            self.assertNotIn(po.v,seen_pos)
+            seen_pos.append(po.v)
+            if len(nex) > 0:
+                self.assertEqual(len(nex),1)
+                nex = nex[0]
+                self.assertEqual(nex.n.get_type(),nex.v.get_type())
+            else:
+                self.assertEqual(len(nex),0)

@@ -1,0 +1,109 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:ModuleDefinition rdf:about="https://synbiohub.org/public/igem/CinR_mod/1">
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc/1">
+        <sbol:displayId>CinR_p_fc</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/CinR_p/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc_i_stimulation_with_pCin_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc_i_stimulation_with_pCin_fc/CinR_p_fc_i_stimulation_with_pCin_fc_CinR_p_fc_i_stimulator/1">
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>CinR_p_fc_i_stimulation_with_pCin_fc_CinR_p_fc_i_stimulator</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc_i_stimulation_with_pCin_fc/CinR_p_fc_i_stimulation_with_pCin_fc_CinR_p_fc_i_stimulator"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc_i_stimulation_with_pCin_fc"/>
+        <sbol:displayId>CinR_p_fc_i_stimulation_with_pCin_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc_i_stimulation_with_pCin_fc/CinR_p_fc_i_stimulation_with_pCin_fc_pCin_fc_i_stimulated/1">
+            <sbol:displayId>CinR_p_fc_i_stimulation_with_pCin_fc_pCin_fc_i_stimulated</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc_i_stimulation_with_pCin_fc/CinR_p_fc_i_stimulation_with_pCin_fc_pCin_fc_i_stimulated"/>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/CinR_mod/pCin_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:version>1</sbol:version>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/CinR_mod/pCin_fc/1">
+        <sbol:displayId>pCin_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/pCin_p/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/pCin_fc"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc_BBa_K1893028_fc_i_participation_promoter/1">
+            <sbol:displayId>BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc_BBa_K1893028_fc_i_participation_promoter</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc_BBa_K1893028_fc_i_participation_promoter"/>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc/1"/>
+            <sbol:version>1</sbol:version>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:displayId>BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc_CinR_p_fc_i_product/1">
+            <sbol:displayId>BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc_CinR_p_fc_i_product</sbol:displayId>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc_CinR_p_fc_i_product"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/CinR_mod/CinR_p_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc_i_genetic_production_with_CinR_p_fc"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc/1">
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod/BBa_K1893028_fc"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_K1893028/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>BBa_K1893028_fc</sbol:displayId>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_mod"/>
+    <sbol:displayId>CinR_mod</sbol:displayId>
+  </sbol:ModuleDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/pCin_p/1">
+    <sbol:displayId>pCin_promoter</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/pCin_promoter"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_K1893028/1">
+    <sbol:displayId>BBa_K1893028</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_K1893028"/>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/CinR_p/1">
+    <sbol:displayId>CinR_p</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/CinR_p"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+  </sbol:ComponentDefinition>
+</rdf:RDF>

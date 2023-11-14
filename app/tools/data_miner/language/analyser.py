@@ -1,31 +1,54 @@
 import spacy
-from fuzzywuzzy import fuzz,process
+from fuzzywuzzy import fuzz, process
+import re
 
+iri_p = re.compile(r'(?i)\b((?:https?|ftp):\/\/[^\s/$.?#].[^\s]*)\b')
 class LanguageAnalyser:
     def __init__(self):
         self.nlp = spacy.load('en_core_web_sm')
 
-    def interaction_search(self,text):
-        return None
+    def break_text(self, text):
+        doc = self.nlp(text)
+        sentences = []
+        for sent in doc.sents:
+            sentences.append(sent.text)
+        return sentences
+
+    def get_subject(self, sentence):
+        doc = self.nlp(sentence)
+        subject = None
+        for token in doc:
+            if token.dep_ == "nsubj":
+                subject = token.text
+                break
+        return subject
+
+    def get_proper_nouns(self, text):
+        doc = self.nlp(text)
+        return [token.text for token in doc if token.pos_ == "PROPN"]
+
+    def get_nouns(self, text):
+        doc = self.nlp(text)
+        return [token.text for token in doc if token.pos_ == "NOUN"]
+
+    def get_all_nouns(self, text):
+        doc = self.nlp(text)
+        return [token.text for token in doc if token.pos_ == "NOUN" or
+                token.pos_ == "PROPN"]
+    
+    def get_non_stop_words(self,text):
+        doc = self.nlp(text)
+        return [token.text for token in doc if 
+                not token.is_stop and 
+                not token.is_punct and 
+                not token.is_space]
+
+    def get_all_uris(self,text):
+        return re.findall(iri_p, text)
+    
+
+    def similarity(self,word1,word2):
+        token1 = self.nlp(word1)
+        token2 = self.nlp(word2)
+        return token1.similarity(token2)
         
-    def fuzzy_string_match(self,search_term,expected_terms,confidence_threshold=70):
-        if len(expected_terms) == 0:
-            return False
-
-        highest_confidence_score = process.extractOne(search_term, expected_terms,
-                                                      scorer=fuzz.token_sort_ratio)
-        if highest_confidence_score[1] >= confidence_threshold:
-            return True
-        return False
-
-    def get_subjects(self,sentences):
-        subjects = []
-        doc=self.nlp(sentences)
-        for sentence in list(doc.sents):
-            subjects += [str(tok) for tok in sentence if (tok.dep_ == "nsubj") ]
-        return list(set(subjects))
-
-    def get_subject(self,sentence):
-        doc=self.nlp(sentence)
-        sub_toks = [tok for tok in doc if (tok.dep_ == "nsubj") ]
-        return sub_toks

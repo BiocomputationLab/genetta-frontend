@@ -18,14 +18,14 @@ class IGEM(AbstractDatabase):
         if os.path.isfile(sbh_igem):
             return sbh_igem
         if not os.path.isfile(igem_cds):
-            self._miner.download_igem_parts(igem_cds)
+            self._miner.get_igem(igem_cds)
         graph = SBOLGraph()
         seqs = {}
         with open(igem_cds) as f:
             igem_recs = json.load(f)
             for identity in igem_recs:
                 identity = URIRef(identity)
-                record = SBOLGraph(self._miner.get_external(identity))
+                record = SBOLGraph(self._miner.get(identity))
                 if record is None:
                     continue
                 ret,seqs = self._handle_component_definition(record,identity,seqs)

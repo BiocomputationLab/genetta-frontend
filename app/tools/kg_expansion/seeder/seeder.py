@@ -2,8 +2,7 @@ import types
 from app.tools.kg_expansion.seeder.datasets.cello import Cello
 from app.tools.kg_expansion.seeder.datasets.igem import IGEM
 from app.tools.kg_expansion.seeder.datasets.vpr import VPR
-from app.tools.kg_expansion.seeder.aligner import Aligner
-
+from app.tools.aligner import aligner
 def _add_dataset(obj, ds):
     e_name = f'enable_{ds.__class__.__name__}'.lower()
     d_name = f'disable_{ds.__class__.__name__}'.lower()
@@ -24,7 +23,7 @@ def _add_dataset(obj, ds):
 datasets = [IGEM,Cello,VPR]
 class Seeder:
     def __init__(self, graph, miner):
-        self._alinger = Aligner()
+        self._alinger = aligner
         self._datasets = {s(graph, miner, self._alinger)
                             : False for s in datasets}
         self._threshold = 0.8

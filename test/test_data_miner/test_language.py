@@ -13,9 +13,55 @@ class TestLanguageAnalyser(unittest.TestCase):
     def tearDown(self):
         None
 
-    def test_mine_sentences(self):
-        sentences = "This plasmid consists of the mcherry gene (encoding red fluorescence protein) inserted in the backbone of pAW50 vector. EcoRI-NotI-XbaI-NsiI restriction sites have been introduced followed by a linker sequence followed by the mcherry sequence. The use of these sites will allow users to introduce any desired gene of their choice to be fused with the linker which is already fused with the mcherry sequence. This way any protein can be qualitatively studied in Methanogens via red fluorescence. Note:- the users will have to introduce the RBS sequence and start codon, delete the terminator sequence of their gene while cloning. Primer were designed in a way to introduce EcoRI-NotI-XbaI-NsiI sites before the linker. mcherry was obtained from Discosoma sp."
-        res = self.language_analyser.get_subjects(sentences)
-        self.assertIn("plasmid",res)
+    def test_break_text(self):
+        text = "ptet"
+        res = self.language_analyser.break_text(text)
+        self.assertEqual(res,[text])
+
+        text = "ptet is a repressible promoter."
+        res = self.language_analyser.break_text(text)
+        self.assertEqual(res,[text])
+
+
+        text = "ptet is a repressible promoter. ptet is repressed by the TetR protein"
+        res = self.language_analyser.break_text(text)
+        expected_text = ["ptet is a repressible promoter.", 
+                         "ptet is repressed by the TetR protein"]
+        self.assertEqual(res,expected_text)
+
+
+        text = "ptet is a repressible promoter. ptet is repressed by the TetR protein.The"
+        res = self.language_analyser.break_text(text)
+        expected_text = ["ptet is a repressible promoter.", 
+                         "ptet is repressed by the TetR protein.",
+                         "The"]
+        self.assertEqual(res,expected_text)
+
+    def test_get_subject(self):
+        text = "laci represses tetr"
+        res = self.language_analyser.get_subject(text)
+        self.assertEqual(res,"laci")
+
+    def test_get_proper_nouns(self):
+        text = "ptet laci repression Matthew"
+        res = self.language_analyser.get_proper_nouns(text)
+        self.assertEqual(res,["Matthew"])
+
+    def test_get_nouns(self):
+        text = "ptet laci repression Matthew"
+        res = self.language_analyser.get_nouns(text)
+        self.assertEqual(res,["ptet","laci","repression"])
+
+    def test_get_all_nouns(self):
+        text = "ptet laci repression Matthew or Kevin"
+        res = self.language_analyser.get_all_nouns(text)
+        self.assertEqual(res,["ptet","laci","repression","Matthew","Kevin"])
+
+    def test_get_all_nouns_uri(self):
+        text = "ptet laci https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/pTet/1 Matthew or Kevin"
+        res = self.language_analyser.get_all_nouns(text)
+        print(res)
+        self.assertEqual(res,["ptet","laci","https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/pTet/1","Matthew","Kevin"])
+
 if __name__ == '__main__':
     unittest.main()

@@ -3,11 +3,12 @@ cyto.load_extra_layouts()
 from app.tools.visualiser.visual.abstract_design import AbstractDesignVisual
 from app.tools.visualiser.builder.truth import TruthBuilder
 from app.tools.visualiser.visual.handlers.truth.color import TruthColorHandler
-
+from app.tools.visualiser.visual.handlers.truth.label import TruthLabelHandler
 class TruthVisual(AbstractDesignVisual):
     def __init__(self,graph):
         super().__init__(TruthBuilder(graph))
         self._color_h = TruthColorHandler(self._builder)
+        self._label_h = TruthLabelHandler(self._builder)
             
     # ---------------------- Preset ------------------------------------
     def set_provenance_preset(self):
@@ -170,6 +171,32 @@ class TruthVisual(AbstractDesignVisual):
                             self.set_bezier_edge_shape]
         return self._set_preset(preset_functions)
     
+    def set_module_preset(self):
+        '''
+        Pre-set methods with an affinity for displaying the module view.
+        '''
+        preset_functions = [self.set_network_mode,
+                            self.set_module_view,
+                            self.set_klay_layout,
+                            self.add_type_edge_color,
+                            self.add_type_node_color,
+                            self.add_node_name_labels,
+                            self.add_edge_no_labels,
+                            self.add_standard_node_size,
+                            self.set_circle_node_shape,
+                            self.set_bezier_edge_shape]
+        return self._set_preset(preset_functions)
+    
+    def set_module_view(self):
+        '''
+        Sub graph viewing only the provenances edges, 
+        displaying parts which have a level of sequence similarity.
+        '''
+        if self.view == self.set_module_view:
+            self._builder.set_module_view()
+        else:
+           self.view =self.set_module_view
+
     def set_provenance_view(self):
         '''
         Sub graph viewing only the provenances edges, 
@@ -216,3 +243,12 @@ class TruthVisual(AbstractDesignVisual):
             return self._color_h.edge.confidence()
         else:
             self.edge_color = self.add_confidence_edge_color
+
+    def add_edge_confidence_labels(self):
+        '''
+        Confidence of edge mapped to text.
+        '''
+        if self.edge_text == self.add_edge_confidence_labels:
+            return self._label_h.edge.confidence()
+        else:
+            self.edge_text = self.add_edge_confidence_labels

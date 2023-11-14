@@ -25,6 +25,10 @@ body {
 
 }
 
+.custom-select{
+    width: 25%;
+}
+
 #navbar {
     display: flex;
     flex-direction: row;
@@ -39,6 +43,10 @@ body {
 
 .index_row{
     margin-bottom: 50px;
+}
+
+.ms-n5 {
+    margin-left: -40px;
 }
 
 #logo {
@@ -464,3 +472,9 @@ details {
       position: static !important;
      }
    }
+
+.break_words{
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+}

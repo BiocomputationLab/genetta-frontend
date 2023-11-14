@@ -7,7 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='2_custom.css')}}"> {% if title %}
+    <link rel="stylesheet" href="{{url_for('static', filename='2_custom.css')}}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% if title %}
     <title>Genetta - {{ title }}</title>
     {% else %}
     <title>Genetta </title>
@@ -35,11 +37,21 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('editor') }}">Editor</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('truth') }}">Database</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Database
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('truth') }}">Visualise</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('truth_query') }}">Query</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('canonicalise') }}">Canonicalise</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('enhancement') }}">Enhancer</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"

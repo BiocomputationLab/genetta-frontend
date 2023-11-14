@@ -7,7 +7,7 @@
     </div>
 </div>
 {% if tg_form %}
-<div class="row gy-5">
+<div class="row">
     <div class="col">
         <div class="card">
             <div class="card-header">
@@ -53,78 +53,6 @@
                             <br>
                         </div>
                         {{ drop_projection.submit(class="btn btn-secondary") }}
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    {% if design_form %}
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h2>Remove Designs</h2>
-            </div>
-            <div class="card-body">
-                <div id="drop_projection">
-                    <form action="" method="post" enctype="multipart/form-data">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Graph Name</th>
-                                    <th scope="col">Owner</th>
-                                    <th scope="col">Stage</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for field in design_form.d_forms %}
-                                <tr>
-                                    <td>{{loop.index}}</td>
-                                    <td>{{field.label}}</td>
-                                    <td>{{field.description}}</td>
-                                    <td>{{field}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {{ design_form.submit_rda(class="btn btn-secondary") }}
-                        <br><br><br>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    {% if user_form %}
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h2>Remove Users</h2>
-            </div>
-            <div class="card-body">
-                <div id="drop_projection">
-                    <form action="" method="post" enctype="multipart/form-data">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Stage</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for field in user_form.u_forms %}
-                                <tr>
-                                    <td>{{loop.index}}</td>
-                                    <td>{{field.label}}</td>
-                                    <td>{{field}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {{ user_form.submit_rua(class="btn btn-secondary") }}
-                        <br><br><br>
                     </form>
                 </div>
             </div>

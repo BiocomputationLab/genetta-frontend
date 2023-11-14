@@ -4,40 +4,37 @@ from app.tools.data_miner.ontology.handler import OntologyHandler
 from app.tools.data_miner.graph_analyser.analyser import GraphAnalyser
 from app.tools.data_miner.utility.identifiers import identifiers
 from rdflib import RDF
-s_seq = identifiers.predicates.sequence
-s_ele = identifiers.predicates.elements
 s_cd = identifiers.objects.component_definition
 
 class DataMiner:
+    '''
+    Acts as a facade interface for several utlity tools.
+    '''
     def __init__(self):
         self._database = DatabaseHandler()
         self._language = LanguageAnalyser()
         self._ontology = OntologyHandler()
         self._graph_analyser = GraphAnalyser(self._database)
 
+    # -- Database --
     def is_reference(self,uri):
         return self._database.is_record(uri)
 
-    def get_external(self,name,timeout=10,db_name=None):
+    def get(self,name,timeout=10,db_name=None):
         return self._database.get(name,timeout=timeout,db_name=db_name)
     
-    def get_graph_subject(self,graph,fragments=None):
-        return self._graph_analyser.get_subject(graph,fragments)
-
-    def query_external(self,query,lazy=False):
+    def query(self,query,lazy=False):
         return self._database.query(query,lazy=lazy)
 
-    def get_descriptors(self,descriptions):
-        return self._language.get_subjects(descriptions)
-
-    def download_igem_parts(self,out_fn):
+    def get_igem(self,out_fn):
         return self._database.download_igem_parts(out_fn)
     
-    def get_vpr_data(self,out_fn):
+    def get_vpr(self,out_fn):
         return self._database.get_vpr_data(out_fn)
     
-    def full_sequence_match(self,sequence,db_name=None):
-        matches = self._database.sequence_search(sequence,db_name=db_name)
+    def sequence_match(self,sequence,db_name=None):
+        s = sequence.replace("\n", "").replace("\t", "").replace(" ", "")
+        matches = self._database.sequence_search(s,db_name=db_name)
         if matches is None:
             return None
         if len(matches) == 1:
@@ -49,33 +46,31 @@ class DataMiner:
             r = self._database.get(uri)
             cds += r.triples((None,RDF.type,s_cd))
         return str(max(set(cds), key=cds.count)[0])
+    
+    # -- Language --
+    def break_text(self,text):
+        return self._language.break_text(text)
+    
+    def get_subject(self,sentence):
+        return self._language.get_subject(sentence)
 
-    def partial_sequence_match(self,sequence):
-        matches = self._database.sequence_search(sequence,0.8)
-        if matches is None or matches == {}:
-            return {}
-        return matches
+    def get_entities(self,text):
+        results = self._language.get_non_stop_words(text)
+        #results = self._language.get_all_uris(text)
+        #results += self._language.get_all_nouns(text)   
+        return list(set(results))
+    
+    def word_similarity(self,word,words):
+        for w in words:
+            yield self._language.similarity(word,w)
+        
+    # -- Ontology -- 
 
-    def get_root_subjects(self,graphs,e_type=None,fragments=None):
-        return self._graph_analyser.get_roots(graphs,e_type=e_type,fragments=fragments)
-
-    def get_leaf_subjects(self,graphs,e_type=None,fragments=None):
-        return self._graph_analyser.get_leafs(graphs,e_type=e_type,fragments=fragments)
-
-    def mine_explicit_reference(self,descriptions):
-        '''
-        Very basic mine, only description with a single 
-        word will be taken as a potential reference.
-        '''
-        # I wonder if a general trash word prune from the langauge object could be used.
-        for description in descriptions:
-            if len(description.split(" ")) != 1:
-                continue
-            record = self._database.get(description)
-            if record is not None:
-                return self.get_graph_subject(record,[description])
-        return None
-
-    def mine_implicit_reference(self,descriptions):
-        pass
-
+    # -- Graph analyser --     
+    def record_to_node(self,graph,key=None,fragments=[]):
+        return self._graph_analyser.graph_to_node(graph,key,fragments)
+    
+    def get_graph_subject(self,graph,fragments=None):
+        return self._graph_analyser.get_subject(graph,fragments)
+    
+data_miner = DataMiner()

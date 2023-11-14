@@ -393,6 +393,7 @@ def create_ordered_components(root,graph):
     # Use this directed graph lib to create a directed 
     # walk through the graph (order)
     G = nx.DiGraph()
+
     G.add_edges_from(sequence_constraints)
     G.add_edges_from(sequence_annotations)
     try:
@@ -448,8 +449,6 @@ def extract_sequence_annotation(root,graph):
     component_locations = []
     for sa in graph.get_sequence_annotations(root,graph):
         seq_anno_component = graph.get_component(sa)
-        if seq_anno_component is None:
-            continue
         seq_anno_locations  = graph.get_locations(sa)
         for location in seq_anno_locations:
             location_type = graph.get_rdf_type(location)

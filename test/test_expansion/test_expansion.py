@@ -28,7 +28,7 @@ class TestExpansion(unittest.TestCase):
     def setUpClass(self):
         self.gn = "test_expansion"
         self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
-        self.tgb = TruthGraphBuilder(self.wg.truth)
+        self.tgb = TruthGraphBuilder(self.wg)
         self.seeder = Seeder(self.enhancer._graph.truth,self.enhancer._miner)
         self.miner = self.tgb._miner
 

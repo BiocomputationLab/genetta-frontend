@@ -24,7 +24,7 @@ class Cello(AbstractDatabase):
         return super().integrate(ig_graph,threshold,existing_seqs,existing_ints,existing_non_dna)
     
     def _build_cello(self):
-        graph = SBOLGraph(self._miner.get_external("Cello_Parts_collection",timeout=80))
+        graph = SBOLGraph(self._miner.get("Cello_Parts_collection",timeout=80))
         seqs = {}
         for cd in graph.get_component_definitions():
             cd = URIRef(cd)
@@ -39,7 +39,7 @@ class Cello(AbstractDatabase):
         return graph
         
     def _build_ecoli(self):
-        graph = SBOLGraph(self._miner.get_external("GokselEco1C1G1T2_collection",timeout=80))
+        graph = SBOLGraph(self._miner.get("GokselEco1C1G1T2_collection",timeout=80))
         cds = graph.get_component_definitions()
         seqs = {}
         for cd in cds:

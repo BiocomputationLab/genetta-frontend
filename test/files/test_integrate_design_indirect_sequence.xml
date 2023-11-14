@@ -1,0 +1,74 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#SrpR_promoter_sequence/1">
+    <sbol:elements>TCTATGATTGGTCCAGATTCGTTACCAATTGACAGCTAGCTCAGTCCTAGGTATATACATACATGCGGGTTTGTTTGTAAAC</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>SrpR_promoter_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_promoter_sequence"/>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#SrpR_protein/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>SrpR_protein</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_protein"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#SrpR_promoter/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_promoter"/>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#SrpR_promoter_sequence/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>SrpR_promoter</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="http://shortbol.org/v2#SrpR_mod/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_mod"/>
+    <sbol:displayId>SrpR_mod</sbol:displayId>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc/1">
+        <sbol:displayId>SrpR_protein_fc</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#SrpR_protein/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="http://shortbol.org/v2#SrpR_mod/SrpR_promoter_fc/1">
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>SrpR_promoter_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_promoter_fc"/>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#SrpR_promoter/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc_SrpR_promoter_fc_i_inhibited/1">
+            <sbol:participant rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_promoter_fc/1"/>
+            <sbol:displayId>SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc_SrpR_promoter_fc_i_inhibited</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000642"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc_SrpR_promoter_fc_i_inhibited"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000169"/>
+        <sbol:displayId>SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:participation>
+          <sbol:Participation rdf:about="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc_SrpR_protein_fc_i_inhibitor/1">
+            <sbol:version>1</sbol:version>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000020"/>
+            <sbol:participant rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#SrpR_mod/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc/SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc_SrpR_protein_fc_i_inhibitor"/>
+            <sbol:displayId>SrpR_protein_fc_i_inhibition_with_SrpR_promoter_fc_SrpR_protein_fc_i_inhibitor</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:version>1</sbol:version>
+  </sbol:ModuleDefinition>
+</rdf:RDF>

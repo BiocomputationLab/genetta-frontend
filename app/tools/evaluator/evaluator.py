@@ -1,11 +1,11 @@
 from app.tools.evaluator.abstract_evaluator import AbstractEvaluator
 from app.tools.evaluator.completeness.completeness import CompletenessEvaluator
 from app.tools.evaluator.standard.standard import StandardEvaluator
-from app.tools.data_miner.data_miner import DataMiner
+from app.tools.data_miner.data_miner import data_miner
 
 class Evaluator(AbstractEvaluator):
     def __init__(self, world_graph):
-        super().__init__(world_graph, DataMiner(), evaluators=[CompletenessEvaluator,
+        super().__init__(world_graph, data_miner, evaluators=[CompletenessEvaluator,
                                                          StandardEvaluator])
 
     def get_evaluators(self):

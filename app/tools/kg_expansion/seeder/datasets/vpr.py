@@ -17,14 +17,14 @@ class VPR(AbstractDatabase):
         if os.path.isfile(vpr_graph):
             return vpr_graph
         if not os.path.isfile(vpr_records):
-            self._miner.get_vpr_data(vpr_records)
+            self._miner.get_vpr(vpr_records)
         graph = SBOLGraph()
         with open(vpr_records) as f:
             vpr_recs = json.load(f)
             seqs = {}
             for identity in vpr_recs[str(cd_pred)]:
                 identity = URIRef(identity)
-                record = SBOLGraph(self._miner.get_external(identity))
+                record = SBOLGraph(self._miner.get(identity))
                 if record is None:
                     continue
                 ret,seqs = self._handle_component_definition(record,identity,seqs)
@@ -32,7 +32,7 @@ class VPR(AbstractDatabase):
                     graph += ret
             for identity in vpr_recs[str(md_pred)]:
                 identity = URIRef(identity)
-                record = SBOLGraph(self._miner.get_external(identity))
+                record = SBOLGraph(self._miner.get(identity))
                 graph += record
 
         seqs = graph.get_sequences()

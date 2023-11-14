@@ -36,7 +36,9 @@ class DatabaseHandler:
                     return
         else:
             for db in self._db_util.db_mapping_calls.keys():
-                yield self._db_util.query(query,db)
+                res = self._db_util.query(query,db)
+                if res is not None:
+                    yield res
 
     def is_record(self,identity):
         for db in self._db_util.db_mapping_calls.keys():

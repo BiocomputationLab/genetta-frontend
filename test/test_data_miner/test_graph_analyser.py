@@ -11,10 +11,10 @@ sys.path.insert(0, os.path.join("..","..",".."))
 sys.path.insert(0, os.path.join("..",".."))
 from app.converter.utility.identifiers import identifiers
 from app.graph.utility.model.model import model
-from app.tools.data_miner.data_miner import DataMiner
+from app.tools.data_miner.data_miner import data_miner
 class TestGraphAnalyser(unittest.TestCase):
     def setUp(self):
-        self.dm = DataMiner()
+        self.dm = data_miner
         self.analyser = self.dm._graph_analyser
 
     def tearDown(self):
@@ -41,6 +41,7 @@ class TestGraphAnalyser(unittest.TestCase):
         fragments = ["pveg"]
         graphs = [self.dm.get_external(r) for r in list(self.dm.query_external(fragments[0],lazy=True))[0]]
         for r in self.analyser.get_leafs(graphs,e_type,fragments):
+            print(r)
             response = requests.get(r)
             self.assertTrue(response.status_code == 200)
 

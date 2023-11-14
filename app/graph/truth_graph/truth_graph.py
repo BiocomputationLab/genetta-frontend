@@ -1,25 +1,38 @@
 import json
+
 from app.graph.utility.model.model import model
 from app.graph.design_graph.design_graph import DesignGraph
 from app.graph.truth_graph.modules.synonym import SynonymModule
 from app.graph.truth_graph.modules.derivative import DerivativeModule
 from app.graph.truth_graph.modules.interaction import InteractionModule
-from app.graph.utility.graph_objects.node import Node
+from app.graph.truth_graph.modules.module import InteractionModuleModule
+from app.graph.truth_graph.modules.usage import UsageModule
 from app.graph.utility.graph_objects.edge import Edge
+from app.graph.utility.graph_objects.reserved_edge import ReservedEdge
+from app.graph.utility.graph_objects.reserved_node import ReservedNode
+from app.graph.truth_graph.gds.procedures import TruthProcedures
+from app.graph.truth_graph.gds.project import TruthProjectBuilder
+
 p_confidence = str(model.identifiers.external.confidence)
 p_synonym = str(model.identifiers.external.synonym)
+o_pe = model.identifiers.objects.physical_entity
+index_name = "truth_index"
+index_labels = ([model.identifiers.objects.synonym] + 
+                [str(k[1]["key"]) for k in model.get_derived(o_pe)])
+index_on = ["name",model.identifiers.external.description] 
 
 class TruthGraph(DesignGraph):
     def __init__(self, name, driver):
         super().__init__(driver,name)
+        self.procedure = TruthProcedures(self)
+        self.project = TruthProjectBuilder(self)
         self.synonyms = SynonymModule(self)
         self.interactions = InteractionModule(self)
         self.derivatives = DerivativeModule(self)
+        self.modules = InteractionModuleModule(self)
+        self.usage = UsageModule(self)
         self._np = {"graph_name": self.name}
-
-
-    def query(self):
-        raise NotImplementedError()
+        self._create_text_index(index_name,index_labels,index_on)
     
     def add_node(self,key,type=None,**kwargs):
         kwargs.update(self._np)
@@ -32,8 +45,8 @@ class TruthGraph(DesignGraph):
             return
         uedges = []
         for e in edges:
-            if not isinstance(e,Edge):
-                e = Edge(*e)
+            if not isinstance(e,(Edge,ReservedEdge)):
+                e = ReservedEdge(*e)
             e = self._add_edge_gn(e)
             e.update({p_confidence: modifier})
             uedges.append(e)
@@ -44,14 +57,19 @@ class TruthGraph(DesignGraph):
             edges = [edges]
         uedges = []
         for e in edges:
-            if not isinstance(e,Edge):
-                e = Edge(*e)
+            if not isinstance(e,(Edge,ReservedEdge)):
+                e = ReservedEdge(*e)
             e = self._add_edge_gn(e)
             uedges.append(e)
         super().remove_edges(uedges)
 
     def set_confidence(self, edge, confidence):
         self.driver.set_edge(edge, {p_confidence: confidence})
+        return self.driver.submit()
+
+    def merge_nodes(self,source,merged):
+        properties = {model.identifiers.external.description:"'combine'"}
+        self.driver.merge_nodes(source,merged,properties=properties)
         return self.driver.submit()
 
     def node_query(self, n=[], **kwargs):
@@ -63,6 +81,17 @@ class TruthGraph(DesignGraph):
         return [e for e in self._edge_query(n,e,v,**kwargs) 
                 if int(e[p_confidence]) >= threshold]
 
+    def query_text_index(self,values,predicate=None,wildcard=False,
+                         fuzzy=False,threshold=None):
+        if predicate is None:
+            predicate = "OR"
+        return self.driver.query_text_index(index_name,values,
+                                            graph_names=self.name,
+                                            predicate=predicate,
+                                            wildcard=wildcard,
+                                            fuzzy=fuzzy,
+                                            threshold=threshold)
+    
     def drop(self):
         self.driver.drop_graph(self.name)
 
@@ -74,12 +103,10 @@ class TruthGraph(DesignGraph):
                 props = ele["properties"]
             else:
                 props = self._np
-            return Node(k, t, id=iden, **props)
+            return ReservedNode(k, t, id=iden, **props)
         data = []
         with open(fn) as f:
-            # Weirdness its always 1 line.
-            for line in f:
-                data = json.loads(line)
+            data = json.load(f)
         for d in data:
             if d["type"] == "relationship":
                 n = _node(d["start"])
@@ -107,6 +134,11 @@ class TruthGraph(DesignGraph):
             json.dump(data, outfile)
         return out_fn
 
+    def _create_text_index(self,name,labels,on):
+        if "graph_name" not in on:
+            on.append("graph_name")
+        return self.driver.create_text_index(name,labels,on)
+    
     def _add_edge_gn(self, edge):
         gnd = self._np
         edge.n.update(gnd)

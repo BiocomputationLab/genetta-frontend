@@ -11,6 +11,23 @@ class Node:
             kwargs["name"] = _get_name(key)
         self._update(kwargs)
 
+    def is_equal(self,node):
+        if not isinstance(node,Node):
+            return False
+        if node.get_key() != self.get_key():
+            return False
+        if node.get_type() != self.get_type():
+            return False
+        return True
+    
+    def is_in(self,nodes):
+        if not isinstance(nodes,(list,tuple,set)):
+            return False
+        for node in nodes:
+            if self.is_equal(node):
+                return True
+        return False
+
     def duplicate(self):
         return self.__class__(self.key,self.type,**self.properties)
         
@@ -86,6 +103,7 @@ class Node:
 
     def _update(self,items):
         for k,v in items.items():
+            k = str(k)
             up = urlparse(k)
             if up.netloc != "":
                 setattr(self,_get_name(k),v)
@@ -147,10 +165,10 @@ class Node:
         del self.properties[k]
         
 def _get_name(subject):
-    if len(subject) == 1:
-        return subject
     split_subject = _split(subject)
-    if len(split_subject[-1]) == 1 and split_subject[-1].isdigit():
+    if split_subject[-1].isdigit():
+        return split_subject[-2]
+    elif len(split_subject[-1]) == 3 and _isfloat(split_subject[-1]):
         return split_subject[-2]
     else:
         return split_subject[-1]
@@ -158,3 +176,11 @@ def _get_name(subject):
 
 def _split(uri):
     return re.split('#|\/|:', uri)
+
+
+def _isfloat(x):
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False

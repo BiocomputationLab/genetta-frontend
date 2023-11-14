@@ -2,6 +2,7 @@ import os
 import shutil
 import json
 import time
+import ast
 
 from xml.sax._exceptions import SAXParseException
 from rdflib.exceptions import ParserError
@@ -27,6 +28,7 @@ from app.converter.sbol_convert import export
 from app.graph.world_graph import WorldGraph
 from app.utility.login import LoginHandler
 
+from app.tools.graph_query.handler import GraphQueryHandler
 from app.tools.visualiser.design import DesignDash
 from app.tools.visualiser.editor import EditorDash
 from app.tools.visualiser.cypher import CypherDash
@@ -53,11 +55,12 @@ db_host = os.environ.get('NEO4J_HOST', 'localhost')
 db_port = os.environ.get('NEO4J_PORT', '7687')
 db_auth = os.environ.get('NEO4J_AUTH', "neo4j/Radeon12300")
 db_auth = tuple(db_auth.split("/"))
-uri = f'neo4j://{db_host}:{db_port}'
+uri = f'neo4j://{db_host}:{db_port}' 
 login_graph_name = "login_manager"
 
 logger = ChangeLogger()
 graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name],logger=logger)
+
 
 # Tools
 design_dash = DesignDash(__name__, server, graph)
@@ -65,9 +68,11 @@ editor_dash = EditorDash(__name__, server, graph)
 cypher_dash = CypherDash(__name__, server, graph)
 projection_dash = ProjectionDash(__name__, server, graph)
 truth_dash = TruthDash(__name__, server, graph)
+tg_builder = TruthGraphBuilder(graph)
+tg_query = GraphQueryHandler(graph.truth)
 enhancer = Enhancer(graph)
 evaluator = Evaluator(graph)
-tg_builder = TruthGraphBuilder(graph.truth)
+
 
 design_dash.app.enable_dev_tools(debug=True)
 cypher_dash.app.enable_dev_tools(debug=True)
@@ -142,7 +147,6 @@ def login():
 @server.route("/logout")
 @login_required
 def logout():
-    session.clear()
     logout_user()
     return redirect("index")
 
@@ -158,23 +162,10 @@ def index():
 @login_required
 def graph_admin():
     if not _is_admin():
-        return render_template('invalid_route.html', 
-                               invalid_credentials=True)
+        return render_template('invalid_route.html', invalid_credentials=True)
     tg_form = forms.add_truth_graph_form(truth_save_dir)
     project_names = graph.driver.project.names()
-    d_projection = forms.add_remove_projection_form(project_names)
-    def _derive_admin_forms():
-        d_names = graph.get_design_names()
-        u_names = [k.get_id() for k in login_manager.get_users() 
-                if not k.is_admin]
-        ud = {}
-        for un in u_names:
-            ud[un] = _get_user_gn(d_names,user=un)
-        design_form = forms.add_remove_design_admin_form(ud)
-        user_form = forms.add_remove_user_admin_form(u_names)
-        return design_form,user_form
-    design_form,user_form = _derive_admin_forms()
-
+    drop_projection = forms.add_remove_projection_form(project_names)
     success_string = None
     if tg_form.validate_on_submit():
         if tg_form.tg_save.data:
@@ -182,48 +173,25 @@ def graph_admin():
             success_string = f'Truth Graph Saved.'
         elif tg_form.tg_reseed.data:
             graph.truth.drop()
-            enhancer.seed_truth_graph()
+            tg_builder.seed()
             success_string = f'Reset Truth Graph'
         elif tg_form.tg_expand.data:
-            enhancer.expand_truth_graph()
+            tg_builder.expand()
             success_string = f'Expanded Truth Graph'
         elif tg_form.tg_restore.data:
             fn = os.path.join(truth_save_dir, request.form["files"])
             graph.truth.drop()
             graph.truth.load(fn)
             success_string = f'Restored Truth Graph {request.form["files"]}'
-    elif d_projection.validate_on_submit():
-        dg = d_projection.graphs.data
+    elif drop_projection.validate_on_submit():
+        dg = drop_projection.graphs.data
         if dg == "Remove All":
             for n in project_names:
                 graph.driver.project.drop(n)
         else:
             graph.driver.project.drop(dg)
-    elif design_form.submit_rda.id in request.form.keys():
-        for k, v in request.form.items():
-            if k == design_form.submit_rda.id:
-                continue
-            if v != "y":
-                continue
-            un = _find_user(k)
-            _remove_graph(k,un)
-        design_form,user_form = _derive_admin_forms()
-    elif user_form.submit_rua.id in request.form.keys():
-        for k, v in request.form.items():
-            if k == user_form.submit_rua.id:
-                continue
-            if v != "y":
-                continue
-            for gn in _get_user_gn(graph.get_design_names(),user=k):
-                _remove_graph(gn,k)
-            login_manager.remove_user(k)            
-            shutil.rmtree(os.path.join(sessions_dir,k))
-        design_form,user_form = _derive_admin_forms()
-
     return render_template('admin.html', tg_form=tg_form,
-                           drop_projection=d_projection,
-                           design_form = design_form,
-                           user_form=user_form,
+                           drop_projection=drop_projection,
                            success_string=success_string)
 
 
@@ -260,8 +228,13 @@ def modify_graph():
         ft = "sbol"
     elif remove_graph.validate_on_submit():
         gn = remove_graph.graphs.data
-        _remove_graph(gn)
+        graph.remove_design(gn)
         remove_graph,_ = _add_graph_forms()
+        try:
+            os.remove(os.path.join(session["user_dir"], gn+".xml"))
+        except FileNotFoundError:
+            pass
+        _remove_user_gn(gn)
         success_string = f'{gn} Removed.'
     elif export_graph.validate_on_submit():
         out_dir = os.path.join(session["user_dir"], "designs")
@@ -336,15 +309,12 @@ def modify_graph():
             return render_template('modify_graph.html', upload_graph=upload_graph,
                                     paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
                                     remove_graph=remove_graph, err_string="Graph name is taken.")
-        
-        for agf,gn in connector.split(add_graph_fn,g_name):
-            _add_user_gn(gn)
-            success,ret_str = _convert_file(agf, gn, ft)
+        _add_user_gn(g_name)
+        success,ret_str = _convert_file(add_graph_fn, g_name, ft)
         if success:
             success_string = ret_str
         else:
             err_string = ret_str
-            
         remove_graph,export_graph = _add_graph_forms()
         return render_template('modify_graph.html', upload_graph=upload_graph,
                                paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
@@ -359,7 +329,44 @@ def modify_graph():
 @server.route('/truth-query', methods=['GET', 'POST'])
 @login_required
 def truth_query():
-    return # Go from ere...
+    handlers = tg_query.get_handlers()
+    query_form = forms.build_truth_query_form(handlers)
+    results = None
+    info_string = None
+    no_results = False
+    if request.method == "POST":
+        if query_form.submit_query.id in request.form:
+            qd = query_form.query.data
+            qt = query_form.query_type.data
+            results = tg_query.query(qt,qd)
+            results = forms.build_tgrf(results,qt)
+        else:
+            for identifier,action in request.form.items():
+                if (identifier == query_form.query.id or 
+                    identifier == query_form.query_type.id):
+                    continue
+                source,result,qt = identifier.split(" - ")
+                if action == "load":
+                    session["cypher_entities"] = result
+                    return redirect(cypher_dash.pathname)
+                elif action == "positive":
+                    tg_query.feedback(qt,source,result)
+                    info_string = "Positive Feedback integrated."
+                elif action == "negative":
+                    tg_query.feedback(qt,source,result,positive=False)
+                    info_string = "Negative Feedback integrated."
+                else:
+                    raise NotImplementedError(action)
+            qd = query_form.query.data
+            qt = query_form.query_type.data
+            results = tg_query.query(qt,qd)
+            results = forms.build_tgrf(results,qt)
+        if len(results) == 0:
+            no_results=True
+        return render_template('truth_query.html', query_bar=query_form,
+                               results=results,info_string=info_string,
+                               no_results=no_results)
+    return render_template('truth_query.html', query_bar=query_form)
 
 @server.route('/visualiser', methods=['GET', 'POST'])
 @login_required
@@ -405,7 +412,7 @@ def evaluate():
         if upload.validate_on_submit():
             gn, _, error = _upload_graph(upload)
             if error is not None:
-                return render_template("evaluate.html", upload=upload, cg=cg,error_str=error)
+                return render_template("evaluate.html",  cg=cg,error_str=error)
         elif cg.validate_on_submit():
             gn = cg.graphs.data
         if gn is not None:
@@ -414,131 +421,112 @@ def evaluate():
             return render_template("evaluate.html", feedback=feedback,
                                    descriptions=descriptions)
 
-    return render_template("evaluate.html", upload=upload, cg=cg)
+    return render_template("evaluate.html",  cg=cg)
 
 
 @server.route('/canonicalise', methods=['GET', 'POST'])
 @login_required
 def canonicalise():
-    upload = forms.UploadEnhanceDesignForm()
     d_names = graph.get_design_names()
-    cg = forms.add_choose_graph_form(d_names)
+    user_d_names = _get_user_gn(d_names)
+    cg = forms.add_choose_graph_form(user_d_names)
     p_changes = None
     changes = None
-    feedback = None
     gn = None
     if request.method == "POST":
         if "close" in request.form:
-            return render_template("canonicalise.html", upload=upload, cg=cg)
-        elif upload.validate_on_submit():
-            gn, rm, error = _upload_graph(upload)
-            if error is not None:
-                return render_template("canonicalise.html", upload=upload, cg=cg,error_str=error)
+            return render_template("canonicaliser.html", cg=cg)
         elif cg.validate_on_submit():
             rm = cg.run_mode.data
             gn = cg.graphs.data
 
         if gn is not None:
-            if upload.run_mode.data == "semi":
-                p_changes, feedback = enhancer.canonicalise_graph(gn, mode=rm)
-            elif upload.run_mode.data == "automated":
-                changes, feedback = enhancer.canonicalise_graph(gn, mode=rm)
+            if not rm:
+                p_changes = enhancer.canonicalise(gn,automated=False)
+            else:
+                changes = enhancer.canonicalise(gn)
 
         if "submit_semi_canonicaliser" in request.form:
             replacements = {}
             for k, v in request.form.items():
                 if k == "submit_semi_canonicaliser":
                     continue
-                if v == "y":
-                    old, new = k.split()
-                    replacements[old] = new
                 elif v != "none":
+                    v = ast.literal_eval(v)
                     replacements[k] = v
             gn = session["c_gn"]
-            changes = enhancer.apply_cannonical(replacements, gn)
+            changes = enhancer.apply_canonicalise(replacements, gn)
             del session["c_gn"]
-            del session["feedback"]
 
         if p_changes is not None:
             if len(p_changes) == 0:
-                return render_template("canonicaliser.html", upload=upload, cg=cg, no_changes=True)
+                return render_template("canonicaliser.html", cg=cg, no_match=True)
             changes = forms.add_semi_canonicaliser_form(p_changes)
             session["c_gn"] = gn
-            session["feedback"] = feedback
-            return render_template("canonicaliser.html", upload=upload, cg=cg, p_changes=changes, gn=gn)
+            return render_template("canonicaliser.html", cg=cg, p_changes=changes, gn=gn)
+        
         if changes is not None:
             if len(changes) == 0:
-                return render_template("canonicaliser.html", upload=upload, cg=cg, no_changes=True)
+                return render_template("canonicaliser.html",cg=cg, no_changes=True)
             else:
-                session["feedback"] = feedback
-                return render_template("canonicaliser.html", upload=upload, cg=cg, s_changes=changes, gn=gn)
-    return render_template("canonicaliser.html", upload=upload, cg=cg)
+                return render_template("canonicaliser.html",  cg=cg, s_changes=changes, gn=gn)
+    return render_template("canonicaliser.html",  cg=cg)
 
 
 @server.route('/enhancement', methods=['GET', 'POST'])
 @login_required
 def enhancement():
     d_names = graph.get_design_names()
-    pipelines = ["all"] + enhancer.get_pipeline_names()
-    upload = forms.add_enhance_graph_form(pipelines)
-    cg = forms.add_choose_graph_enhancement_form(d_names, pipelines)
+    user_d_names = _get_user_gn(d_names)
+    run_e = forms.add_enhancement_form(user_d_names)
     p_changes = None
     changes = None
-    feedback = None
     gn = None
     if request.method == "POST":
         if "close" in request.form:
-            return render_template("enhancement.html", upload=upload, cg=cg)
-        elif upload.validate_on_submit():
-            gn, rm, error = _upload_graph(upload)
-            if error is not None:
-                return render_template("enhancement.html", upload=upload, cg=cg,error_str=error)
-            pipeline = upload.pipelines.data
-        elif cg.validate_on_submit():
-            rm = cg.run_mode.data
-            gn = cg.graphs.data
-            pipeline = cg.pipelines.data
-        if gn is not None:
-            if pipeline == "all":
-                pipeline = None
+            return render_template("enhancement.html",  run_e=run_e)
+        elif run_e.validate_on_submit():
+            automate = run_e.automate.data
+            gn = run_e.graphs.data
+            if automate:
+                changes = enhancer.enhance(gn, automated=True)
             else:
-                pipeline = enhancer.cast_pipelines(pipelines)
-            if upload.run_mode.data == "semi":
-                p_changes, feedback = enhancer.enhance_design(
-                    gn, mode=rm, pipeline=pipeline)
-            elif upload.run_mode.data == "automated":
-                changes, feedback = enhancer.enhance_design(
-                    gn, mode=rm, pipeline=pipeline)
-
-        if "submit_semi_enhancer" in request.form:
+                p_changes = enhancer.enhance(gn, automated=False)
+        if "submit_enhancer" in request.form:
             replacements = {}
             for k, v in request.form.items():
-                if k == "submit_semi_enhancer":
+                if k == "submit_enhancer":
                     continue
                 if v == "y":
-                    old, new = k.split()
-                    replacements[old] = new
-                elif v != "none":
-                    replacements[k] = v
+                    enhancer_mod,old, new = k.split()
+                    if enhancer_mod not in replacements:
+                        replacements[enhancer_mod] = {}
+                    if old in replacements[enhancer_mod]:
+                        existing = replacements[enhancer_mod][old]
+                        if isinstance(existing,list):
+                            replacements[enhancer_mod][old].append(new)
+                        else:
+                            replacements[enhancer_mod][old] = [existing,
+                                                               new]
+                    else:
+                        replacements[enhancer_mod][old] = new
             gn = session["c_gn"]
-            changes = enhancer.apply_enhancement(replacements, gn)
+            changes = enhancer.apply_enhance(replacements, gn)
             del session["c_gn"]
-            del session["feedback"]
 
         if p_changes is not None:
             if len(p_changes) == 0:
-                return render_template("enhancement.html", upload=upload, cg=cg, no_changes=True)
+                return render_template("enhancement.html", run_e=run_e, no_changes=True)
             changes = forms.add_semi_enhancer_form(p_changes)
             session["c_gn"] = gn
-            session["feedback"] = feedback
-            return render_template("enhancement.html", upload=upload, cg=cg, p_changes=changes, gn=gn)
+            return render_template("enhancement.html", run_e=run_e, p_changes=changes, gn=gn)
         if changes is not None:
             if len(changes) == 0:
-                return render_template("enhancement.html", upload=upload, cg=cg, no_changes=True)
+                return render_template("enhancement.html", run_e=run_e, no_changes=True)
             else:
-                session["feedback"] = feedback
-                return render_template("enhancement.html", upload=upload, cg=cg, s_changes=changes, gn=gn)
-    return render_template("enhancement.html", upload=upload, cg=cg)
+                return render_template("enhancement.html", run_e=run_e, s_changes=changes, gn=gn)
+            
+    return render_template("enhancement.html",  run_e=run_e)
 
 @server.route('/tutorial', methods=['GET', 'POST'])
 def tutorial():
@@ -591,15 +579,6 @@ def _convert_file(fn,name,ct):
         return False,ex
     return True, "Graph added successfully."
 
-def _remove_graph(gn,user=None):
-    graph.remove_design(gn)
-    if user is None:
-        user = current_user.get_id()
-    try:
-        os.remove(os.path.join(sessions_dir,user, gn+".xml"))
-    except FileNotFoundError:
-        pass
-    _remove_user_gn(gn,user)
 
 def _add_graph_forms():
     gns = graph.get_design_names()
@@ -615,18 +594,9 @@ def _is_admin():
         return True
     return False
 
-def _find_user(gn):
-    for e in os.listdir(sessions_dir):
-        user_gn_file = os.path.join(sessions_dir,e,user_gns)
-        with open(user_gn_file) as f:
-            data = json.load(f)
-            if gn in data:
-                return e
 
-def _get_user_gn(names,user=None):
-    if user is None:
-        user = current_user.get_id()
-    user_gn_file = os.path.join(sessions_dir,user,user_gns)
+def _get_user_gn(names):
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
     if not os.path.isfile(user_gn_file):
         return []
     with open(user_gn_file) as f:
@@ -635,8 +605,7 @@ def _get_user_gn(names,user=None):
 
 
 def _add_user_gn(gn):
-    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),
-                                user_gns)
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
     data = [gn]
     if os.path.isfile(user_gn_file):
         with open(user_gn_file) as f:
@@ -645,10 +614,8 @@ def _add_user_gn(gn):
         json.dump(data, outfile)
 
 
-def _remove_user_gn(gn,user=None):
-    if user is None:
-        user = current_user.get_id()
-    user_gn_file = os.path.join(sessions_dir,user,user_gns)
+def _remove_user_gn(gn):
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
     if not os.path.isfile(user_gn_file):
         return
     with open(user_gn_file) as f:

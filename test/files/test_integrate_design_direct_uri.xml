@@ -1,0 +1,109 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_C0079/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_C0079"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>BBa_C0079</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_K091117/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_K091117"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>BBa_K091117</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ModuleDefinition rdf:about="https://synbiohub.org/public/igem/lasR_mod/1">
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc/1">
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/LasR_p/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:displayId>LasR_p_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/lasR_mod/BBa_K091117_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_K091117_fc"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>BBa_K091117_fc</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_K091117/1"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc/1">
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>BBa_C0079_fc</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_C0079/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc_BBa_C0079_fc_i_participation_promoter/1">
+            <sbol:displayId>BBa_C0079_fc_i_genetic_production_with_LasR_p_fc_BBa_C0079_fc_i_participation_promoter</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc_BBa_C0079_fc_i_participation_promoter"/>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>BBa_C0079_fc_i_genetic_production_with_LasR_p_fc</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc"/>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc_LasR_p_fc_i_product/1">
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc/1"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:displayId>BBa_C0079_fc_i_genetic_production_with_LasR_p_fc_LasR_p_fc_i_product</sbol:displayId>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc/BBa_C0079_fc_i_genetic_production_with_LasR_p_fc_LasR_p_fc_i_product"/>
+          </sbol:Participation>
+        </sbol:participation>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod"/>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc_i_stimulation_with_BBa_K091117_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc_i_stimulation_with_BBa_K091117_fc"/>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc_i_stimulation_with_BBa_K091117_fc/LasR_p_fc_i_stimulation_with_BBa_K091117_fc_BBa_K091117_fc_i_stimulated/1">
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc_i_stimulation_with_BBa_K091117_fc/LasR_p_fc_i_stimulation_with_BBa_K091117_fc_BBa_K091117_fc_i_stimulated"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/lasR_mod/BBa_K091117_fc/1"/>
+            <sbol:displayId>LasR_p_fc_i_stimulation_with_BBa_K091117_fc_BBa_K091117_fc_i_stimulated</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000643"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc_i_stimulation_with_BBa_K091117_fc/LasR_p_fc_i_stimulation_with_BBa_K091117_fc_LasR_p_fc_i_stimulator/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000459"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>LasR_p_fc_i_stimulation_with_BBa_K091117_fc_LasR_p_fc_i_stimulator</sbol:displayId>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/lasR_mod/LasR_p_fc_i_stimulation_with_BBa_K091117_fc/LasR_p_fc_i_stimulation_with_BBa_K091117_fc_LasR_p_fc_i_stimulator"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000170"/>
+        <sbol:displayId>LasR_p_fc_i_stimulation_with_BBa_K091117_fc</sbol:displayId>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>lasR_mod</sbol:displayId>
+  </sbol:ModuleDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/LasR_p/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/LasR_p"/>
+    <sbol:displayId>LasR_p</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+</rdf:RDF>

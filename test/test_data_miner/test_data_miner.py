@@ -31,35 +31,30 @@ class TestDataMiner(unittest.TestCase):
         self.assertFalse(self.miner.is_reference("https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/A1_AmtR/1123"))
         self.assertFalse(self.miner.is_reference(""))
 
-    def test_get_external(self):
-        r = self.miner.get_external("https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/A1_AmtR/1")
-        r1 = self.miner.get_external("A1_AmtR")
+    def test_get(self):
+        r = self.miner.get("https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/A1_AmtR/1")
+        r1 = self.miner.get("A1_AmtR")
         r_trips = list(set(r.triples((None,None,None))) - set(r1.triples((None,None,None))))
         self.assertEqual(len(r_trips),0)
-        r3 = self.miner.get_external("tst")
+        r3 = self.miner.get("tst")
         self.assertIsNone(r3)
 
-    def test_full_sequence_match(self):
+    def test_sequence_match(self):
         sequence = "agctttaagaaggagatatacataatggcaatggcagcatctcgtcaggctgttcgcgttgcagcagctgtggatgctgattaccgtaagcgcgaaccaaaggacgtgcgcgtgcttgttgtaggtccaacaggttacatcggtaagttcgtggtgaaggaactcgtgagccgtggttacaacgtggttgcattcgcacgtgagaatgcaggtatcaagggtaagatgggtcgtgaagatatcgtgaaggagttccatggtgcggaagtgcgtttcggttctgtgctggatccagcttcgctgcgtgacgttgcattcaaggacccagttgacgttgttgttagctgcctggcaagccgcacaggtggtaagaaggactcgtggctgatcgactacacagctactaagaacagcctggacgttgcacgcgcatctggtgcaaagcactttgtgctgctgtctgcaatctgcgtgcagaagccactgctggagttccagaaagccaagctccagttcgagtctgaccttcaggctgccggtgacatcacctattccatcgtgcgtcctaccgcattcttcaagtccattgctggtcagatcgacatcgtgaagaaaggtaacccatacgtcatgtttggtgacggtaacctggcagcatgcaaacctatcagcgaagctgacctggcttcattcattgcagattgcgtcaccgaacagaacaaggtcaacaaggtgctgcctatcggtggtccaagcaaggccttcacggctaagcagcaggctgatctgctgttcaacatcacaggtctgccacctaagtacttccctgtgcctgtggcactcatggatggtatgattggtctgttcgactctctggctaagctgttcccacagctggaagatagcgctgaatttgcacgtattggtaagtactatgccaccgaatccatgctggtgtacgacgaggcacgtggtgtgtaccggaagacgaaacgcctggttacggcaaggacacgctggaagacttcttctctcgtgcagtgaaggaaggtctgcaaggacaggaactgggtgaccaggcagtgtttggacaacaataataataa"
-        match = self.miner.full_sequence_match(sequence)
-        self.assertEqual(str(match),"https://synbiohub.org/public/igem/BBa_K1080012/1")
-
-    def test_partial_sequence_match(self):
-        sequence = "cgctttaagaaggagatatacataatggcaatggcagcatctcgtcaggctgttcgcgttgcagcagctgtggatgctgattaccgtaagcgcgaaccaaaggacgtgcgcgtgcttgttgtaggtccaacaggttacatcggtaagttcgtggtgaaggaactcgtgagccgtggttacaacgtggttgcattcgcacgtgagaatgcaggtatcaagggtaagatgggtcgtgaagatatcgtgaaggagttccatggtgcggaagtgcgtttcggttctgtgctggatccagcttcgctgcgtgacgttgcattcaaggacccagttgacgttgttgttagctgcctggcaagccgcacaggtggtaagaaggactcgtggctgatcgactacacagctactaagaacagcctggacgttgcacgcgcatctggtgcaaagcactttgtgctgctgtctgcaatctgcgtgcagaagccactgctggagttccagaaagccaagctccagttcgagtctgaccttcaggctgccggtgacatcacctattccatcgtgcgtcctaccgcattcttcaagtccattgctggtcagatcgacatcgtgaagaaaggtaacccatacgtcatgtttggtgacggtaacctggcagcatgcaaacctatcagcgaagctgacctggcttcattcattgcagattgcgtcaccgaacagaacaaggtcaacaaggtgctgcctatcggtggtccaagcaaggccttcacggctaagcagcaggctgatctgctgttcaacatcacaggtctgccacctaagtacttccctgtgcctgtggcactcatggatggtatgattggtctgttcgactctctggctaagctgttcccacagctggaagatagcgctgaatttgcacgtattggtaagtactatgccaccgaatccatgctggtgtacgacgaggcacgtggtgtgtaccggaagacgaaacgcctggttacggcaaggacacgctggaagacttcttctctcgtgcagtgaaggaaggtctgcaaggacaggaactgggtgaccaggcagtgtttggacaacaataataataa"
-        match = self.miner.partial_sequence_match(sequence)
+        match = self.miner.sequence_match(sequence)
         self.assertEqual(str(match),"https://synbiohub.org/public/igem/BBa_K1080012/1")
     
-    def test_get_graph_subject(self):
+    def test_get_subject(self):
         fn = os.path.join("files","laci_synbiohub.xml")
         g = Graph()
         g.parse(fn)
-        res = self.miner.get_graph_subject(g)   
+        res = self.miner.get_subject(g)   
         self.assertEqual(str(res),"https://synbiohub.org/public/igem/BBa_R0010/1")
 
         fn = os.path.join("files","nor_full.xml")
         g = Graph()
         g.parse(fn)
-        res = self.miner.get_graph_subject(g,["Ara_"])
+        res = self.miner.get_subject(g,["Ara_"])
         self.assertEqual(str(res),"http://shortbol.org/v2#Ara_arac/1")
 
     def test_mine_explicit_references(self):
@@ -75,43 +70,18 @@ class TestDataMiner(unittest.TestCase):
         refs = self.miner.mine_explicit_reference(meta)
         self.assertEqual(refs,None)
 
-    def test_query_external(self):
+    def test_query(self):
         dbs = list(self.miner._database._db_util.db_mapping_calls.keys())
-        for index,db_res in enumerate(self.miner.query_external("laci")):
+        for index,db_res in enumerate(self.miner.query("laci")):
             db = dbs[index]
             for res in db_res:
                 self.assertTrue(self.miner._database.is_record(res) or self.miner._database._db_util.get(res,db) is not None)
         dbs = list(self.miner._database._db_util.db_mapping_calls.keys())
-        db_res = list(self.miner.query_external("laci",lazy=True))
+        db_res = list(self.miner.query("laci",lazy=True))
         self.assertEqual(len(db_res),1)
         db_res = db_res[0]
         for res in db_res:
             self.assertTrue(self.miner._database.is_record(res) or self.miner._database._db_util.get(res,db) is not None)
-            
-    def test_get_root_subjects(self):
-        t = model.identifiers.objects.cds
-        query_v = "laci"
-        db_res = list(self.miner.query_external(query_v,lazy=True))
-        self.assertEqual(len(db_res),1)
-        db_res = [self.miner.get_external(e) for e in db_res[0]]
-        roots = self.miner.get_root_subjects(db_res,t,[query_v])
-        for r in roots:
-            self.assertTrue(self.miner.get_external(r) is not None)
-
-    def test_get_leaf_subjects(self):
-        t = model.identifiers.objects.cds
-        query_v = "laci"
-        db_res = list(self.miner.query_external(query_v,lazy=True))
-        self.assertEqual(len(db_res),1)
-        db_res = [self.miner.get_external(e) for e in db_res[0]]
-        roots = self.miner.get_leaf_subjects(db_res,t,[query_v])
-        for r in roots:
-            self.assertTrue(self.miner.get_external(r) is not None)
-        
-    def test_get_descriptors(self):
-        # I wonder how much of this we can outsource.
-        # Also check old lang analyser.
-        pass
 
 
 

@@ -4,6 +4,7 @@ from dash.dependencies import Input
 from dash.exceptions import PreventUpdate
 from neo4j.exceptions import CypherSyntaxError
 from dash import callback_context
+from flask import session
 
 from app.tools.visualiser.abstract_dashboard.utility.callback_structs import *
 from app.tools.visualiser.visual.abstract import AbstractVisual
@@ -11,7 +12,7 @@ from app.tools.visualiser.abstract_dashboard.abstract import AbstractDash
 from app.tools.visualiser.visual.cypher import CypherVisual
 
 assets_ignore = '.*bootstrap.*'
-
+blacklist = ["CREATE","MERGE","SET","REMOVE","DELETE","DROP","LOAD"]
 class CypherDash(AbstractDash):
     def __init__(self, name, server, graph):
         super().__init__(CypherVisual(graph), name, server,
@@ -51,6 +52,9 @@ class CypherDash(AbstractDash):
         for sf in self.visualiser._builder.view.get_save_formats():
             export_modal_i[sf] = Input(sf, "n_clicks")
 
+        def update_inputs_inner(style):
+            return self.update_inputs(style)
+        
         def update_graph_cypher_inner(button,state):
             return self.update_graph_cypher(button,state)
         def update_graph_toolbar_inner(*args):
@@ -60,6 +64,7 @@ class CypherDash(AbstractDash):
         def export_modal_inner(*args):
             return self.export_modal(*args)
 
+        self.add_callback(update_inputs_inner, [cypher_au_i], cypher_au_o.values())
         self.add_callback(update_graph_toolbar_inner, update_inputs.values(), update_o.values())
         self.add_callback(update_graph_cypher_inner, cypher_i.values(), cypher_o.values(),cypher_s)
         self.add_callback(export_img_inner,export_img_i, export_img_o)
@@ -72,8 +77,20 @@ class CypherDash(AbstractDash):
             return self.create_heading_4("no_results","No Results Found.")
         return self.create_complex_table("datatable_t",[{"name": str(i), "id": str(i)} for i in struct[0].keys()],struct)
 
+    def update_inputs(self,style):
+        if "cypher_entities" in session:
+            entity = session["cypher_entities"]
+            del session["cypher_entities"]
+            qry = f'MATCH (n:`{entity}`) - [e] - (v) return n,v,e'
+            return [qry,1]
+        else:
+            raise PreventUpdate()
+    
     def update_graph_cypher(self, n_clicks,query):
         if not isinstance(self.visualiser, CypherVisual):
+            raise PreventUpdate()
+        if any(word in query.upper() for word in blacklist):
+            print(f'{query} contains write keywords, no submitting.')
             raise PreventUpdate()
         try:
             self.visualiser.set_query(query)

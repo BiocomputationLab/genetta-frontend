@@ -93,6 +93,23 @@ class ProjectBuilder():
         #self._driver.project.drop(i_name)
         return graph
     
+    def position(self,name):
+        try:
+            self._driver.project.drop(name)
+        except ValueError:
+            pass
+        positions = self._graph.get_position(predicate="ANY")
+        nv_next = model.identifiers.predicates.next
+        self._driver.project.project(name,positions,[nv_next])
+        sources = []
+        for s in positions:
+            for edge in self._graph.edges(v=s,predicate="ANY"):
+                if edge.get_type() == str(nv_next):
+                    break
+            else:
+                sources.append(s)
+        return sources
+    
     def _interaction_direction(self,name,direction):
         nodes = []
         pet = []

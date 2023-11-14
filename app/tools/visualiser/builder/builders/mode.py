@@ -113,12 +113,12 @@ class ModeBuilder:
         Check if the number of occurances of a node is equal to 1.
         '''
         edges = []
-        gn_map,all_names = self._builder.view_number_map(ret_max=True)
+        gn_map = self._builder.view_number_map()
         seens = {}
         def valid(node):
             assert(node in gn_map)
             agn = gn_map[node]
-            if len(agn) != len(all_names):
+            if len(agn) == 1:
                 return True
             return False
 
@@ -143,7 +143,7 @@ class ModeBuilder:
         def valid(item):
             assert(item in gn_map)
             agn = gn_map[item]
-            if len(agn) != 1:
+            if len(agn) == 1:
                 return True
             return False
 
@@ -153,6 +153,7 @@ class ModeBuilder:
             else:
                 seens[node] = node
             return node
+
         for edge in self._builder.view.edges():
             if edge not in edges and valid(edge):
                 edge.n = swap(edge.n)

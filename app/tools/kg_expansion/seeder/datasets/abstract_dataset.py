@@ -45,7 +45,7 @@ class AbstractDatabase(ABC):
                 cd_seq = cd_seq[0].lower()
                 if cd_seq in existing_seqs:
                     graph.replace_component_definition(cd,existing_seqs[cd_seq])
-                    self._graph.synonyms.positive(existing_seqs[cd_seq],cd)
+                    self._graph.synonyms.positive(existing_seqs[cd_seq],cd,score=100)
                     continue
                 o_type_map = self._add_cd(cd,graph,cd_types,model_roots,o_type_map)
                 highest_score = [0,None]
@@ -63,7 +63,7 @@ class AbstractDatabase(ABC):
                         continue
                     name = self._get_name(e)
                     if cd_name in name or name in cd_name:
-                        self._graph.synonyms.positive(e,cd)
+                        self._graph.synonyms.positive(e,cd,score=100)
                         break
                 else:
                     o_type_map = self._add_cd(cd,graph,cd_types,model_roots,o_type_map)
@@ -99,10 +99,10 @@ class AbstractDatabase(ABC):
         properties = ([(nv_characteristic, physical_entity)] +
                     [(nv_role, r) for r in (s_graph.get_roles(cd) + cd_types)])
         s, p, o = map_to_nv(cd, properties, m_roots, model)
-        sequence = s_graph.get_sequence_names(cd)
+        sequence = s_graph.get_sequences(cd)
         if len(sequence) > 0:
             assert(len(sequence) == 1)
-            props = {model.identifiers.predicates.hasSequence: sequence[0]}
+            props = {model.identifiers.predicates.hasSequence: sequence[0].upper()}
         else:
             props = None
         n = self._add_node(s_graph,s, o, props)

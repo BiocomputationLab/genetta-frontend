@@ -32,12 +32,6 @@ class SBOLGraph:
     def get_component_definitions(self):
         return [cd[0] for cd in self.graph.get_instances(identifiers.objects.component_definition)]
 
-    def get_collections(self):
-        return [cd[0] for cd in self.graph.get_instances(identifiers.objects.collection)]
-     
-    def get_members(self,collection):
-        return [sa[2] for sa in self.graph.get_children(collection,identifiers.predicates.member)]
-    
     def get_sequence_annotations(self,cd=None,component=None):
         if cd is not None:
             return [sa[2] for sa in self.graph.get_children(cd,identifiers.predicates.sequence_annotation)]
@@ -234,22 +228,6 @@ class SBOLGraph:
     
     def search(self,pattern,lazy=False): 
         return self.graph.search(pattern,lazy)
-
-    def subgraph(self,subject):
-        triples = []
-        seen_objs = []
-        def _recurse(entity):
-            nonlocal triples
-            nonlocal seen_objs
-            if entity in seen_objs:
-                return
-            seen_objs.append(entity)
-            for s,p,o in self.search((entity,None,None)):
-                if (s,p,o) not in triples:
-                    _recurse(o)
-                triples.append((s,p,o))
-        _recurse(subject)
-        return triples
 
     def get_name(self,subject):
         split_subject = self.split(subject)

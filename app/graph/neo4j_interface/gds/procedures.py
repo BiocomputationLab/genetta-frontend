@@ -58,13 +58,13 @@ class Centrality:
         return [{"node":self._interface.labels_to_node(r[1]["node"].labels),
                 "score":r[1]["score"]} for r in res.iterrows()]
 
-    def degree(self, name):
+    def degree(self, name, orientation="NATURAL"):
         '''
         Wrapper for 
         https://neo4j.com/docs/graph-data-science/current/algorithms/degree-centrality/
         '''
         name = _normalise_gn(name)
-        qry = self._qry_builder.degree_centrality(name)
+        qry = self._qry_builder.degree_centrality(name,orientation=orientation)
         res = self._interface.driver.run_cypher(qry)
         return [{"node":self._interface.labels_to_node(r[1]["node"].labels),
                 "score":r[1]["score"]} for r in res.iterrows()]

@@ -16,7 +16,26 @@ class Edge:
     def duplicate(self):
         return self.__class__(self.n.duplicate(),self.v.duplicate(),
                               self.type,**self.properties)
-                              
+
+    def is_equal(self,obj):
+        if not isinstance(obj, Edge):
+            return False
+        if not obj.n.is_equal(self.n):
+            return False
+        if not obj.v.is_equal(self.v):
+            return False
+        if obj.type != self.type:
+            return False
+        return True
+    
+    def is_in(self,edges):
+        if not isinstance(edges,(list,tuple,set)):
+            return False
+        for edge in edges:
+            if self.is_equal(edge):
+                return True
+        return False
+          
     def __str__(self):
         return f'{self.n} - {self.type} - {self.v}'
 
@@ -80,6 +99,7 @@ class Edge:
 
     def _update(self,items):
         for k,v in items.items():
+            k = str(k)
             if validators.url(k):
                 setattr(self,_get_name(k),v)
             elif isinstance(v,(set,list,tuple)) and hasattr(self,_get_name(k)):

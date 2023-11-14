@@ -152,23 +152,7 @@ class DesignVisual(AbstractDesignVisual):
                             self.set_circle_node_shape,
                             self.set_bezier_edge_shape]
         return self._set_preset(preset_functions)
-    
-    def set_positional_circular_preset(self):
-        '''
-        Pre-set methods with an affinity for displaying the positional view.
-        '''
-        preset_functions = [self.set_network_mode,
-                            self.set_positional_circular_view,
-                            self.set_cola_layout,
-                            self.add_standard_edge_color,
-                            self.add_type_node_color,
-                            self.add_node_name_labels,
-                            self.add_edge_no_labels,
-                            self.add_standard_node_size,
-                            self.set_circle_node_shape,
-                            self.set_bezier_edge_shape]
-        return self._set_preset(preset_functions)
-    
+
     def set_interaction_explicit_view(self):
         '''
         Sub graph viewing all consituent reactions of each interaction. 
@@ -195,13 +179,3 @@ class DesignVisual(AbstractDesignVisual):
             self._builder.set_positional_view()
         else:
            self.view =self.set_positional_view
-
-    def set_positional_circular_view(self):
-        '''
-        Sub graph viewing relative positions of entities in a
-        circular representation.
-        '''
-        if self.view == self.set_positional_circular_view:
-            self._builder.set_positional_circular_view()
-        else:
-           self.view =self.set_positional_circular_view
