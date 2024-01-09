@@ -17,7 +17,7 @@ from app.tools.evaluator.completeness.interaction import ExpectedInteractionEval
 from app.tools.evaluator.completeness.interaction import part_int_map
 from app.tools.evaluator.completeness.interaction import PathwayEvaluator
 from app.tools.evaluator.completeness.hierarchy import HierarchyEvaluator
-from app.tools.data_miner.data_miner import DataMiner
+from app.tools.data_miner.data_miner import data_miner
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 
 db_host = os.environ.get('NEO4J_HOST', 'localhost')
@@ -37,7 +37,7 @@ class TestEvaluator(unittest.TestCase):
         self.wg.remove_design(gn)
         convert(fn,self.wg.driver,gn)
         self.graph = self.wg.get_design(gn)
-        self.miner = DataMiner()
+        self.miner = data_miner
 
     @classmethod
     def tearDownClass(self):

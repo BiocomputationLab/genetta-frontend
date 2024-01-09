@@ -118,31 +118,33 @@ class TruthDash(AbstractDash):
         args = args[0]
         for index, setter_str in enumerate(args):
             if setter_str is not None:
-                try:
-                    setter = getattr(self.visualiser, setter_str, None)
-                    parameter = None
+               # try:
+                setter = getattr(self.visualiser, setter_str, None)
+                parameter = None
+                '''
                 except TypeError:
                     # Must be a input element rather than a checkbox.
                     # With annonymous implementation this is tough.
                     to_call = list(update_i.keys())[index]
                     parameter = setter_str
                     setter = getattr(self.visualiser, to_call, None)
+                '''
                 if setter is not None:
-                    try:
-                        if parameter is not None and len(getargspec(setter).args) > 1:
-                            setter(parameter)
-                        else:
-                            setter()
-                    except Exception as ex:
-                        print(ex)
-                        raise PreventUpdate()
-        try:
-            figure, legend = self.visualiser.build(graph_id=graph_id, legend=True)
-            legend = self.create_legend(legend)
-            return [figure], legend
-        except Exception as ex:
-            print(ex)
-            raise PreventUpdate()
+                    #try:
+                    if parameter is not None and len(getargspec(setter).args) > 1:
+                        setter(parameter)
+                    else:
+                        setter()
+                    #except Exception as ex:
+                    #    print(ex)
+                    #    raise PreventUpdate()
+        #try:
+        figure, legend = self.visualiser.build(graph_id=graph_id, legend=True)
+        legend = self.create_legend(legend)
+        return [figure], legend
+        #except Exception as ex:
+        #    print(ex)
+        #    raise PreventUpdate()
 
     def export_graph_img(self, get_jpg_clicks, get_png_clicks, get_svg_clicks):
         action = 'store'

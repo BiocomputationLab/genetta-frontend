@@ -11,22 +11,6 @@ class ColorHandler():
 class NodeColorHandler(AbstractNodeColorHandler):
     def __init__(self,builder):
         super().__init__(builder)
-    
-    def type(self):
-        colors = []
-        col_map = {None : {"No_Type" : self._color_picker[0]}}
-        col_index = len(col_map)
-        for n in self._builder.v_nodes():
-            n_type = n.get_type()
-            if n_type == "None":
-                colors.append(col_map[None])
-            else:
-                name = _get_name(n_type)
-                if name not in col_map.keys():
-                    col_map[name] = self._color_picker[col_index]
-                    col_index += 1
-                colors.append({name : col_map[name]})
-        return colors
 
     def role(self):
         '''

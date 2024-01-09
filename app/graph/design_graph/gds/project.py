@@ -54,7 +54,8 @@ class ProjectBuilder():
                     nodes.append(out.n)
                     nodes.append(out.v)
                     edges.append(out.get_type())
-            nodes = self._cast(nodes)
+            nodes = self._cast(list(set(nodes)))
+            edges = list(set(edges))
             graph = self._driver.project.sub_graph(i_name,name,nodes,edges)
         elif type.lower() == "monopartite":
             seens = []
@@ -92,6 +93,23 @@ class ProjectBuilder():
             graph = self._interaction_monopartite(graph,i_name,name,ints,dna_obj)
         #self._driver.project.drop(i_name)
         return graph
+    
+    def position(self,name):
+        try:
+            self._driver.project.drop(name)
+        except ValueError:
+            pass
+        positions = self._graph.get_position(predicate="ANY")
+        nv_next = model.identifiers.predicates.next
+        self._driver.project.project(name,positions,[nv_next])
+        sources = []
+        for s in positions:
+            for edge in self._graph.edges(v=s,predicate="ANY"):
+                if edge.get_type() == str(nv_next):
+                    break
+            else:
+                sources.append(s)
+        return sources
     
     def _interaction_direction(self,name,direction):
         nodes = []

@@ -1,0 +1,54 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#te_3_sequence/1">
+    <sbol:elements>GCTC</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_3_sequence"/>
+    <sbol:displayId>te_3_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#te_3/1">
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_3"/>
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#te_3_sequence/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>te_3</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#te_2/1">
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#te_2/te_2_te_3_c/1">
+        <sbol:definition rdf:resource="http://shortbol.org/v2#te_3/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_2/te_2_te_3_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>te_2_te_3_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:displayId>te_2</sbol:displayId>
+    <sbol:component>
+      <sbol:Component rdf:about="http://shortbol.org/v2#te_2/te_2_te_1_c/1">
+        <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_2/te_2_te_1_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>te_2_te_1_c</sbol:displayId>
+        <sbol:definition rdf:resource="http://shortbol.org/v2#te_1/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_2"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="http://shortbol.org/v2#te_1/1">
+    <sbol:sequence rdf:resource="http://shortbol.org/v2#te_1_sequence/1"/>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_1"/>
+    <sbol:displayId>te_1</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="http://shortbol.org/v2#te_1_sequence/1">
+    <sbol:elements>ATCG</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="http://shortbol.org/v2#te_1_sequence"/>
+    <sbol:displayId>te_1_sequence</sbol:displayId>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+  </sbol:Sequence>
+</rdf:RDF>

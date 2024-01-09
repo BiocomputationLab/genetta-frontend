@@ -56,6 +56,10 @@ class ChangeLogger:
 
     def replace_node(self,old,new,graph_name):
         fn = self._get_gn(graph_name)
+        if isinstance(old,Node):
+            old = old.get_key()
+        if isinstance(new,Node):
+            new = new.get_key()
         self._add_to_file(fn,{"action" : "replace",
                             "subject": old,
                             "predicate" : "uri",

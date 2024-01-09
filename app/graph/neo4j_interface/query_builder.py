@@ -1,3 +1,4 @@
+import re
 from  app.graph.utility.graph_objects.node import Node
 from  app.graph.neo4j_interface.operations import NodeOperations
 from  app.graph.neo4j_interface.operations import EdgeOperations
@@ -119,6 +120,77 @@ class QueryBuilder:
     def get_edge_properties(self):
         return "MATCH (n)-[r]-(m) RETURN properties(r)"
 
+    def create_text_index(self,name,labels,on):
+        l = "|".join([f'`{lab}`' for lab in labels])
+        o = ""
+        for index,ele in enumerate(on):
+            if is_url(ele):
+                ele = f'`{ele}`'
+            o += f'n.{ele}'
+            if index < len(on)-1:
+                o += ","
+        return f'CREATE FULLTEXT INDEX {name} FOR (n:{l}) ON EACH [{o}]'
+
+    def drop_text_index(self,name):
+        return f'DROP INDEX {name}'
+    
+    def list_text_indexes(self):
+        return 'SHOW FULLTEXT INDEXES'
+    
+    def query_text_index(self,index_name,values,graph_names=None,
+                         predicate=None,wildcard=False,fuzzy=False,
+                         threshold=None):
+        qry_str  = ""
+        if predicate is None:
+            predicate = "OR"
+        if fuzzy:
+            fuzzy_s = "~"
+            if threshold is not None:
+                fuzzy_s += str(threshold)
+        else:
+            fuzzy_s = ""
+        if graph_names is not None:
+            graph_names = self._escape_sequence(str(graph_names))
+            qry_str +=  f'graph_name:{graph_names} AND '
+        for index,(k,v) in enumerate(values.items()):
+            if not isinstance(v,list):
+                v = [v]
+            if is_url(k):
+                k = self._escape_sequence(k)
+            if index == 0:
+                qry_str += "("
+            for index2,ele in enumerate(v):
+                if is_url(ele):
+                    ele = f'`{ele}`'
+                if wildcard:
+                    qry_str += f'{k}:*{ele}{fuzzy_s} OR '
+                qry_str += f'{k}:{ele}{fuzzy_s}'
+                if index2 < len(v)-1:
+                    qry_str += f' {predicate} '
+            if index < len(values)-1:
+                qry_str += f' {predicate} '
+            else:
+                qry_str += ")"
+        return f'CALL db.index.fulltext.queryNodes("{index_name}", "{qry_str}") YIELD node, score'
+    
+    def _escape_sequence(self,string):
+        return string.replace("[","\[").replace("]","\]").replace("/","\/").replace(":","\:")
+    
+    def duplicate_node(self,old,new,graph_name):
+        return f'''
+        MATCH (n:`{old}`)
+        CREATE (newNode:`{new}`)
+        SET newNode = n
+        WITH n, newNode
+        MATCH (n)-[r]->(relatedNode) WHERE ANY(a IN {str(graph_name)} WHERE a IN r.`graph_name`)   
+        CREATE (newNode)-[r]->(relatedNode)
+        SET newRel = r
+        RETURN newNode
+        '''
+    
+    def count_edge(self,e_type):
+        return f'''match(n) - [e:`{e_type}`] - (v) return count(e)'''
+    
     def get_isolated_nodes(self,identity=[],predicate="ALL",**kwargs):
         where = ""
         for index, i in enumerate(identity):
@@ -153,15 +225,26 @@ class QueryBuilder:
         RETURN p
         """
 
-    def merge_relationship_nodes(self,edge):
+    def merge_nodes(self,source,merged,properties=None):
+        if properties is None:
+            properties = {}
+        p_str = "{properties: {"
+        for index,(k,v) in enumerate(properties.items()):
+            if is_url(k):
+                k = f'`{k}`'
+            p_str += f'{k} : {v}'
+            p_str += ","
+        p_str += "`.*`:'discard'}}"
+
         return f'''
-        {self._edge_match(n=edge.n,v=edge.v,e=edge.get_type(),e_props=edge.get_properties())}
-        CALL apoc.refactor.mergeNodes([n,v],{{properties:"combine",
-                                                        mergeRels:TRUE,
-                                                        produceSelfRel:FALSE,
-                                                        preserveExistingSelfRels:FALSE}})
+        MATCH (source:`{source}`)
+        MATCH (merged: `{merged}`)
+        REMOVE merged: `{merged.get_type()}`
+        WITH source,merged
+        CALL apoc.refactor.mergeNodes([source,merged],{p_str})
         YIELD node
-        RETURN node
+        REMOVE source:`{merged}`
+
         '''
 
     def degree(self, source, **kwargs):
@@ -337,3 +420,15 @@ class QueryBuilder:
             where = "WHERE " + where
 
         return f'MATCH {n}-{e}-{">" if directed else ""}{v} {where}'
+    
+
+def is_url(string):
+    # Regular expression pattern for URL matching
+    url_pattern = re.compile(
+        r'^(?:http|ftp)s?://'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
+        r'(?::\d+)?'  # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    return re.match(url_pattern, string) is not None

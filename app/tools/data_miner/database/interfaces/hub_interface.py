@@ -98,7 +98,8 @@ class AbstractSynBioHubInterface(DatabaseInterface):
         except requests.exceptions.HTTPError:
             return None
         contents = json.loads(r.content)
-        return {URIRef(c["uri"]) : float(c["percentMatch"])/100 for c in contents}
+        return {URIRef(c["uri"]) : float(c["percentMatch"])/100 for c 
+                in contents if c["percentMatch"] != ""}
         
     def get_metadata_identifiers(self):
         return metadata_predicates
@@ -115,11 +116,16 @@ class AbstractSynBioHubInterface(DatabaseInterface):
     def _sparql(self,query):
         query = requests.utils.quote(query)
         synbiohub_url = f'{self.base}sparql?query={query}'
-        r = requests.get(synbiohub_url,headers={'Accept': 'application/json'})
-        r.raise_for_status()    
+        try:
+            r = requests.get(synbiohub_url,headers={'Accept': 'application/json'})
+            r.raise_for_status()
+        except ConnectionError:
+            return None    
         return json.loads(r.content)
 
     def _generalise_query_results(self,query_results):
+        if query_results is None:
+            return None
         g_query_results = []
         if "results" not in query_results.keys():
             return g_query_results

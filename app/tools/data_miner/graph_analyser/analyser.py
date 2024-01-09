@@ -1,13 +1,16 @@
+from rdflib import URIRef
 from app.converter.utility.identifiers import identifiers
 from app.tools.data_miner.graph_analyser.utility.graph import SBOLGraph
 from app.graph.utility.model.model import model
 from app.converter.utility.common import map_to_nv
 from rdflib import Graph
+from app.graph.utility.graph_objects.node import Node
 
 s_cd = identifiers.objects.component_definition
 nv_characteristic = model.identifiers.predicates.hasCharacteristic
 physical_entity = model.identifiers.roles.physical_entity
 nv_role = model.identifiers.predicates.role
+nv_seq = model.identifiers.predicates.hasSequence
 model_roots = model.get_base_class()
 
 class GraphAnalyser:
@@ -15,10 +18,13 @@ class GraphAnalyser:
         self._db_handler = db_handler
 
     def get_subject(self, graph, fragments=None):
-        graph = SBOLGraph(graph)
+        if not isinstance(graph,SBOLGraph):
+            graph = SBOLGraph(graph)
         p_s = graph.get_component_definitions()
         if len(p_s) == 1:
             return p_s[0]
+        if len(p_s) == 0:
+            return None
         elif fragments is None:
             print("WARN:: Multiple subjects extracted without fragments.")
             return p_s[0]
@@ -28,6 +34,27 @@ class GraphAnalyser:
             return p_s[0]
         return f_s[0]
 
+    def graph_to_node(self,graph,key=None,fragments=None):
+        model_roots = model.get_base_class()
+        if not isinstance(graph,SBOLGraph):
+            graph = SBOLGraph(graph)
+        if key is None:
+            key = self.get_subject(graph,fragments)
+        if key is None:
+            return None
+        key = URIRef(key)
+        cd_types = graph.get_types(key)
+        properties = ([(nv_characteristic, physical_entity)] +
+                    [(nv_role, r) for r in (graph.get_roles(key) + cd_types)])
+        s, p, o = map_to_nv(key, properties, model_roots, model)
+        sequence = graph.get_sequences(key)
+        if len(sequence) > 0:
+            assert(len(sequence) == 1)
+            props = {nv_seq: sequence[0].upper()}
+        else:
+            props = {}
+        return Node(key,o,**props)
+        
     def get_roots(self, graphs, e_type=None, fragments=None):
         graphs = [g for g in graphs if isinstance(g, Graph)]
         all_graphs = SBOLGraph()

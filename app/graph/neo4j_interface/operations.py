@@ -145,7 +145,7 @@ class Operations:
             if where != "":
                 where += " AND "
             where += f" ID(n{self.index}) = {self.graph_object.id} "
-        
+
         gn = self.graph_object.graph_name
         if len(where) > 0:
             where += " AND "

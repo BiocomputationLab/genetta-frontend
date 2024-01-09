@@ -6,7 +6,7 @@ class Projection():
         self._qry_builder = GDSQueryBuilder()
     
     def project(self, name, nodes, edges, **kwargs):
-        nodes = [n.get_key() if isinstance(n,Node) else n for n in nodes ]
+        nodes = [n.get_key() if isinstance(n,Node) else n for n in nodes]
         return self._driver.graph.project(name, nodes, edges, **kwargs)
         
     def drop(self, name):

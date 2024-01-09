@@ -46,13 +46,14 @@ class Predicates:
 
 class Objects:
     def __init__(self):
-        pass
+        self.synonym = nv_namespace + "Synonym"
 
     def __iter__(self):
         for i in dir(self):
             attr = getattr(self,i)
             if isinstance(attr,(URIRef)):
                 yield attr
+
 
 class Roles:
     def __init__(self):

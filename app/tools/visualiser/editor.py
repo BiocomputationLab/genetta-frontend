@@ -37,24 +37,19 @@ class EditorDash(AbstractDash):
         options = self.create_sidebar(not_modifier_identifiers["sidebar_id"], "Options", form_div, className="col sidebar")
         figure = self.visualiser.empty_graph(graph_id)
         graph = self.create_div(e_update_o["graph_id"].component_id, [figure])
-        graph = self.create_div(modify_graph_o["graph_container"].component_id, graph)
-        graph = self.create_div(load_page_o.component_id, graph,className="col")
+        graph = self.create_div(modify_graph_o["graph_container"].component_id, graph,className="col")
         legend = self.create_div(e_update_o["legend_id"].component_id,[], className="col sidebar")
 
         col_names = [{"id" : "entity", "name" : "Entity"},
                      {"id" : "confidence","name" : "Confidence"}]
         an_tbl = self.create_complex_table(add_node_o["data"].component_id, col_names)
         an_modal = self.create_modal(add_node_o["id"].component_id,add_node_i["close_an"].component_id,"Export", an_tbl)
-        location = self.create_location(load_page_i.component_id)
 
-        elements = location + options + graph + legend + an_modal
+
+        elements = options + graph + legend + an_modal
         container = self.create_div("row-main", elements, className="row flex-nowrap no-gutters")
         self.app.layout = self.create_div("main", load_accordion+container, className="container-fluid")[0]
         # Bind the callbacks
-
-        def load_page_inner(pathname):
-            return self.load_page(pathname)
-        
         def update_inputs_inner(style):
             return self.update_inputs(style)
 
@@ -64,41 +59,27 @@ class EditorDash(AbstractDash):
         def add_node_inner(o_click,c_click,is_open,n_key,n_type,metadata):
             return self.add_node(o_click,c_click,is_open,n_key,n_type,metadata)
         
-        def modify_graph_inner(n_select,e_click,rmn_click,rme_click,n_data,n_type,metadata,e_subj,e_pred,e_obj,rm_val):
-            return self.modify_graph(n_select,e_click,rmn_click,rme_click,n_data,n_type,metadata,e_subj,e_pred,e_obj,rm_val)
+        def modify_graph_inner(n_select,e_click,n_data,n_type,metadata,e_subj,e_pred,e_obj):
+            return self.modify_graph(n_select,e_click,n_data,n_type,metadata,e_subj,e_pred,e_obj)
 
         def select_node_inner(aes_c,aeo_c,predicate,elements,data,es_values,eo_values):
             return self.select_node(aes_c,aeo_c,predicate,elements,data,es_values,eo_values)
-        
-        def select_remove_node_inner(click,elements,data,rm_values):
-            return self.select_remove_node(click,elements,data,rm_values)
         
         def add_node_properties_inner(o_type):
             return self.add_node_properties(o_type)
 
         def update_graph_inner(*args):
             return self.update_graph(args)
-        
-        self.add_callback(load_page_inner, [load_page_i], [load_page_o])
+
         self.add_callback(update_inputs_inner, [update_i_i], [update_i_o])
         self.add_callback(load_inner, [load_editor_input], load_editor_output,load_editor_states.values())
         self.add_callback(add_node_properties_inner, properties_node_i.values(), properties_node_o.values())
         self.add_callback(select_node_inner, select_node_i.values(), select_node_o.values(),select_node_s.values())
-        self.add_callback(select_remove_node_inner, select_remove_node_i.values(), select_remove_node_o.values(),select_remove_node_s.values())
         self.add_callback(add_node_inner, add_node_i.values(), add_node_o.values(),add_node_s.values())
         self.add_callback(modify_graph_inner, modify_graph_i.values(), modify_graph_o.values(),modify_graph_s.values())
         self.add_callback(update_graph_inner, e_update_i.values(), e_update_o.values())
         self.build()
 
-    def load_page(self,pathname):
-        figure = self.visualiser.empty_graph(graph_id)
-        graph = self.create_div(update_o["graph_id"].component_id, [figure])
-        graph = self.create_div(modify_graph_o["graph_container"].component_id, graph, className="col")
-        graph = self.create_div(load_o["graph_content"].component_id,graph)
-        self.visualiser.reset()
-        self.visualiser.set_design_names(None,None)
-        return graph
-    
     def update_inputs(self,style):
         all_design_names = self.visualiser.get_design_names()
         user_dn_file = os.path.join(session.get("user_dir"),user_gns)
@@ -151,14 +132,12 @@ class EditorDash(AbstractDash):
 
             node_types = self.visualiser.get_view_node_types()
             edge_types = self.visualiser.get_view_edge_types()
-            nodes = self.visualiser.get_view_nodes()
 
             typechoices = [{"label": _get_name(c), "value": c} for c in node_types]
             echoices = [{"label": _get_name(c), "value": c} for c in edge_types]
-            nchoices = [{"label": c.name, "value": c.get_key()} for c in nodes]
             figure, legend = self.visualiser.build(graph_id=graph_id, legend=True)
             legend = self.create_legend(legend)
-            return [figure], legend,typechoices,echoices,nchoices
+            return [figure], legend,typechoices,echoices
 
         except Exception as ex:
             print(ex)
@@ -199,15 +178,6 @@ class EditorDash(AbstractDash):
         else:
             return [],[],hidden,hidden
 
-    def select_remove_node(self,click,elements,data,values):
-        if data is not None and data != []:
-            for node in data:
-                nid = node["id"]
-                res = self.visualiser.get_view_nodes(nid)
-                return [res.get_key()]
-            return values
-        return [[]]
-    
     def add_node_properties(self,v_type):
         if v_type == "" or v_type is None:
             raise PreventUpdate()
@@ -248,7 +218,7 @@ class EditorDash(AbstractDash):
             return True,data,[]
         return False,[],[]
     
-    def modify_graph(self,n_select,e_click,rmn_click,rme_click,n_data,n_type,metadata,e_subj,e_pred,e_obj,rm_val):
+    def modify_graph(self,n_select,e_click,n_data,n_type,metadata,e_subj,e_pred,e_obj):
         changed_id = [p['prop_id'] for p in callback_context.triggered][0]
         if None in self.visualiser.get_loaded_design_names():
             raise PreventUpdate()
@@ -281,30 +251,6 @@ class EditorDash(AbstractDash):
             graph = self.create_div(e_update_o["graph_id"].component_id, figure)
             graph = self.create_div(modify_graph_o["graph_container"].component_id, graph, className="col")
             return graph
-        elif modify_graph_i["remove_node_submit"].component_id in changed_id:
-            self.visualiser.remove_node(rm_val)
-            figure = self.visualiser.build(graph_id=graph_id) 
-            graph = self.create_div(e_update_o["graph_id"].component_id, figure)
-            graph = self.create_div(modify_graph_o["graph_container"].component_id, graph, className="col")
-            return graph
-        elif modify_graph_i["remove_edge_submit"].component_id in changed_id:
-            s_vals = {}
-            e_vals = {}
-            for s in e_subj:
-                if s["props"]["value"] is None:
-                    raise PreventUpdate()
-                s_vals[s["props"]["id"]] = s["props"]["value"]
-            for e in e_obj:
-                if e["props"]["value"] is None:
-                    raise PreventUpdate()
-                e_vals[e["props"]["id"]] = e["props"]["value"]
-            if e_subj is None or e_pred is None or e_obj is None:
-                raise PreventUpdate()
-            self.visualiser.remove_edges(s_vals,e_vals,e_pred)
-            figure = self.visualiser.build(graph_id=graph_id) 
-            graph = self.create_div(e_update_o["graph_id"].component_id, figure)
-            graph = self.create_div(modify_graph_o["graph_container"].component_id, graph, className="col")
-            return graph
         else:
             raise PreventUpdate()
             
@@ -331,26 +277,16 @@ class EditorDash(AbstractDash):
         obj_i = self.create_div(modify_graph_s["edge_object"].component_id,[],className="col")
         obj_i_an = self.create_button(select_node_i["edge_object"].component_id,"Add Selected Nodes")
         obj_i_an = self.create_div("edge_object_an_div",obj_i_an,className="col")
-        obj_i = self.create_div(select_node_o["node_object_div"].component_id,obj_i + obj_i_an,className="row")
+        obj_i = self.create_div(select_node_o["node_object_div"].component_id,obj_i + obj_i_an,className="row",style={"display" : "none"})
         add_edge +=  self.create_div("a_e_obj", obj_i, className="col")
 
         sub_i = self.create_button(modify_graph_i["add_edge_submit"].component_id, "Add Edge")
-        rm_e_b = self.create_button(modify_graph_i["remove_edge_submit"].component_id, "Remove Edge")
-        add_edge +=  self.create_div("a_e_submit", sub_i+rm_e_b, className="col")
+        add_edge +=  self.create_div("a_e_submit", sub_i, className="col")
         add_edge += self.create_line_break(8)
-
-        rn_vals = self.create_dropdown(modify_graph_s["remove_node"].component_id, [], placeholder="Nodes")
-        rn_submit = self.create_button(modify_graph_i["remove_node_submit"].component_id, "Remove Node")
-        rn_select = self.create_button(select_remove_node_i["remove_node"].component_id,"Add Selected Node")
-        obj_i_an = self.create_div("remove_node_an",rn_vals+rn_submit+rn_select,className="col")
-        remove_node =  self.create_div("remove_node_col", obj_i_an, className="col")
-        remove_node += self.create_line_break(8)
 
         add_node = self.create_div("add_node_div",add_node,className="row")
         add_edge = self.create_div("add_edge_div",add_edge,className="row")
-        remove_node = self.create_div("remove_node_div",remove_node,className="row")
-        acc_elements = [("Add Node", add_node), ("Modify Edge",add_edge),
-                        ("Remove Node",remove_node)]
+        acc_elements = [("Add Node", add_node), ("Add Edge",add_edge)]
         return self.create_accordion("editor_accordion", acc_elements)
 
     def _create_form_elements(self, visualiser, style={}, id_prefix=""):
@@ -456,8 +392,6 @@ class EditorDash(AbstractDash):
                                "get_edge_labels",
                                "get_load_predicates",
                                "add_node",
-                               "remove_edges",
-                               "remove_node",
                                "get_view_node",
                                "get_io_nodes",
                                "get_add_node_options",

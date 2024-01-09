@@ -1,0 +1,628 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#">
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1_sequence/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1_sequence"/>
+    <sbol:elements>AATGTTCCCTAATAATCAGCAAAGAGGTTACTAG</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>A1_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_J107113_sequence/1">
+    <sbol:elements>ccaattattgaaggccgctaacgcggcctttttttgtttctggtctccc</sbol:elements>
+    <sbol:displayId>BBa_J107113_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_J107113_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_K1899004_sequence/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_K1899004_sequence"/>
+    <sbol:elements>CGACGTACGGTGGAATCTGATTCGTTACCAATTGACATGATACGAAACGTACCGTATCGTTAAGGT</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BBa_K1899004_sequence</sbol:displayId>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/BM3R1_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>ATGGAAAGCACCCCGACCAAACAGAAAGCAATTTTTAGCGCAAGCCTGCTGCTGTTTGCAGAACGTGGTTTTGATGCAACCACCATGCCGATGATTGCAGAAAATGCAAAAGTTGGTGCAGGCACCATTTATCGCTATTTCAAAAACAAAGAAAGCCTGGTGAACGAACTGTTTCAGCAGCATGTTAATGAATTTCTGCAGTGTATTGAAAGCGGTCTGGCAAATGAACGTGATGGTTATCGTGATGGCTTTCATCACATTTTTGAAGGTATGGTGACCTTTACCAAAAATCATCCGCGTGCACTGGGTTTTATCAAAACCCATAGCCAGGGCACCTTTCTGACCGAAGAAAGCCGTCTGGCATATCAGAAACTGGTTGAATTTGTGTGCACCTTTTTTCGTGAAGGTCAGAAACAGGGTGTGATTCGTAATCTGCCGGAAAATGCACTGATTGCAATTCTGTTTGGCAGCTTTATGGAAGTGTATGAAATGATCGAGAACGATTATCTGAGCCTGACCGATGAACTGCTGACCGGTGTTGAAGAAAGCCTGTGGGCAGCACTGAGCCGTCAGAGCTAA</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/BM3R1_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BM3R1_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ModuleDefinition rdf:about="https://synbiohub.org/public/igem/mod_def/1">
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_fc/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_fc"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>SrpR_fc</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR/1"/>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_fc_i_genetic_production_with_SrpR_protein_fc/1">
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_fc_i_genetic_production_with_SrpR_protein_fc/SrpR_fc_i_genetic_production_with_SrpR_protein_fc_SrpR_protein_fc_i_product/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000011"/>
+            <sbol:version>1</sbol:version>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_fc_i_genetic_production_with_SrpR_protein_fc/SrpR_fc_i_genetic_production_with_SrpR_protein_fc_SrpR_protein_fc_i_product"/>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc/1"/>
+            <sbol:displayId>SrpR_fc_i_genetic_production_with_SrpR_protein_fc_SrpR_protein_fc_i_product</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:version>1</sbol:version>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000589"/>
+        <sbol:displayId>SrpR_fc_i_genetic_production_with_SrpR_protein_fc</sbol:displayId>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_fc_i_genetic_production_with_SrpR_protein_fc/SrpR_fc_i_genetic_production_with_SrpR_protein_fc_SrpR_fc_i_participation_promoter/1">
+            <sbol:displayId>SrpR_fc_i_genetic_production_with_SrpR_protein_fc_SrpR_fc_i_participation_promoter</sbol:displayId>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_fc/1"/>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_fc_i_genetic_production_with_SrpR_protein_fc/SrpR_fc_i_genetic_production_with_SrpR_protein_fc_SrpR_fc_i_participation_promoter"/>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000598"/>
+            <sbol:version>1</sbol:version>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_fc_i_genetic_production_with_SrpR_protein_fc"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/mod_def/pSrpR_fc/1">
+        <sbol:version>1</sbol:version>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/pSrpR_fc"/>
+        <sbol:displayId>pSrpR_fc</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR/1"/>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:functionalComponent>
+      <sbol:FunctionalComponent rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc"/>
+        <sbol:displayId>SrpR_protein_fc</sbol:displayId>
+        <sbol:direction rdf:resource="http://sbols.org/v2#inout"/>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR_protein/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:FunctionalComponent>
+    </sbol:functionalComponent>
+    <sbol:displayId>mod_def</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def"/>
+    <sbol:interaction>
+      <sbol:Interaction rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc_i_inhibition_with_pSrpR_fc/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc_i_inhibition_with_pSrpR_fc"/>
+        <sbol:version>1</sbol:version>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc_i_inhibition_with_pSrpR_fc/SrpR_protein_fc_i_inhibition_with_pSrpR_fc_pSrpR_fc_i_inhibited/1">
+            <sbol:displayId>SrpR_protein_fc_i_inhibition_with_pSrpR_fc_pSrpR_fc_i_inhibited</sbol:displayId>
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000642"/>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc_i_inhibition_with_pSrpR_fc/SrpR_protein_fc_i_inhibition_with_pSrpR_fc_pSrpR_fc_i_inhibited"/>
+            <sbol:version>1</sbol:version>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/mod_def/pSrpR_fc/1"/>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:participation>
+          <sbol:Participation rdf:about="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc_i_inhibition_with_pSrpR_fc/SrpR_protein_fc_i_inhibition_with_pSrpR_fc_SrpR_protein_fc_i_inhibitor/1">
+            <sbol:role rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000020"/>
+            <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc_i_inhibition_with_pSrpR_fc/SrpR_protein_fc_i_inhibition_with_pSrpR_fc_SrpR_protein_fc_i_inhibitor"/>
+            <sbol:participant rdf:resource="https://synbiohub.org/public/igem/mod_def/SrpR_protein_fc/1"/>
+            <sbol:version>1</sbol:version>
+            <sbol:displayId>SrpR_protein_fc_i_inhibition_with_pSrpR_fc_SrpR_protein_fc_i_inhibitor</sbol:displayId>
+          </sbol:Participation>
+        </sbol:participation>
+        <sbol:displayId>SrpR_protein_fc_i_inhibition_with_pSrpR_fc</sbol:displayId>
+        <sbol:type rdf:resource="http://identifiers.org/biomodels.sbo/SBO:0000169"/>
+      </sbol:Interaction>
+    </sbol:interaction>
+  </sbol:ModuleDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_J133450/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:displayId>BBa_J133450</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_J133450"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_K1725040_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_K1725040_sequence"/>
+    <sbol:elements>ATGGCACGTACCCCGAGCCGTAGCAGCATTGGTAGCCTGCGTAGTCCGCATACCCATAAAGCAATTCTGACCAGCACCATTGAAATCCTGAAAGAATGTGGTTATAGCGGTCTGAGCATTGAAAGCGTTGCACGTCGTGCCGGTGCAAGCAAACCGACCATTTATCGTTGGTGGACCAATAAAGCAGCACTGATTGCCGAAGTGTATGAAAATGAAAGCGAACAGGTGCGTAAATTTCCGGATCTGGGTAGCTTTAAAGCCGATCTGGATTTTCTGCTGCGTAATCTGTGGAAAGTTTGGCGTGAAACCATTTGTGGTGAAGCATTTCGTTGTGTTATTGCAGAAGCACAGCTGGACCCTGCAACCCTGACCCAGCTGAAAGATCAGTTTATGGAACGTCGTCGTGAGATGCCGAAAAAACTGGTTGAAAATGCCATTAGCAATGGTGAACTGCCGAAAGATACCAATCGTGAACTGCTGCTGGATATGATTTTTGGTTTTTGTTGGTATCGCCTGCTGACCGAACAGCTGACCGTTGAACAGGATATTGAAGAATTTACCTTCCTGCTGATTAATGGTGTTTGTCCGGGTACACAGCGTTAA</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BBa_K1725040_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_I723131/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_I723131"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BBa_I723131</sbol:displayId>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_I723131_sequence/1"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_J107113/1">
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_J107113_sequence/1"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:displayId>BBa_J107113</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_J107113"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pBM3R1/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:displayId>pBM3R1</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pBM3R1_sequence/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pBM3R1"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_B0064_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_B0064_sequence"/>
+    <sbol:elements>AAAGAGGGGAAA</sbol:elements>
+    <sbol:displayId>BBa_B0064_sequence</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_E0030_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>ATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACAGGCAAGCTGCCCGTGCCCTGGCCCACCCTCGTGACCACCTTCGGCTACGGCCTGCAATGCTTCGCCCGCTACCCCGACCACATGAAGCTGCACGACTTCTTCAAGTCCGCCATGCCCGAAGGCTACGTCCAGGAGCGCACCATCTTCTTCAAGGACGACGGCAACTACAAGACCCGCGCCGAGGTGAAGTTCGAGGGCGACACCCTGGTGAACCGCATCGAGCTGAAGGGCATCGACTTCAAGGAGGACGGCAACATCCTGGGGCACAAGCTGGAGTACAACTACAACAGCCACAACGTCTATATCATGGCCGACAAGCAGAAGAACGGCATCAAGGTGAACTTCAAGATCCGCCACAACATCGAGGACGGCAGCGTGCAGCTCGCCGACCACTACCAGCAGAACACCCCAATCGGCGACGGCCCCGTGCTGCTGCCCGACAACCACTACCTTAGCTACCAGTCCGCCCTGAGCAAAGACCCCAACGAGAAGCGCGATCACATGGTCCTGCTGGAGTTCGTGACCGCCGCCGGGATCACTCTCGGCATGGACGAGCTGTACAAGTAA</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_E0030_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BBa_E0030_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_B0064/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>BBa_B0064</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_B0064_sequence/1"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_B0064"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_K1899004/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_K1899004_sequence/1"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_K1899004"/>
+    <sbol:displayId>BBa_K1899004</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1"/>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1_sequence/1"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:displayId>A1</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR_protein/1">
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Protein"/>
+    <sbol:displayId>SrpR_protein</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR_protein"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_I723131_sequence/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_I723131_sequence"/>
+    <sbol:elements>gtgagggtgaggtc</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BBa_I723131_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_J107115/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_J107115"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>BBa_J107115</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/B3_sequence/1">
+    <sbol:displayId>B3_sequence</sbol:displayId>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/B3_sequence"/>
+    <sbol:elements>CCAAACGAGGCCGGGAGA</sbol:elements>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTac_sequence/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTac_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>AACGATCGTTGGCTGTGTTGACAATTAATCATCGGCTCGTATAATGTGTGGAATTGTGAGCGCTCACAATT</sbol:elements>
+    <sbol:displayId>pTac_sequence</sbol:displayId>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_K1725040/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:displayId>BBa_K1725040</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_K1725040"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_K1725040_sequence/1"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR_sequence/1">
+    <sbol:displayId>SrpR_sequence</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>ATGGCACGTAAAACCGCAGCAGAAGCAGAAGAAACCCGTCAGCGTATTATTGATGCAGCACTGGAAGTTTTTGTTGCACAGGGTGTTAGTGATGCAACCCTGGATCAGATTGCACGTAAAGCCGGTGTTACCCGTGGTGCAGTTTATTGGCATTTTAATGGTAAACTGGAAGTTCTGCAGGCAGTTCTGGCAAGCCGTCAGCATCCGCTGGAACTGGATTTTACACCGGATCTGGGTATTGAACGTAGCTGGGAAGCAGTTGTTGTTGCAATGCTGGATGCAGTTCATAGTCCGCAGAGCAAACAGTTTAGCGAAATTCTGATTTATCAGGGTCTGGATGAAAGCGGTCTGATTCATAATCGTATGGTTCAGGCAAGCGATCGTTTTCTGCAGTATATTCATCAGGTTCTGCGTCATGCAGTTACCCAGGGTGAACTGCCGATTAATCTGGATCTGCAGACCAGCATTGGTGTTTTTAAAGGTCTGATTACCGGTCTGCTGTATGAAGGTCTGCGTAGCAAAGATCAGCAGGCACAGATTATCAAAGTTGCACTGGGTAGCTTTTGGGCACTGCTGCGTGAACCGCCTCGTTTTCTGCTGTGTGAAGAAGCACAGATTAAACAGGTGAAATCCTTCGAATAA</sbol:elements>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR_sequence"/>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>TCTATGATTGGTCCAGATTCGTTACCAATTGACAGCTAGCTCAGTCCTAGGTATATACATACATGCTTGTTTGTTTGTAAAC</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>pSrpR_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR_sequence"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTet/1">
+    <sbol:displayId>pTet</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTet"/>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTet_sequence/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pBM3R1_sequence/1">
+    <sbol:elements>AATCCGCGTGATAGGTCTGATTCGTTACCAATTGACGGAATGAACGTTCATTCCGATAATGCTAGC</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>pBM3R1_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pBM3R1_sequence"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>SrpR</sbol:displayId>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR_sequence/1"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_E0030/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_E0030"/>
+    <sbol:displayId>BBa_E0030</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_E0030_sequence/1"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/B3/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/B3_sequence/1"/>
+    <sbol:displayId>B3</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/B3"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/AND_gate/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate"/>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1725040_c_i_precedes_BBa_J107115_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1725040_c_i_precedes_BBa_J107115_c"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107115_c/1"/>
+        <sbol:displayId>AND_gate_BBa_K1725040_c_i_precedes_BBa_J107115_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1725040_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:version>1</sbol:version>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1899004_c_i_precedes_cpB3_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1899004_c_i_precedes_cpB3_c"/>
+        <sbol:displayId>AND_gate_BBa_K1899004_c_i_precedes_cpB3_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1899004_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpB3_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_E0030_c/1">
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_E0030/1"/>
+        <sbol:displayId>AND_gate_BBa_E0030_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_E0030_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpBM3R1_c/1">
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/BM3R1/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_cpBM3R1_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpBM3R1_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppBM3R1_c/1">
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pBM3R1/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_cppBM3R1_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppBM3R1_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1725040_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_BBa_K1725040_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_K1725040/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1725040_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbBBa_K1725040_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_shbBBa_K1725040_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_K1725040/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbBBa_K1725040_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_I723131_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_I723131_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_I723131/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_BBa_I723131_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTac_c_i_precedes_BBa_I723131_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTac_c_i_precedes_BBa_I723131_c"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTac_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_cppTac_c_i_precedes_BBa_I723131_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_I723131_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107113_c_i_precedes_cppSrpR_c/1">
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107113_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppSrpR_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107113_c_i_precedes_cppSrpR_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_BBa_J107113_c_i_precedes_cppSrpR_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTet_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTet/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTet_c"/>
+        <sbol:displayId>AND_gate_cppTet_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_J133450/1"/>
+        <sbol:displayId>AND_gate_BBa_J133450_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1899004_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1899004_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_K1899004/1"/>
+        <sbol:displayId>AND_gate_BBa_K1899004_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpSrpR_c/1">
+        <sbol:displayId>AND_gate_cpSrpR_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpSrpR_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/SrpR/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_B0064/1"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_BBa_B0064_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:displayId>AND_gate</sbol:displayId>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpB3_c_i_precedes_BBa_E0030_c/1">
+        <sbol:displayId>AND_gate_cpB3_c_i_precedes_BBa_E0030_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpB3_c_i_precedes_BBa_E0030_c"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_E0030_c/1"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpB3_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpSrpR_c_i_precedes_BBa_J133450_c/1">
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_cpSrpR_c_i_precedes_BBa_J133450_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpSrpR_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpSrpR_c_i_precedes_BBa_J133450_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpBM3R1_c_i_precedes_BBa_J107113_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpBM3R1_c_i_precedes_BBa_J107113_c"/>
+        <sbol:displayId>AND_gate_cpBM3R1_c_i_precedes_BBa_J107113_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107113_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpBM3R1_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppSrpR_c_i_precedes_cppBM3R1_c/1">
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:version>1</sbol:version>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppSrpR_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppBM3R1_c/1"/>
+        <sbol:displayId>AND_gate_cppSrpR_c_i_precedes_cppBM3R1_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppSrpR_c_i_precedes_cppBM3R1_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c_i_precedes_shbBBa_K1725040_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c_i_precedes_shbBBa_K1725040_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbBBa_K1725040_c/1"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c/1"/>
+        <sbol:displayId>AND_gate_cpA1_c_i_precedes_shbBBa_K1725040_c</sbol:displayId>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpB3_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_cpB3_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpB3_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/B3/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c_i_precedes_cpSrpR_c/1">
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpSrpR_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c_i_precedes_cpSrpR_c"/>
+        <sbol:displayId>AND_gate_BBa_B0064_c_i_precedes_cpSrpR_c</sbol:displayId>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c_i_precedes_cppTac_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c_i_precedes_cppTac_c"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTac_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>AND_gate_BBa_J133450_c_i_precedes_cppTac_c</sbol:displayId>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppSrpR_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppSrpR_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_cppSrpR_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTac_c/1">
+        <sbol:displayId>AND_gate_cppTac_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTac/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTac_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_I723131_c_i_precedes_cpBM3R1_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_I723131_c_i_precedes_cpBM3R1_c"/>
+        <sbol:displayId>AND_gate_BBa_I723131_c_i_precedes_cpBM3R1_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_I723131_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpBM3R1_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTet_c_i_precedes_BBa_B0064_c/1">
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_cppTet_c_i_precedes_BBa_B0064_c</sbol:displayId>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c/1"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTet_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppTet_c_i_precedes_BBa_B0064_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107115_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107115_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_J107115/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_BBa_J107115_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppBM3R1_c_i_precedes_cpA1_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>AND_gate_cppBM3R1_c_i_precedes_cpA1_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppBM3R1_c_i_precedes_cpA1_c"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cppBM3R1_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107115_c_i_precedes_BBa_K1899004_c/1">
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107115_c/1"/>
+        <sbol:displayId>AND_gate_BBa_J107115_c_i_precedes_BBa_K1899004_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_K1899004_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107115_c_i_precedes_BBa_K1899004_c"/>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1/1"/>
+        <sbol:displayId>AND_gate_cpA1_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107113_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_BBa_J107113_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J107113_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_J107113/1"/>
+      </sbol:Component>
+    </sbol:component>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR/1">
+    <sbol:displayId>pSrpR</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR_sequence/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pSrpR"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTet_sequence/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTet_sequence"/>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>pTet_sequence</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:elements>TACTCCACCGTTGGCTTTTTTCCCTATCAGTGATAGAGATTGACATCCCTATCAGTGATAGAGATAATGAGCAC</sbol:elements>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/BM3R1/1">
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/BM3R1_sequence/1"/>
+    <sbol:displayId>BM3R1</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/BM3R1"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTac/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTac"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>pTac</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/pTac_sequence/1"/>
+  </sbol:ComponentDefinition>
+</rdf:RDF>

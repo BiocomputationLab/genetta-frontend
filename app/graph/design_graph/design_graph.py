@@ -5,8 +5,8 @@ from rdflib import RDF,DCTERMS
 from app.graph.utility.model.model import model
 from app.graph.design_graph.gds.project import ProjectBuilder
 from app.graph.design_graph.gds.procedures import Procedures
-from app.graph.utility.graph_objects.node import Node
 from app.graph.utility.graph_objects.edge import Edge
+from app.graph.utility.graph_objects.reserved_node import ReservedNode
 
 def _add_predicate(obj, pred):
     method_name = f'get_{pred.split("/")[-1].lower()}'
@@ -30,6 +30,7 @@ def _add_object(obj, subject):
     obj.__dict__[method_name] = types.MethodType(
         produce_get_subject(subject), obj)
 
+nv_has_seq = str(model.identifiers.predicates.has_sequence)
 
 class DesignGraph:
     def __init__(self, driver, name):
@@ -51,18 +52,27 @@ class DesignGraph:
     def nodes(self, n=None, **kwargs):
         return self._node_query(n,**kwargs)
 
-    def edges(self, n=None, v=None, e=None, directed=True, exclusive=False,predicate="ALL"):
-        return self._edge_query(n=n, v=v, e=e, directed=directed, exclusive=exclusive,predicate=predicate)
+    def edges(self, n=None, v=None, e=None, directed=True, 
+              exclusive=False,predicate="ALL"):
+        return self._edge_query(n=n, v=v, e=e, directed=directed, 
+                                exclusive=exclusive,predicate=predicate)
 
     def add_node(self,key,type,sequence=None,description=None,**kwargs):
         if "graph_name" not in kwargs:
             kwargs["graph_name"] = self.name
         if sequence is not None:
-            kwargs[model.identifiers.predicates.has_sequence] = sequence
+            kwargs[nv_has_seq] = sequence.upper()
         if description is not None:
             if not isinstance(description,list):
                 description = [description]
             kwargs[DCTERMS.description] = description
+        if "name" not in kwargs:
+            if hasattr(key,"name"):
+                name = key.name
+            else:
+                name = _get_name(key)
+            kwargs["name"] = name
+            
         n = self.driver.add_node(key,type,**kwargs)
         self.driver.submit()
         return n
@@ -85,7 +95,6 @@ class DesignGraph:
                 n.add_property("graph_name",self.name)
             if "graph_name" not in v.get_properties():
                 v.add_property("graph_name",self.name)
-            
             self.driver.add_edge(n,v,e,**props)
         self.driver.submit()
 
@@ -121,23 +130,80 @@ class DesignGraph:
             self.driver.remove_edge(n,v,e,**props)
         self.driver.submit()
 
+    def count_edges(self,e_type):
+        return self.driver.count_edges(e_type)
+
+    def duplicate_node(self,old,new,graph_name):
+        self.driver.duplicate_node(old,new,graph_name)
+
+    def replace_node(self,old,key,properties):
+        def _remove_gn(props):
+            props = props.copy()
+            props["graph_name"] = [n for n in props["graph_name"] 
+                                   if n not in self.name]
+            return props
+        
+        def _replace_edge_properties(edge):
+            e_props = _remove_gn(edge.properties)
+            if e_props["graph_name"] == []:
+                self.driver.remove_edge(edge.n,edge.v,
+                                        edge.get_type(),
+                                        **edge.properties)
+            else:
+                self.driver.replace_edge_property(edge,e_props)
+
+        def _new_edge(n,v,e,properties):
+            properties["graph_name"] = self.name
+            self.driver.add_edge(n,v,e,**properties)
+        
+        def _swap_edges(old_res,new_res):
+            for edge in self.edges(n=old_res):
+                _new_edge(new_res,edge.v,edge.get_type(),edge.properties.copy())
+                _replace_edge_properties(edge)
+            for edge in self.edges(v=old_res):
+                _new_edge(edge.n,new_res,edge.get_type(),edge.properties.copy())
+                _replace_edge_properties(edge)
+
+
+        properties["graph_name"] = self.name
+        properties["name"] = _get_name(key)
+        if nv_has_seq in properties:
+            properties[nv_has_seq] = properties[nv_has_seq].upper()
+        res = self._node_query(old)
+        assert(len(res) == 1)
+        res = res[0]
+        new_res = [r for r in self.driver.node_query(key) 
+                   if not isinstance(r,ReservedNode)]
+
+        # Node is already in the network.
+        if len(new_res) > 0:
+            assert(len(new_res) == 1)
+            new_res = new_res[0]
+            # Add graph name to existing node
+            if len(list(set(self.name) & set(new_res.graph_name))) == 0:
+                new_res.properties["graph_name"] += self.name
+                self.driver.replace_node_property(res,new_res)
+            _swap_edges(res,new_res)
+            # Remove old node
+            if res.graph_name == self.name:
+                self.driver.remove_node(res)
+            self.driver.submit()
+        elif res.graph_name == self.name:
+            del properties["graph_name"]
+            self.driver.replace_node_label(old,key,graph_name=self.name,
+                                           new_props=properties)
+            self.driver.submit()
+        else:
+            new = self.driver.add_node(key,res.get_type(),**properties)
+            _swap_edges(res,new)
+            res.properties = _remove_gn(res.properties)
+            self.driver.replace_node_property(res,new)
+            self.driver.submit()
         
     def replace_label(self,old,new):
         new_props = {"name" : _get_name(new)}
-        self.driver.replace_node_label(old,new,new_props=new_props,graph_name=self.name)
-        self.driver.submit()
-
-    def replace_node_property(self,node,predicate,new):
-        if "graph_name" not in node.get_properties():
-            node.update({"graph_name" : self.name})
-        self.driver.replace_node_property(node,{predicate:new})
-        self.driver.submit()
-
-    def replace_edge_property(self,edge,predicate,new):
-        n,v,e,props = edge
-        if "graph_name" not in props:
-            edge.update({"graph_name" : self.name})
-        self.driver.replace_edge_property(n,v,e,props,{predicate:new})
+        self.driver.replace_node_label(old,new,new_props=new_props,
+                                       graph_name=self.name)
         self.driver.submit()
         
     def get_children(self, node,predicate="ALL"):
@@ -175,19 +241,21 @@ class DesignGraph:
                 roots.append(node)
         return roots
         
-    def get_interactions(self,node=None,predicate=None):
+    def get_interactions(self,node=None,e_type=None,predicate="ALL"):
         s = model.identifiers.objects.interaction
         derived = ([s] + [n[1]["key"] for n in model.get_derived(s)])
-        return self._edge_query(n=derived,v=node,e=predicate)
+        return self._edge_query(n=derived,v=node,e=e_type,
+                                predicate=predicate)
 
-    def get_interaction_elements(self,interaction,predicate=None):
-        if predicate is None:
+    def get_interaction_elements(self,interaction,e_type=None,predicate="ALL"):
+        if e_type is None:
             model_code = model.get_class_code(interaction.get_type())
             inp,out = model.interaction_predicates(model_code)
-            predicate = [str(i[1]["key"]) for i in inp]
-            predicate += [str(o[1]["key"]) for o in out]
+            e_type = [str(i[1]["key"]) for i in inp]
+            e_type += [str(o[1]["key"]) for o in out]
             
-        return self._edge_query(n=interaction,e=predicate)
+        return self._edge_query(n=interaction,e=e_type,
+                                predicate=predicate)
 
     def get_interaction_io(self, subject,predicate="ALL"):
         inputs = []
@@ -221,25 +289,7 @@ class DesignGraph:
         if None in self.name:
             return []
         return self.driver.get_isolated_nodes(graph_name=self.name,predicate=predicate)
-    
-    def get_consists_of(self,interaction):
-        co = self.edges(interaction,e=model.identifiers.predicates.consists_of)
-        assert(len(co) == 1)
-        elements = []
-        next_node = co[0].v
-        while True:
-            res = self._edge_query(n=next_node)
-            f = [c for c in res if str(RDF.first) in c.get_type()]
-            r = [c for c in res if str(RDF.rest) in c.get_type()]
-            if len(f) != 1 or len(r) != 1:
-                raise ValueError(f'{co[0]} is a malformed list.')
-            elements += res
-            r = r[0]
-            if str(RDF.nil) in r.v.get_labels():
-                break
-            next_node = r.v
-        return elements
-
+        
     def resolve_list(self, list_node,predicate="ANY"):
         elements = []
         next_node = list_node
@@ -255,7 +305,13 @@ class DesignGraph:
                 break
             next_node = r.v
         return elements
-
+    
+    def position_walk(self):
+        pos_proj_name = "-".join(self.name) + "_position_projection"
+        sources = self.project.position(pos_proj_name)
+        paths = self.procedure.dfs(pos_proj_name,sources)
+        return [p["path"] for p in paths]
+            
     def get_project_preset_names(self):
         return self.project.get_presets()
 
@@ -290,7 +346,7 @@ class DesignGraph:
 
 def _get_name(subject):
     split_subject = _split(subject)
-    if len(split_subject[-1]) == 1 and split_subject[-1].isdigit():
+    if split_subject[-1].isdigit():
         return split_subject[-2]
     elif len(split_subject[-1]) == 3 and _isfloat(split_subject[-1]):
         return split_subject[-2]

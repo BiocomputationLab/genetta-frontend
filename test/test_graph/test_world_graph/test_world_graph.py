@@ -8,9 +8,8 @@ sys.path.insert(0, os.path.join("..","..",".."))
 sys.path.insert(0, os.path.join("..","..","..",".."))
 from app.graph.world_graph import WorldGraph
 from app.converter.sbol_convert import convert
-from app.utility.sbol_connector.connector import SBOLConnector
 curr_dir = os.path.dirname(os.path.realpath(__file__))
-fn = os.path.join(curr_dir,"..","..","files","nor_full.xml")
+fn = os.path.join(curr_dir,"..","..","test","files","nor_full.xml")
 
 db_host = os.environ.get('NEO4J_HOST', 'localhost')
 db_port = os.environ.get('NEO4J_PORT', '7687')

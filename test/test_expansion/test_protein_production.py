@@ -6,12 +6,11 @@ sys.path.insert(0, os.path.join("..",".."))
 sys.path.insert(0, os.path.join("..","..",".."))
 sys.path.insert(0, os.path.join("..","..","..",".."))
 from app.graph.world_graph import WorldGraph
-from app.tools.enhancer.enhancer import Enhancer
-from app.graph.utility.graph_objects.node import Node
 from app.graph.utility.model.model import model
-from app.graph.truth_graph.modules.interaction import InteractionModule
-from app.tools.enhancer.enhancements.interaction.protein_production import TruthProteinProduction
-from app.tools.enhancer.enhancements.interaction.protein_production import DesignProteinProduction
+from app.tools.kg_expansion.expansions.protein_production import TruthProteinProduction
+from app.tools.data_miner.data_miner import data_miner
+from app.graph.utility.graph_objects.reserved_node import ReservedNode
+
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 
 db_host = os.environ.get('NEO4J_HOST', 'localhost')
@@ -27,23 +26,24 @@ nv_pp = str(model.identifiers.objects.genetic_production)
 nv_cds = str(model.identifiers.objects.cds)
 nv_template = str(model.identifiers.predicates.template)
 nv_product = str(model.identifiers.predicates.product)
+nv_repression = str(model.identifiers.objects.repression)
+nv_repressor = str(model.identifiers.predicates.repressor)
+nv_repressed = str(model.identifiers.predicates.repressed)
 
-class TestEnhancements(unittest.TestCase):
+class TestPPExpansion(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tg = self.wg.truth
-        self.enhancer = Enhancer(self.wg)
-        self.im = InteractionModule(self.wg.truth)
 
     @classmethod
     def tearDownClass(self):
         pass
     
-    def test_protein_production_enhancements_tg_auto(self):
-        ppe = TruthProteinProduction(self.wg,self.enhancer._miner)
+    def test_protein_production_expansion(self):
+        ppe = TruthProteinProduction(self.wg.truth,data_miner)
         pre_e = self.tg.edges()
-        ppe.enhance()
+        ppe.expand()
         post_e = self.tg.edges()
         diff = list(set(post_e) - set(pre_e))
         for d in diff:
@@ -59,51 +59,27 @@ class TestEnhancements(unittest.TestCase):
             else:
                 self.fail()
 
-    def test_protein_production_enhancements_d_auto(self):
-        gn = "test_protein_production_enhancements_d_auto"
-        nodes = [Node("https://synbiohub.org/public/igem/my_fake_uri/1",model.identifiers.objects.cds),
-                 Node("https://synbiohub.org/public/igem/my_fake_uri_protein/1",model.identifiers.objects.protein),
-                 Node("https://synbiohub.org/public/igem/my_fake_uri_protein_generation/1",model.identifiers.objects.genetic_production),
-                 Node("https://synbiohub.org/public/igem/my_fake_uri2/1",model.identifiers.objects.cds)]
-        dg = self.wg.get_design(gn)
-        nodes = [dg.add_node(n.get_key(),n.get_type()) for n in nodes]
-        edges = [(nodes[2],nodes[0],model.identifiers.predicates.template),
-                (nodes[2],nodes[1],model.identifiers.predicates.product)]
-        dg.add_edges(edges)
-        ppe = DesignProteinProduction(self.wg,self.enhancer._miner)
-        pre_e = dg.edges()
-        ppe.enhance(dg.name)
-        post_e = dg.edges()
+    def test_pp_expansion_cds_interaction(self):
+        cds = self.tg.get_cds()[0]
+        promoter = self.tg.get_promoter()[0]
+        interaction = ReservedNode("test_interaction123",nv_repression,graph_name=["truth_graph"])
+        self.tg.interactions.positive(interaction,cds,nv_repressor)
+        self.tg.interactions.positive(interaction,promoter,nv_repressed)
+        ppe = TruthProteinProduction(self.wg.truth,data_miner)
+        pre_e = self.tg.edges()
+        ppe.expand()
+        post_e = self.tg.edges()
         diff = list(set(post_e) - set(pre_e))
-        self.assertEqual(len(diff),2)
-        for i in range(0,20):
-            for e in diff:
-                self.tg.interactions.negative(e.n,e.v,e.get_type())
-        self.wg.remove_design(gn)
-
-
-    def test_protein_production_enhancements_d_manual(self):
-        gn = "test_protein_production_enhancements_d_auto"
-        nodes = [Node("https://synbiohub.org/public/igem/my_fake_uri/1",model.identifiers.objects.cds),
-                 Node("https://synbiohub.org/public/igem/my_fake_uri_protein/1",model.identifiers.objects.protein),
-                 Node("https://synbiohub.org/public/igem/my_fake_uri_protein_generation/1",model.identifiers.objects.genetic_production),
-                 Node("https://synbiohub.org/public/igem/my_fake_uri2/1",model.identifiers.objects.cds)]
-        dg = self.wg.get_design(gn)
-        nodes = [dg.add_node(n.get_key(),n.get_type()) for n in nodes]
-        edges = [(nodes[2],nodes[0],model.identifiers.predicates.template),
-                (nodes[2],nodes[1],model.identifiers.predicates.product)]
-        dg.add_edges(edges)
-        ppe = DesignProteinProduction(self.wg,self.enhancer._miner)
-        pre_e = dg.edges()
-        res = ppe.enhance(dg.name,mode="manual")
-        for k,v in res.items():
-            for k1,v1 in v.items():
-                v1["apply"] = True
-        ppe.apply(res,gn)
-        post_e = dg.edges()
-        diff = list(set(post_e) - set(pre_e))
-        self.assertEqual(len(diff),2)
-        for i in range(0,20):
-            for e in diff:
-                self.tg.interactions.negative(e.n,e.v,e.get_type())
-        self.wg.remove_design(gn)
+        
+        self.assertGreater(len(diff),0)
+        for d in diff:
+            print(d)
+            if d.n == interaction:
+                self.assertEqual(d.v.get_type(),nv_p)
+                break
+        else:
+            self.fail()
+        
+        i_g = self.tg.interactions.get(subject=interaction.get_key())
+        for i in i_g.out_edges():
+            self.tg.interactions.negative(i.n,i.v,i.get_type(),score=100)

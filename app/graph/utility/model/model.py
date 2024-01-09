@@ -319,6 +319,23 @@ class ModelGraph:
         assert(len(r_value) == 1)
         return [r_property[1]["key"],r_value[0]]
 
+    def get_predicates(self,identifier):
+        preds = []
+        for s,p,o in self.search((None,RDF.first,identifier)):
+            o_key = None
+            o = s
+            while o_key != OWL.unionOf:
+                res = self.search((None,None,o))
+                assert(len(res) == 1)
+                s,p,o = res[0]
+                o_key = o
+                o = s[0]
+            es = self.search((None,None,o))
+            assert(len(es) == 1)
+            preds.append((es[0][0][1]["key"]))
+        return preds
+    
+
     def interaction_predicates(self,interaction=None):
         if interaction is None:
             return [n[0] for n in self.search((None,self.identifiers.predicates.direction,None))]

@@ -1,0 +1,472 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:sbol="http://sbols.org/v2#" xmlns:ns0="http://purl.org/dc/terms/">
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/DntR_sequence/1">
+    <sbol:displayId>DntR_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/DntR_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>gtgagggtgaggtc</sbol:elements>
+  </sbol:Sequence>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BM3R1_repressor_sequence/1">
+    <sbol:version>1</sbol:version>
+    <sbol:elements>ATGGAAAGCACCCCGACCAAACAGAAAGCAATTTTTAGCGCAAGCCTGCTGCTGTTTGCAGAACGTGGTTTTGATGCAACCACCATGCCGATGATTGCAGAAAATGCAAAAGTTGGTGCAGGCACCATTTATCGCTATTTCAAAAACAAAGAAAGCCTGGTGAACGAACTGTTTCAGCAGCATGTTAATGAATTTCTGCAGTGTATTGAAAGCGGTCTGGCAAATGAACGTGATGGTTATCGTGATGGCTTTCATCACATTTTTGAAGGTATGGTGACCTTTACCAAAAATCATCCGCGTGCACTGGGTTTTATCAAAACCCATAGCCAGGGCACCTTTCTGACCGAAGAAAGCCGTCTGGCATATCAGAAACTGGTTGAATTTGTGTGCACCTTTTTTCGTGAAGGTCAGAAACAGGGTGTGATTCGTAATCTGCCGGAAAATGCACTGATTGCAATTCTGTTTGGCAGCTTTATGGAAGTGTATGAAATGATCGAGAACGATTATCTGAGCCTGACCGATGAACTGCTGACCGGTGTTGAAGAAAGCCTGTGGGCAGCACTGAGCCGTCAGAGCTAA</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>BM3R1_repressor_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BM3R1_repressor_sequence"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/pPhIF/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>pPhIF</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/pPhIF"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/my_rbs_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>my_rbs_sequence</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/my_rbs_sequence"/>
+    <sbol:version>1</sbol:version>
+    <sbol:elements>CCAAACGAGGCCGGGAGA</sbol:elements>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/PhIF/1">
+    <sbol:displayId>PhIF</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/PhIF"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/AND_gate/1">
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_L3S3P22_c_i_precedes_SrpR_sensor_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_L3S3P22_c_i_precedes_SrpR_sensor_c"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_SrpR_sensor_c/1"/>
+        <sbol:displayId>AND_gate_L3S3P22_c_i_precedes_SrpR_sensor_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_L3S3P22_c/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_cpA1_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_SrpR_sensor_c_i_precedes_pBM3R1_promoter_c/1">
+        <sbol:displayId>AND_gate_SrpR_sensor_c_i_precedes_pBM3R1_promoter_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_SrpR_sensor_c_i_precedes_pBM3R1_promoter_c"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_SrpR_sensor_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pBM3R1_promoter_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_pPhIF_c/1">
+        <sbol:displayId>AND_gate_pPhIF_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/pPhIF/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pPhIF_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c_i_precedes_Tac_promoter_c/1">
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tac_promoter_c/1"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>AND_gate_BBa_J133450_c_i_precedes_Tac_promoter_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c_i_precedes_Tac_promoter_c"/>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:displayId>AND_gate</sbol:displayId>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/PhIF/1"/>
+        <sbol:displayId>AND_gate_PhIF_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_c"/>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_BBa_J133450_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_J133450/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:version>1</sbol:version>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_geSrpR_c/1">
+        <sbol:displayId>AND_gate_geSrpR_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/SrpR/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_geSrpR_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_c_i_precedes_PhIF_terminator_c/1">
+        <sbol:displayId>AND_gate_PhIF_c_i_precedes_PhIF_terminator_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_c_i_precedes_PhIF_terminator_c"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_terminator_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_my_rbs_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_my_rbs_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_my_rbs_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/my_rbs/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate"/>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_pBM3R1_promoter_c_i_precedes_cpA1_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pBM3R1_promoter_c_i_precedes_cpA1_c"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pBM3R1_promoter_c/1"/>
+        <sbol:displayId>AND_gate_pBM3R1_promoter_c_i_precedes_cpA1_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_my_rbs_c_i_precedes_yellow_fluorescent_protein_c/1">
+        <sbol:displayId>AND_gate_my_rbs_c_i_precedes_yellow_fluorescent_protein_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_my_rbs_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_yellow_fluorescent_protein_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_my_rbs_c_i_precedes_yellow_fluorescent_protein_c"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tet_promoter_c/1">
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/Tet_promoter/1"/>
+        <sbol:displayId>AND_gate_Tet_promoter_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tet_promoter_c"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_BBa_B0064_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BBa_B0064/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BM3R1_repressor_c/1">
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/BM3R1_repressor/1"/>
+        <sbol:displayId>AND_gate_BM3R1_repressor_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BM3R1_repressor_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_geSrpR_c_i_precedes_BBa_J133450_c/1">
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_geSrpR_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>AND_gate_geSrpR_c_i_precedes_BBa_J133450_c</sbol:displayId>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_J133450_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_geSrpR_c_i_precedes_BBa_J133450_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_terminator_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_PhIF_terminator_c</sbol:displayId>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/PhIF_terminator/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_terminator_c"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_yellow_fluorescent_protein_c/1">
+        <sbol:displayId>AND_gate_yellow_fluorescent_protein_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_yellow_fluorescent_protein_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/yellow_fluorescent_protein/1"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tac_promoter_c_i_precedes_shbDntR_c/1">
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tac_promoter_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbDntR_c/1"/>
+        <sbol:displayId>AND_gate_Tac_promoter_c_i_precedes_shbDntR_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tac_promoter_c_i_precedes_shbDntR_c"/>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c_i_precedes_geSrpR_c/1">
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_geSrpR_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_BBa_B0064_c_i_precedes_geSrpR_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c_i_precedes_geSrpR_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbDntR_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbDntR_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/DntR/1"/>
+        <sbol:displayId>AND_gate_shbDntR_c</sbol:displayId>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbDntR_c_i_precedes_BM3R1_repressor_c/1">
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BM3R1_repressor_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbDntR_c_i_precedes_BM3R1_repressor_c"/>
+        <sbol:displayId>AND_gate_shbDntR_c_i_precedes_BM3R1_repressor_c</sbol:displayId>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_shbDntR_c/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_pPhIF_c_i_precedes_my_rbs_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pPhIF_c/1"/>
+        <sbol:displayId>AND_gate_pPhIF_c_i_precedes_my_rbs_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pPhIF_c_i_precedes_my_rbs_c"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_my_rbs_c/1"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tet_promoter_c_i_precedes_BBa_B0064_c/1">
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tet_promoter_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tet_promoter_c_i_precedes_BBa_B0064_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BBa_B0064_c/1"/>
+        <sbol:displayId>AND_gate_Tet_promoter_c_i_precedes_BBa_B0064_c</sbol:displayId>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_BM3R1_repressor_c_i_precedes_L3S3P22_c/1">
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>AND_gate_BM3R1_repressor_c_i_precedes_L3S3P22_c</sbol:displayId>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BM3R1_repressor_c/1"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_L3S3P22_c/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_BM3R1_repressor_c_i_precedes_L3S3P22_c"/>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_SrpR_sensor_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:displayId>AND_gate_SrpR_sensor_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_SrpR_sensor_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/SrpR_sensor/1"/>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c_i_precedes_PhIF_c/1">
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_cpA1_c_i_precedes_PhIF_c"/>
+        <sbol:version>1</sbol:version>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:displayId>AND_gate_cpA1_c_i_precedes_PhIF_c</sbol:displayId>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tac_promoter_c/1">
+        <sbol:version>1</sbol:version>
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/Tac_promoter/1"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_Tac_promoter_c"/>
+        <sbol:displayId>AND_gate_Tac_promoter_c</sbol:displayId>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_pBM3R1_promoter_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pBM3R1_promoter_c"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/pBM3R1_promoter/1"/>
+        <sbol:displayId>AND_gate_pBM3R1_promoter_c</sbol:displayId>
+        <sbol:version>1</sbol:version>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:component>
+      <sbol:Component rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_L3S3P22_c/1">
+        <sbol:access rdf:resource="http://sbols.org/v2#public"/>
+        <sbol:definition rdf:resource="https://synbiohub.org/public/igem/L3S3P22/1"/>
+        <sbol:version>1</sbol:version>
+        <sbol:displayId>AND_gate_L3S3P22_c</sbol:displayId>
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_L3S3P22_c"/>
+      </sbol:Component>
+    </sbol:component>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#Dna"/>
+    <sbol:sequenceConstraint>
+      <sbol:SequenceConstraint rdf:about="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_terminator_c_i_precedes_pPhIF_c/1">
+        <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_terminator_c_i_precedes_pPhIF_c"/>
+        <sbol:object rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_pPhIF_c/1"/>
+        <sbol:restriction rdf:resource="http://sbols.org/v2#precedes"/>
+        <sbol:version>1</sbol:version>
+        <sbol:subject rdf:resource="https://synbiohub.org/public/igem/AND_gate/AND_gate_PhIF_terminator_c/1"/>
+        <sbol:displayId>AND_gate_PhIF_terminator_c_i_precedes_pPhIF_c</sbol:displayId>
+      </sbol:SequenceConstraint>
+    </sbol:sequenceConstraint>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:displayId>A1</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1"/>
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1_sequence/1"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/L3S3P22/1">
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>L3S3P22</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/L3S3P22"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/Tac_promoter_sequence/1">
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>AACGATGGTTGGCTGTGTTGACAATTATTCATCGGCTCGTATAATGAGTGGAATTGTGAGCGCTCACAATT</sbol:elements>
+    <sbol:displayId>Tac_promoter_sequence</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/Tac_promoter_sequence"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_B0064/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_B0064"/>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BBa_B0064_sequence/1"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:displayId>BBa_B0064</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/Tet_promoter/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/Tet_promoter"/>
+    <sbol:displayId>Tet_promoter</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/Tet_promoter_sequence/1"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/my_rbs/1">
+    <sbol:displayId>my_rbs</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/my_rbs"/>
+    <sbol:version>1</sbol:version>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/my_rbs_sequence/1"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/BBa_B0064_sequence/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_B0064_sequence"/>
+    <sbol:elements>AAAGAGGGGAAA</sbol:elements>
+    <sbol:displayId>BBa_B0064_sequence</sbol:displayId>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/PhIF_terminator/1">
+    <sbol:displayId>PhIF_terminator</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+    <ns0:description>BBa_J107115</ns0:description>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/PhIF_terminator"/>
+    <sbol:version>1</sbol:version>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.org/public/igem/Tet_promoter_sequence/1">
+    <sbol:displayId>Tet_promoter_sequence</sbol:displayId>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:elements>TACTCCACCGTTGGCTTTTTTCCCTATCAGTGATAGAGATTGACATCCCTATCAGTGATAGAGATAATGAGCAC</sbol:elements>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/Tet_promoter_sequence"/>
+  </sbol:Sequence>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/Tac_promoter/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/Tac_promoter_sequence/1"/>
+    <sbol:displayId>Tac_promoter</sbol:displayId>
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/Tac_promoter"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/SrpR_sensor/1">
+    <sbol:version>1</sbol:version>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/SrpR_sensor"/>
+    <sbol:displayId>SrpR_sensor</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BM3R1_repressor/1">
+    <sbol:version>1</sbol:version>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/BM3R1_repressor_sequence/1"/>
+    <sbol:displayId>BM3R1_repressor</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BM3R1_repressor"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/DntR/1">
+    <sbol:sequence rdf:resource="https://synbiohub.org/public/igem/DntR_sequence/1"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/DntR"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000139"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>DntR</sbol:displayId>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/BBa_J133450/1">
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/BBa_J133450"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>BBa_J133450</sbol:displayId>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000141"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/SrpR/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>SrpR</sbol:displayId>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/SrpR"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/pBM3R1_promoter/1">
+    <sbol:version>1</sbol:version>
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000167"/>
+    <sbol:displayId>pBM3R1_promoter</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/pBM3R1_promoter"/>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:ComponentDefinition rdf:about="https://synbiohub.org/public/igem/yellow_fluorescent_protein/1">
+    <sbol:role rdf:resource="http://identifiers.org/so/SO:0000316"/>
+    <sbol:version>1</sbol:version>
+    <sbol:displayId>yellow_fluorescent_protein</sbol:displayId>
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.org/public/igem/yellow_fluorescent_protein"/>
+    <ns0:description>YFP</ns0:description>
+    <sbol:type rdf:resource="http://www.biopax.org/release/biopax-level3.owl#DnaRegion"/>
+  </sbol:ComponentDefinition>
+  <sbol:Sequence rdf:about="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1_sequence/1">
+    <sbol:persistentIdentity rdf:resource="https://synbiohub.programmingbiology.org/public/Cello_Parts/A1_sequence"/>
+    <sbol:elements>AATGTTCCCTAATAATCAGCAAAGAGGTTACTAG</sbol:elements>
+    <sbol:encoding rdf:resource="http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html"/>
+    <sbol:displayId>A1_sequence</sbol:displayId>
+    <sbol:version>1</sbol:version>
+  </sbol:Sequence>
+</rdf:RDF>

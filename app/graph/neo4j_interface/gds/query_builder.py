@@ -53,7 +53,8 @@ class StringBuilder:
                     if isinstance(i,Node):
                         f_str += f'{name}:`{i.get_key()}`' if i.get_key() != "None" else ""
                         f_str += f' AND {name}:`{i.get_type()}`' if i.get_type() != "None" else ""
-                        f_str += f' AND ANY(a IN {str(i.graph_name)} WHERE a IN {name}.`graph_name`)'
+                        if hasattr(i,"graph_name"):
+                            f_str += f' AND ANY(a IN {str(i.graph_name)} WHERE a IN {name}.`graph_name`)'
                     else:
                         f_str += f'{name}:`{i}`'                        
                     if index < len(match) - 1:
@@ -166,9 +167,10 @@ class GDSQueryBuilder:
         sb.RETURN(["gds.util.asNode(nodeId) AS node", "score"])
         return sb.BUILD()
 
-    def degree_centrality(self,name,mode="stream"):
+    def degree_centrality(self,name,mode="stream",orientation="NATURAL"):
         sb = StringBuilder()
         sb.CALL("gds.degree",name,mode)
+        sb.PARAMETER("orientation",orientation)
         sb.YIELD(["nodeId","score"])
         sb.RETURN(["gds.util.asNode(nodeId) AS node", "score"])
         return sb.BUILD()
