@@ -28,7 +28,10 @@ class TruthNameSynonym(AbstractExpansion):
         s_graph = self._tg.synonyms.get()
         i_graph = self._tg.interactions.get()
         for entity in self._tg.get_physicalentity():
-            e_synonyms = [s.v.get_key() for s in s_graph.synonyms(entity)]
+            try:
+                e_synonyms = [s.v.get_key() for s in s_graph.synonyms(entity)]
+            except ValueError:
+                e_synonyms = []
             for n_synonym in self._generate_synonyms(entity,i_graph):
                 if n_synonym in e_synonyms:
                     continue
@@ -50,7 +53,11 @@ class TruthNameSynonym(AbstractExpansion):
         e_type = self._get_name(entity.get_type()).lower()
         if e_type not in e_name.lower():
             synonyms.append(f'{e_name}_{e_type}')
-        for i in i_graph.interactions(participant=e_key):
+        try:
+            ints = list(i_graph.interactions(participant=e_key))
+        except ValueError:
+            ints = []
+        for i in ints:
             if i.get_type() in bl_ints:
                 continue
             part_t = [i for i in i_graph.interactions(i.get_key()) 

@@ -47,7 +47,8 @@ class AbstractLayoutHandler:
             super().__init__()
 
         def build(self):
-            return super().build({"name" : "concentric"}) 
+            return super().build({"name" : "concentric",
+                                  "minNodeSpacing" : 80}) 
 
         def _init_settings(self):
             super()._init_settings()

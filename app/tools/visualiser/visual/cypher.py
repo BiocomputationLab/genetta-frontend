@@ -48,3 +48,4 @@ class CypherVisual(AbstractVisual):
 
     def set_query(self,qry):
         return self._builder.set_query(qry)
+    

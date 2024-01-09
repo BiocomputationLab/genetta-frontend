@@ -12,6 +12,8 @@ from app.graph.world_graph import WorldGraph
 from app.tools.kg_expansion.builder import TruthGraphBuilder
 from app.tools.kg_expansion.seeder.seeder import Seeder
 from app.converter.utility.graph import SBOLGraph
+from app.tools.data_miner.data_miner import data_miner
+
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 fn = os.path.join("test","files","nor_full.xml")
 
@@ -29,7 +31,7 @@ class TestExpansion(unittest.TestCase):
         self.gn = "test_expansion"
         self.wg = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
         self.tgb = TruthGraphBuilder(self.wg)
-        self.seeder = Seeder(self.enhancer._graph.truth,self.enhancer._miner)
+        self.seeder = Seeder(self.wg.truth,data_miner)
         self.miner = self.tgb._miner
 
 
@@ -397,6 +399,9 @@ class TestExpansion(unittest.TestCase):
                     d = d[0].n.get_key()
                 self.assertIn(d,nv_parts)
         
+    def test_expansion(self):
+        self.tgb.seed()
+        self.tgb.expand()
 
 
 

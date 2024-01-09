@@ -54,7 +54,8 @@ class ProjectBuilder():
                     nodes.append(out.n)
                     nodes.append(out.v)
                     edges.append(out.get_type())
-            nodes = self._cast(nodes)
+            nodes = self._cast(list(set(nodes)))
+            edges = list(set(edges))
             graph = self._driver.project.sub_graph(i_name,name,nodes,edges)
         elif type.lower() == "monopartite":
             seens = []

@@ -102,14 +102,6 @@ class AbstractDesignVisual(AbstractVisual):
         else:
             self.view = self.set_hierarchy_view
 
-    def add_type_node_color(self):
-        '''
-        Each Class is mapped to a distinct color.
-        '''
-        if self.node_color == self.add_type_node_color:
-            return self._color_h.node.type()
-        else:
-            self.node_color = self.add_type_node_color
 
     def add_role_node_color(self):
         '''

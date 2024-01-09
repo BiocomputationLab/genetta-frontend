@@ -27,7 +27,13 @@ class TruthInteractions(AbstractEnhancement):
         seen_ints = []
         for e in d_entities:
             d_ints = self._existing_interactions(e,graph)
-            for t_i in ti_graph.interactions(participant=e.get_key()):
+            try:
+                tg_ints = list(ti_graph.interactions(
+                    participant=e.get_key()))
+            except ValueError:
+                tg_ints = []
+
+            for t_i in tg_ints:
                 if t_i in seen_ints:
                     continue
                 seen_ints.append(t_i)

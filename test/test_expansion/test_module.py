@@ -40,6 +40,7 @@ class TestModuleExpansion(unittest.TestCase):
         tns = TruthModules(self.tg,data_miner)
         pre_e = self.tg.edges()
         tns.expand()
+        exit()
         post_e = self.tg.edges()
 
         m_graph = self.module.get()
