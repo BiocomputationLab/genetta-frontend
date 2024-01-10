@@ -1,9 +1,6 @@
 import re
 from rdflib import RDF, BNode, URIRef, DCTERMS, OWL, Literal
-from pysbolgraph.SBOL2Serialize import serialize_sboll2
-from pysbolgraph.SBOL2Graph import SBOL2Graph
 from urllib.parse import urlparse
-
 import networkx as nx
 
 from app.converter.utility.graph import SBOLGraph

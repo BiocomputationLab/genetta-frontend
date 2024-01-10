@@ -26,10 +26,11 @@ class ModuleHandler(AbstractHandler):
             entities = self._cast_synonyms(entities,graph)
             for entity in entities:
                 e_res = []
+                modules = []
                 if model.is_derived(entity.get_type(),nv_pe_cc):
                     interactions = graph.interactions(participant=entity)
                 for i in interactions:
-                    modules = graph.modules(object = i)
+                    modules += graph.modules(object = i)
                 for m in modules:
                     m_ints = graph.modules(m.n)
                     conf = 0

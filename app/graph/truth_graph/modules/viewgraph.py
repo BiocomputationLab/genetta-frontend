@@ -116,7 +116,11 @@ class ViewGraph:
         if isinstance(synonym,Node):
             synonym = synonym.get_key()
         if canonical is not None:
-            for edge in self.out_edges(canonical):
+            try:
+                edges = list(self.out_edges(canonical))
+            except ValueError:
+                edges = []
+            for edge in edges:
                 if edge.get_type() != nv_synonym:
                     continue
                 if synonym is None:

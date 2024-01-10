@@ -157,9 +157,32 @@ class EditorBuilder(DesignBuilder):
         if len(edges) > 0:
             self._dg.add_edges(edges)
 
+    def remove_edges(self,n,v,e):
+        # To reduce number of queries to server.
+        all_nodes = []
+        for node in n.values():
+            all_nodes.append(node)
+        for vertex in v.values():
+            all_nodes.append(vertex)
+        all_nodes = self._dg.nodes(all_nodes)
+        all_nodes = {n.get_key(): n for n in all_nodes}
+        n = {k:all_nodes[v] if isinstance(v,str) else v for k,v in n.items()}
+        v = {k:all_nodes[v] if isinstance(v,str) else v for k,v in v.items()}
+        edges = self._view_builder.transform(n,v,e)
+        for n,v,e,p in edges:
+            self._add_props(n)
+            self._add_props(v)
+        if len(edges) > 0:
+            self._dg.remove_edges(edges)
+
     def add_node(self, key, type,**kwargs):
         self._dg.add_node(key, type, name=_get_name(key),**kwargs)
 
+    def remove_node(self,key):
+        if not isinstance(key,Node):
+            key = Node(key)
+        self._dg.remove_node(key)
+        
     def _add_props(self,node):
         node.update({"name" :_get_name(node.get_key()),
                       "graph_name" : self._dg.name})

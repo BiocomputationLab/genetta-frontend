@@ -138,7 +138,20 @@ class Neo4jInterface:
         self.qry_builder.add_match_edge(edge)
         self.qry_builder.add_remove_edge(edge)
 
+    '''
     def remove_node(self, node, use_id=False):
+        self.qry_builder.add_match_node(node, use_id)
+        self.qry_builder.add_remove_node(node)
+    '''
+    
+    def remove_node(self, node=None, use_id=False,key=None,
+                    type=None,properties=None):
+        if node is None:
+            if properties is None:
+                props = {}
+            else:
+                props = properties
+            node = Node(key,type,**props)
         self.qry_builder.add_match_node(node, use_id)
         self.qry_builder.add_remove_node(node)
 

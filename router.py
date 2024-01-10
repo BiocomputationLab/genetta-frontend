@@ -162,10 +162,23 @@ def index():
 @login_required
 def graph_admin():
     if not _is_admin():
-        return render_template('invalid_route.html', invalid_credentials=True)
+        return render_template('invalid_route.html', 
+                               invalid_credentials=True)
     tg_form = forms.add_truth_graph_form(truth_save_dir)
     project_names = graph.driver.project.names()
-    drop_projection = forms.add_remove_projection_form(project_names)
+    d_projection = forms.add_remove_projection_form(project_names)
+    def _derive_admin_forms():
+        d_names = graph.get_design_names()
+        u_names = [k.get_id() for k in login_manager.get_users() 
+                if not k.is_admin]
+        ud = {}
+        for un in u_names:
+            ud[un] = _get_user_gn(d_names,user=un)
+        design_form = forms.add_remove_design_admin_form(ud)
+        user_form = forms.add_remove_user_admin_form(u_names)
+        return design_form,user_form
+    design_form,user_form = _derive_admin_forms()
+
     success_string = None
     if tg_form.validate_on_submit():
         if tg_form.tg_save.data:
@@ -173,26 +186,50 @@ def graph_admin():
             success_string = f'Truth Graph Saved.'
         elif tg_form.tg_reseed.data:
             graph.truth.drop()
-            tg_builder.seed()
+            enhancer.seed_truth_graph()
             success_string = f'Reset Truth Graph'
         elif tg_form.tg_expand.data:
-            tg_builder.expand()
+            enhancer.expand_truth_graph()
             success_string = f'Expanded Truth Graph'
         elif tg_form.tg_restore.data:
             fn = os.path.join(truth_save_dir, request.form["files"])
             graph.truth.drop()
             graph.truth.load(fn)
             success_string = f'Restored Truth Graph {request.form["files"]}'
-    elif drop_projection.validate_on_submit():
-        dg = drop_projection.graphs.data
+    elif d_projection.validate_on_submit():
+        dg = d_projection.graphs.data
         if dg == "Remove All":
             for n in project_names:
                 graph.driver.project.drop(n)
         else:
             graph.driver.project.drop(dg)
+    elif design_form.submit_rda.id in request.form.keys():
+        for k, v in request.form.items():
+            if k == design_form.submit_rda.id:
+                continue
+            if v != "y":
+                continue
+            un = _find_user(k)
+            _remove_graph(k,un)
+        design_form,user_form = _derive_admin_forms()
+    elif user_form.submit_rua.id in request.form.keys():
+        for k, v in request.form.items():
+            if k == user_form.submit_rua.id:
+                continue
+            if v != "y":
+                continue
+            for gn in _get_user_gn(graph.get_design_names(),user=k):
+                _remove_graph(gn,k)
+            login_manager.remove_user(k)            
+            shutil.rmtree(os.path.join(sessions_dir,k))
+        design_form,user_form = _derive_admin_forms()
+
     return render_template('admin.html', tg_form=tg_form,
-                           drop_projection=drop_projection,
+                           drop_projection=d_projection,
+                           design_form = design_form,
+                           user_form=user_form,
                            success_string=success_string)
+
 
 
 @server.route('/modify-graph', methods=['GET', 'POST'])
@@ -309,8 +346,14 @@ def modify_graph():
             return render_template('modify_graph.html', upload_graph=upload_graph,
                                     paste_graph=paste_graph, sbh_graph=sbh_graph, export_graph=export_graph,
                                     remove_graph=remove_graph, err_string="Graph name is taken.")
-        _add_user_gn(g_name)
-        success,ret_str = _convert_file(add_graph_fn, g_name, ft)
+        for agf,gn in connector.split(add_graph_fn,g_name):
+            _add_user_gn(gn)
+            success,ret_str = _convert_file(agf, gn, ft)
+        if success:
+            success_string = ret_str
+        else:
+            err_string = ret_str
+
         if success:
             success_string = ret_str
         else:
@@ -579,6 +622,15 @@ def _convert_file(fn,name,ct):
         return False,ex
     return True, "Graph added successfully."
 
+def _remove_graph(gn,user=None):
+    graph.remove_design(gn)
+    if user is None:
+        user = current_user.get_id()
+    try:
+        os.remove(os.path.join(sessions_dir,user, gn+".xml"))
+    except FileNotFoundError:
+        pass
+    _remove_user_gn(gn,user)
 
 def _add_graph_forms():
     gns = graph.get_design_names()
@@ -594,9 +646,18 @@ def _is_admin():
         return True
     return False
 
-
-def _get_user_gn(names):
-    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
+def _find_user(gn):
+    for e in os.listdir(sessions_dir):
+        user_gn_file = os.path.join(sessions_dir,e,user_gns)
+        with open(user_gn_file) as f:
+            data = json.load(f)
+            if gn in data:
+                return e
+            
+def _get_user_gn(names,user=None):
+    if user is None:
+        user = current_user.get_id()
+    user_gn_file = os.path.join(sessions_dir,user,user_gns)
     if not os.path.isfile(user_gn_file):
         return []
     with open(user_gn_file) as f:
@@ -605,7 +666,8 @@ def _get_user_gn(names):
 
 
 def _add_user_gn(gn):
-    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
+    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),
+                                user_gns)
     data = [gn]
     if os.path.isfile(user_gn_file):
         with open(user_gn_file) as f:

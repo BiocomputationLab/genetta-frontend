@@ -61,6 +61,9 @@ class DesignGraph:
         if "graph_name" not in kwargs:
             kwargs["graph_name"] = self.name
         if sequence is not None:
+            if isinstance(sequence,list):
+                assert(len(sequence) == 1)
+                sequence = sequence[0]
             kwargs[nv_has_seq] = sequence.upper()
         if description is not None:
             if not isinstance(description,list):
@@ -290,6 +293,24 @@ class DesignGraph:
             return []
         return self.driver.get_isolated_nodes(graph_name=self.name,predicate=predicate)
         
+    def get_consists_of(self,interaction):
+        co = self.edges(interaction,e=model.identifiers.predicates.consists_of)
+        assert(len(co) == 1)
+        elements = []
+        next_node = co[0].v
+        while True:
+            res = self._edge_query(n=next_node)
+            f = [c for c in res if str(RDF.first) in c.get_type()]
+            r = [c for c in res if str(RDF.rest) in c.get_type()]
+            if len(f) != 1 or len(r) != 1:
+                raise ValueError(f'{co[0]} is a malformed list.')
+            elements += res
+            r = r[0]
+            if str(RDF.nil) in r.v.get_labels():
+                break
+            next_node = r.v
+        return elements
+
     def resolve_list(self, list_node,predicate="ANY"):
         elements = []
         next_node = list_node

@@ -28,9 +28,26 @@ class EditorInteractionViewBuilder(InteractionViewBuilder):
     def transform(self,n,v,e):
         et = [str(n) for n in self.get_edge_types()]
         nt = [str(n) for n in self.get_node_types()]
+        n = {str(nn) : nv for nn,nv in n.items()}
+        v = {str(vn) : vv for vn,vv in v.items()}
         edges = []
         if e not in et:
             return []
+        
+        # Checking for an conceptual match for an existing interaction.
+        for edge in self._graph.get_interactions(list(n.values())[0]):
+            if edge.n.get_type() == e:
+                i_eles = self._graph.get_interaction_elements(edge.n)
+                i_parts = {e.get_type():e.v for e in i_eles}
+                all_eles = n 
+                all_eles.update(v)
+                if i_parts == all_eles:
+                    edges += [(e.n,e.v,e.get_type(),e.properties) 
+                              for e in i_eles]
+                    edges += [(e.n,e.v,e.get_type(),e.properties) for
+                               e in self._graph.get_consists_of(edge.n)]
+                return edges
+            
         node_uri = build_interaction_uri(n,v,e)
         i_node = Node(node_uri,e,**build_properties(node_uri,self._graph.name))
 

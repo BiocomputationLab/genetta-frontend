@@ -27,6 +27,10 @@ class LoginHandler(LoginManager):
         user = User(username, password, self)
         self._add_user(user)
         return user
+    
+    def remove_user(self,username):
+        self.driver.remove_node(key=username,type=user_type,
+                                properties={"graph_name":self.name})
 
     def get_admin(self):
         res = self._node_query(admin_type)

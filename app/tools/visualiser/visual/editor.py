@@ -25,8 +25,14 @@ class EditorVisual(AbstractDesignVisual):
     def add_edges(self,n,v,e):
         return self._builder.add_edges(n,v,e)
     
+    def remove_edges(self,n,v,e):
+        return self._builder.remove_edges(n,v,e)
+
     def add_node(self,key,type,**kwargs):
         return self._builder.add_node(key,type,**kwargs)
+
+    def remove_node(self,key):
+        return self._builder.remove_node(key)
 
     def is_physical_entity(self,e_type):
         return self._builder.is_physical_entity(e_type)

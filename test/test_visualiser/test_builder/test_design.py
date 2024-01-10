@@ -11,6 +11,7 @@ from app.tools.visualiser.builder.design import DesignBuilder
 from app.graph.world_graph import WorldGraph
 from app.graph.utility.model.model import model
 from app.converter.sbol_convert import convert
+from app.utility.sbol_connector.connector import SBOLConnector
 
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 test_fn = os.path.join(curr_dir,"..","..","files","nor_full.xml")
@@ -174,6 +175,21 @@ class TestViews(unittest.TestCase):
         graph = self.builder.view
         self.assertTrue(len(graph) > 0)        
 
+    def test_positional_multiple(self):
+        gn1 = "test_positional_multiple"
+        fn1 = os.path.join(curr_dir,"..","..","files","iGEM_2016_interlab_collection_connected.xml")
+        connector = SBOLConnector()
+        res = connector.split(fn1,gn1)
+        for fn,gn in res:
+            convert(fn,self.wg.driver,gn)
+
+        dg1 = self.wg.get_design([r[1] for r in res])
+        self.builder.set_design(dg1,"ANY")
+        self.builder.set_positional_view()
+        self.builder.build()
+        graph1 = self.builder.view
+        edges1 = list(graph1.edges())
+
     def test_positional(self):
         self.builder.set_positional_view()
         self.builder.build()
@@ -228,7 +244,22 @@ class TestViews(unittest.TestCase):
         self.wg.remove_design(gn2)
         self.wg.remove_design(gn3)
 
+    def test_mode_multiple(self):
+        gn1 = "test_positional_multiple"
+        fn1 = os.path.join(curr_dir,"..","..","files","iGEM_2016_interlab_collection_connected.xml")
+        connector = SBOLConnector()
+        res = connector.split(fn1,gn1)
+        for fn,gn in res:
+            convert(fn,self.wg.driver,gn)
 
+        dg1 = self.wg.get_design([r[1] for r in res])
+        self.builder.set_design(dg1,"ANY")
+        self.builder.set_full_view()
+        self.builder.build()
+        self.builder.set_node_intersection_mode()
+
+        graph1 = self.builder.view
+        edges1 = list(graph1.edges())
 
 def diff(list1,list2):
     diff = []

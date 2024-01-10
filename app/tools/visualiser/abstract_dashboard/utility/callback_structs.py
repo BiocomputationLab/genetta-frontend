@@ -12,6 +12,9 @@ update_i = OrderedDict()
 not_modifier_identifiers = {"sidebar_id": "sidebar-left",
                             "utility_id": "utility"}
 
+load_page_i = Input("url","pathname")
+load_page_o = Output("load_div","children")
+
 update_i_i = Input(graph_id, "style")
 update_i_o = Output("load_i", "options")
 load_i = Input("load_submit", "n_clicks")
@@ -128,7 +131,9 @@ e_update_i = OrderedDict()
 e_update_o = {"graph_id": Output("content", "children"),
               "legend_id": Output("sidebar-right", "children"),
               "node_type": Output("node_type", "options"),
-              "edge_predicate": Output("edge_predicate", "options")}
+              "edge_predicate": Output("edge_predicate", "options"),
+              "rm_nodes": Output("rm_nodes_values", "options"),
+              }
 
 # -- Properties -- 
 properties_node_i = {"node_type": Input(e_update_o["node_type"].component_id, "value")}
@@ -147,6 +152,12 @@ select_node_o = {"edge_subject": Output(select_node_s["edge_subject"].component_
                 "node_subject_div": Output("node_subject_div", "style"),
                 "node_object_div": Output("node_object_div", "style")}
 
+select_remove_node_i = {"remove_node" : Input("remove_node_select","n_clicks")}
+select_remove_node_s = {"elements": State(graph_id, 'elements'),
+                        "snd": State(graph_id, 'selectedNodeData'),
+                        "remove_node_value": State(e_update_o["rm_nodes"].component_id, "options")}
+select_remove_node_o = {"remove_node" : Output(e_update_o["rm_nodes"].component_id, "value")}
+
 # -- Add Node --
 add_node_i = {"close_an": Input("close_an", "n_clicks"),
               "submit_am": Input("submit_am", "n_clicks")}
@@ -160,12 +171,15 @@ add_node_s = {"an_open" : State("an_modal", "is_open"),
 
 # -- Modify --
 modify_graph_i = {"data": Input("an_data", "selected_rows"),
-                  "add_edge_submit": Input("add_edge_submit", "n_clicks")}
+                  "add_edge_submit": Input("add_edge_submit", "n_clicks"),
+                  "remove_node_submit":Input("remove_node_submit", "n_clicks"),
+                  "remove_edge_submit": Input("remove_edge_submit", "n_clicks")}
 modify_graph_s = {"data": State(add_node_o["data"].component_id, "data"),
                   "node_type": State(e_update_o["node_type"].component_id, "value"),
                   "p_list" : State(properties_node_o["p_list"].component_id,"children"),
                   "edge_subject": State(select_node_s["edge_subject"].component_id, "children"),
                   "edge_predicate": State(e_update_o["edge_predicate"].component_id, "value"),
-                  "edge_object": State(select_node_s["edge_object"].component_id, "children")}
+                  "edge_object": State(select_node_s["edge_object"].component_id, "children"),
+                  "remove_node" : State(e_update_o["rm_nodes"].component_id, "value")}
 modify_graph_o = {"graph_container": Output(
                 "graph_container", "children")}
