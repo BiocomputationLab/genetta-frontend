@@ -74,6 +74,12 @@ class EditorDash(AbstractDash):
 
         def update_graph_inner(*args):
             return self.update_graph(args)
+        
+        def export_img_inner(*args):
+            return self.export_graph_img(*args)
+
+        def export_modal_inner(*args):
+            return self.export_modal(*args)
 
         self.add_callback(update_inputs_inner, [update_i_i], [update_i_o])
         self.add_callback(load_inner, [load_editor_input], load_editor_output,load_editor_states.values())
@@ -83,6 +89,8 @@ class EditorDash(AbstractDash):
         self.add_callback(add_node_inner, add_node_i.values(), add_node_o.values(),add_node_s.values())
         self.add_callback(modify_graph_inner, modify_graph_i.values(), modify_graph_o.values(),modify_graph_s.values())
         self.add_callback(update_graph_inner, e_update_i.values(), e_update_o.values())
+        self.add_callback(export_img_inner,export_img_i, export_img_o)
+        self.add_callback(export_modal_inner, export_modal_i.values(), export_modal_o.values(), export_modal_s)
         self.build()
 
     def update_inputs(self,style):
@@ -149,6 +157,35 @@ class EditorDash(AbstractDash):
             print(ex)
             raise PreventUpdate()
 
+    def export_graph_img(self, get_jpg_clicks, get_png_clicks, get_svg_clicks):
+        action = 'store'
+        input_id = None
+        ctx = callback_context
+        if ctx.triggered:
+            input_id = ctx.triggered[0]["prop_id"].split(".")[0]
+            if input_id != "tabs":
+                action = "download"
+        else:
+            raise PreventUpdate()
+        return [{'type': input_id, 'action': action}]
+
+    def export_modal(self, *args):
+        changed_id = [p['prop_id']
+                      for p in callback_context.triggered][0].split(".")[0]
+        if changed_id == "":
+            return False, []
+        if export_modal_i["close_export"].component_id in changed_id:
+            return False, []
+        else:
+            children = []
+            try:
+                data = self.visualiser._builder.view.generate(changed_id)
+                children += self.create_text_area("export-data",
+                                                  value=data, disabled=True)
+            except KeyError:
+                pass
+            return True, children
+        
     def select_node(self,predicate,aes_c,aeo_c,elements,data,es_values,eo_values):
         hidden = {"display" : "none"}
         visible = {"display" : "block"}

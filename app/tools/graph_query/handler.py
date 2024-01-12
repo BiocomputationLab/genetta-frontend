@@ -17,10 +17,10 @@ class GraphQueryHandler:
     def get_handlers(self):
         return self._handlers
 
-    def query(self,datatype,query):
+    def query(self,datatype,query,strict=False):
         for handler in self._handlers:
             if handler.get_name() == datatype:
-                return handler.handle(query)
+                return handler.handle(query,strict=strict)
         raise ValueError(f'{datatype} is not a valid datatype.')
     
     def feedback(self,datatype,source,result,positive=True):

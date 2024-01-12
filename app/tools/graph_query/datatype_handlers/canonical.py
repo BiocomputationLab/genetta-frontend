@@ -14,11 +14,12 @@ class CanonicalHandler(AbstractHandler):
     def get_example(self):
         return "pTet"
 
-    def handle(self, query):
+    def handle(self, query,strict=False):
         results = {}
         s_graph = self._graph.synonyms.get(threshold=0)
         for qry_ele in self._miner.get_entities(query):
-            for entity in self._identify_entities(qry_ele,s_graph):
+            for entity in self._identify_entities(qry_ele,s_graph,
+                                                  strict=strict):
                 e_res = []
                 if len(list(s_graph.synonyms(canonical=entity))) > 0:
                     # The input entity is the canonical.

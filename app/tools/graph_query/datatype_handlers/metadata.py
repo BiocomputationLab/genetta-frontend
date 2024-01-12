@@ -15,12 +15,13 @@ class MetadataHandler(AbstractHandler):
     def get_example(self):
         return "Repression"
     
-    def handle(self,query):
+    def handle(self,query,strict=False):
         results = {}
         qry_eles = self._miner.get_entities(query)
         e_res = []
         entities = self._identify_entities(qry_eles,index=p_description,
-                                           predicate="AND",threshold=1)
+                                           predicate="AND",threshold=1,
+                                           strict=strict)
         for entity,score in entities.items():
             d = f'{entity.name} - {self._get_name(entity.get_type())}'
             e_res.append((score, 

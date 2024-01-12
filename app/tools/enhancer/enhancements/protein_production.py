@@ -26,14 +26,16 @@ class ProteinProduction(AbstractEnhancement):
         
         changes = {}
         for cds in graph.get_cds():
+            # Hack here. if the CDS is in the TG it will 
+            # be added in a different enhancer.
             if len(self._wg.truth.node_query(cds)) > 0:
                 continue
             cds_ints = graph.get_interactions(cds)
             pp_int = []
             defered_ints = []
             for i in cds_ints:
-                
                 if i.n.get_type() == nv_pp:
+                    print(i)
                     pp_int.append(i)
                 elif i.n.get_type() in defered_int_types:
                     defered_ints.append(i)

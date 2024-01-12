@@ -13,12 +13,12 @@ class DerivativeHandler(AbstractHandler):
     def get_example(self):
         return "BBa_C0012"
     
-    def handle(self,query):
+    def handle(self,query,strict=False):
         results = {}
         graph = self._graph.derivatives.get(threshold=0)
         graph += self._graph.synonyms.get(threshold=0)
         for qry_ele in self._miner.get_entities(query):
-            entities = self._identify_entities(qry_ele,graph)
+            entities = self._identify_entities(qry_ele,graph,strict=strict)
             entities = self._cast_synonyms(entities,graph)
             for entity in entities:
                 e_res = []

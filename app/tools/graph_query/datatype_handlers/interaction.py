@@ -7,25 +7,17 @@ class InteractionHandler(AbstractHandler):
         return "Interaction"
     
     def get_description(self):
-        '''
-        Consider if also, this could be expanded.
-        Some ideas follow (Increasing complexity):
-            1. Given an interaction type, each record returned 
-                is the systems which implement this regulation.
-            2. Returns interactions between provided entities (Multiple Inputs).
-            3. Given an abstract function for example NOR, returns implementations. (This might be better on its own Handler.)
-        '''
         return "Returns interactions of a provided entity."
     
     def get_example(self):
         return "pAmtR"
     
-    def handle(self,query):
+    def handle(self,query,strict=False):
         results = {}
         graph = self._graph.interactions.get(threshold=0)
         graph += self._graph.synonyms.get(threshold=0)
         for qry_ele in self._miner.get_entities(query):
-            entities = self._identify_entities(qry_ele,graph)
+            entities = self._identify_entities(qry_ele,graph,strict=strict)
             entities = self._cast_synonyms(entities,graph)
             for entity in entities:
                 e_res = []

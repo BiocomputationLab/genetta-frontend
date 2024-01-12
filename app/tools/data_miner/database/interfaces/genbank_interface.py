@@ -76,7 +76,15 @@ class GenBankInterface(DatabaseInterface):
 
     def get_uri(self,name):
         return []
-        
+    
+    def is_up(self):
+        try:
+            # Use a simple query to check the GenBank server's availability
+            Entrez.esearch(db="nucleotide", term="example", retmax=1)
+            return True
+        except Exception as e:
+            return False
+
     def get_metadata_identifiers(self):
         return [rdflib.URIRef("http://genbank2graph/features"),
                 rdflib.URIRef("http://genbank2graph/taxonomy"),

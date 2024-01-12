@@ -51,4 +51,12 @@ class LanguageAnalyser:
         token1 = self.nlp(word1)
         token2 = self.nlp(word2)
         return token1.similarity(token2)
+    
+    def get_potential_names(self,input_string):
+        doc = self.nlp(input_string)
+        non_verbs = [token.text for token in doc if 
+                     token.pos_ not in ["ADJ","ADP","ADV","AUX",
+                                        "CONJ","DET","INTJ","PART",
+                                        "PUNCT","SCONJ","SYM","VERB"]]
+        return ' '.join(non_verbs)
         

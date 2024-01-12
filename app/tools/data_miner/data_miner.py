@@ -4,6 +4,8 @@ from app.tools.data_miner.ontology.handler import OntologyHandler
 from app.tools.data_miner.graph_analyser.analyser import GraphAnalyser
 from app.tools.data_miner.utility.identifiers import identifiers
 from rdflib import RDF
+import string
+
 s_cd = identifiers.objects.component_definition
 
 class DataMiner:
@@ -63,7 +65,15 @@ class DataMiner:
     def word_similarity(self,word,words):
         for w in words:
             yield self._language.similarity(word,w)
-        
+    
+    def prune_text(self,texts):
+        final_ts = []
+        for text in texts:
+            translator = str.maketrans('', '', string.punctuation)
+            text = text.translate(translator)
+            final_ts.append(self._language.get_potential_names(text))
+        return final_ts
+
     # -- Ontology -- 
 
     # -- Graph analyser --     
@@ -73,4 +83,7 @@ class DataMiner:
     def get_graph_subject(self,graph,fragments=None):
         return self._graph_analyser.get_subject(graph,fragments)
     
+    def cleanup(self):
+        self._database.cleanup()
+
 data_miner = DataMiner()

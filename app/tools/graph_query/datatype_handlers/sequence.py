@@ -19,7 +19,7 @@ class SequenceHandler(AbstractHandler):
     def get_example(self):
         return "tttaattatatatatatatatatataatggaagcgtttt"
     
-    def handle(self,query):
+    def handle(self,query,strict=False):
         results = {}
         e_res = []
         sequence = query.strip().upper()
@@ -34,7 +34,7 @@ class SequenceHandler(AbstractHandler):
                                                  derivative.v))
             e_res = self._rank_result(e_res)
             return {f_match[0].get_key(): e_res}
-        else:
+        elif not strict:
             seq_len = len(sequence)
             d_graph = self._graph.derivatives.get()
             candidates = self._get_sequence_type(sequence)

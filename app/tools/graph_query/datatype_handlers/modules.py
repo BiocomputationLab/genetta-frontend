@@ -16,13 +16,14 @@ class ModuleHandler(AbstractHandler):
     def get_example(self):
         return "pAmtR"
     
-    def handle(self,query):
+    def handle(self,query,strict=False):
         results = {}
         graph = self._graph.modules.get(threshold=0)
         graph += self._graph.synonyms.get(threshold=0)
         graph += self._graph.interactions.get(threshold=0)
         for qry_ele in self._miner.get_entities(query):
-            entities = self._identify_entities(qry_ele,graph)
+            entities = self._identify_entities(qry_ele,graph,
+                                               strict=strict)
             entities = self._cast_synonyms(entities,graph)
             for entity in entities:
                 e_res = []
@@ -44,7 +45,8 @@ class ModuleHandler(AbstractHandler):
                 if len(e_res) > 0:
                     entity = entity.get_key()
                     if entity in results:
-                        e_res = self._merge_duplicates(results[entity],e_res)
+                        e_res = self._merge_duplicates(results[entity],
+                                                       e_res)
                     e_res = self._rank_result(e_res)
                     results[entity] = e_res
         return results

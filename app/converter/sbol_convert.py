@@ -446,6 +446,8 @@ def extract_sequence_annotation(root,graph):
     component_locations = []
     for sa in graph.get_sequence_annotations(root,graph):
         seq_anno_component = graph.get_component(sa)
+        if seq_anno_component is None:
+            continue
         seq_anno_locations  = graph.get_locations(sa)
         for location in seq_anno_locations:
             location_type = graph.get_rdf_type(location)
@@ -479,6 +481,8 @@ def extract_sequence_constraints(root,graph):
     for sc in graph.get_sequence_constraints(root):
         subject = graph.get_sc_subject(sc)
         object = graph.get_sc_object(sc)
+        if subject is None or object is None:
+            continue
         restriction = graph.get_sc_restriction(sc)
         if restriction == identifiers.predicates.precedes:
             constraints.append((subject,object))

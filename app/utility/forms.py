@@ -300,6 +300,7 @@ def build_truth_query_form(handlers, **kwargs):
             csrf = False
         submit_query = SubmitField('Submit')
         query = TextAreaField('Query')
+        strict = BooleanField("Strict")
         choices = []
         examples = {}
         descriptions = {}

@@ -81,3 +81,8 @@ class DatabaseHandler:
         if len(potential_codes) == 0:
             return list(self._db_util.db_mapping_calls.keys())
         return potential_codes
+    
+    def cleanup(self):
+        for db in self._db_util.db_mapping_calls.keys():
+            self._db_util.cleanup(db)
+

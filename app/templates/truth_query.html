@@ -37,6 +37,10 @@
                 <p id="{{name}}_examples">{{ex}}</p>
                 {% endfor %}
             </div>
+            <div class="input-group-prepend">
+                {{ query_bar.strict() }}
+                {{ query_bar.strict.label() }}
+            </div>
         {% endif %}
         {% if results %}
             <table class="table table-hover">

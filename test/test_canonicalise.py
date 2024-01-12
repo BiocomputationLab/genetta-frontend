@@ -46,13 +46,6 @@ class TestCanonical(unittest.TestCase):
     def tearDownClass(self):
         pass#self.wg.remove_design(self.gn)
     
-    def test_temp(self):
-        from app.tools.aligner import aligner
-        for pe in self.wg.truth.get_physicalentity():
-            if hasattr(pe,"hasSequence"):
-                score = aligner.sequence_match("AACGATGGTTGGCTGTGTTGACAATTATTCATCGGCTCGTATAATGAGTGGAATTGTGAGCGCTCACAATT",pe.hasSequence)
-                score = int(score*100)
-                if score > 70:
     def test_get_truth_absolute(self):
         t_pes = self.wg.truth.get_physicalentity()
 
@@ -175,18 +168,18 @@ class TestCanonical(unittest.TestCase):
         self.assertIn(expected,res)
 
 
-    def _apply_canonical_test(self,subj,obj):
-        res = self.wg.truth.synonyms.get(subj.get_key())
+    def _apply_canonical_test(self,synonym,canoncial):
+        res = self.wg.truth.synonyms.get(canoncial)
         for r in res.edges():
-            if obj == r.v.get_key():
+            if r.v.get_key() == synonym and r.n.get_key() == canoncial:
                 break
         else:
             self.fail()
 
-        self.wg.truth.synonyms.negative(subj,obj)
-        res = self.wg.truth.synonyms.get(subj.get_key())
+        self.wg.truth.synonyms.negative(canoncial,synonym)
+        res = self.wg.truth.synonyms.get(canoncial)
         for r in res.edges():
-            if obj == r.v.get_key():
+            if r.v.get_key() == synonym and r.n.get_key() == canoncial:
                 self.fail()
 
 
@@ -201,7 +194,6 @@ class TestCanonical(unittest.TestCase):
         t_seq = "ATCG"
         replacements = {subj.get_key():[test_key,subj.get_type(),{nv_has_seq:t_seq}]}
         replacements = self.canonicaliser.apply(replacements,self.gn)
-
         for e in e_graph.get_physicalentity():
             if test_key == e.get_key():
                 self.assertEqual(e.hasSequence,t_seq)
@@ -209,8 +201,8 @@ class TestCanonical(unittest.TestCase):
                 break
         else:
             self.fail()
-
-        self._apply_canonical_test(subj,test_key)
+    
+        self._apply_canonical_test(subj.get_key(),test_key)
         replacements = {test_key:[subj.get_key(),subj.get_type(),{nv_has_seq:subj.hasSequence}]}
         self.canonicaliser.apply(replacements,self.gn)
         for e in e_graph.get_physicalentity():
@@ -441,5 +433,11 @@ class TestCanonical(unittest.TestCase):
 
 
 
-
-
+    def test_canonicalise_full(self):
+        t_fn = os.path.join("test","files","nor_full.xml")
+        gn = "test_canonicalise_full"
+        self.wg.remove_design(gn)
+        convert(t_fn,self.wg.driver,gn)
+        graph = self.wg.get_design(gn)
+        changes = self.enhancer.canonicalise(gn,automated=False)
+        self.wg.remove_design(gn)

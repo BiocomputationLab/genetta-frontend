@@ -22,7 +22,7 @@ class AbstractHandler(ABC):
         pass
 
     @abstractmethod
-    def handle(self,query):
+    def handle(self,query,strict=False):
         pass
 
     @abstractmethod
@@ -30,7 +30,7 @@ class AbstractHandler(ABC):
         pass
 
     def _identify_entities(self,qry_elements,viewgraph=None,index=None,
-                           predicate=None,threshold=None):
+                           predicate=None,threshold=None,strict=False):
         entities = {}
         if not isinstance(qry_elements,list):
             qry_elements = [qry_elements]
@@ -45,17 +45,22 @@ class AbstractHandler(ABC):
 
         qry_uris = [q for q in qry_elements if self.is_url(q)]
         if len(qry_strs) > 0:
-            if index is None:
-                index = {"name":qry_strs}
+            if not strict:
+                if index is None:
+                    index = {"name":qry_strs}
+                else:
+                    if not isinstance(index,list):
+                        index = [index]
+                    index = {ti:qry_strs for ti in index}
+                qti = self._graph.query_text_index(index,
+                                                predicate=predicate,
+                                                fuzzy=True,
+                                                threshold=threshold)
+                entities.update(qti)
             else:
-                if not isinstance(index,list):
-                    index = [index]
-                index = {ti:qry_strs for ti in index}
-            qti = self._graph.query_text_index(index,
-                                               predicate=predicate,
-                                               fuzzy=True,
-                                               threshold=threshold)
-            entities.update(qti)
+                for q in qry_strs:
+                    for res in self._graph.node_query(name=q):
+                        entities[res] = 100
         for qry_uri in qry_uris:
             if viewgraph is not None:
                 entity = viewgraph.get_node(qry_uri)

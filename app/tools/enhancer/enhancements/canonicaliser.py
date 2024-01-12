@@ -71,9 +71,6 @@ class Canonicaliser(AbstractEnhancement):
             return self.apply(changes,graph_name)
         return changes
 
-
-    
-
     def apply(self,replacements,graph_name):
         dg = self._wg.get_design(graph_name)
         for old,new in replacements.items():
@@ -165,8 +162,9 @@ class Canonicaliser(AbstractEnhancement):
         
         ds = [self._get_name(entity.get_key())]
         if hasattr(entity,"description"):
-            ds += entity.description
+            ds += list(set(self._miner.prune_text(entity.description)))
         index = {nv_desc:ds}
+
         qti = self._wg.truth.query_text_index(index,fuzzy=True)
         qti.update(self._wg.truth.query_text_index(index)) 
         for k,v in qti.items():
@@ -182,7 +180,7 @@ class Canonicaliser(AbstractEnhancement):
         potentials = {}
         # 1. The entity description has a name of a external entity.
         if hasattr(entity,"description"):
-            for d in entity.description:
+            for d in list(set(self._miner.prune_text(entity.description))):
                 for e in self._miner.get_entities(d):
                     record = self._get_record(e,entity)
                     if record is not None:

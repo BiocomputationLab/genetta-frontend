@@ -54,7 +54,9 @@ class AbstractSynBioHubInterface(DatabaseInterface):
             graph = self._load_graph(expected_fn)
         except TypeError:
             os.remove(expected_fn)
-            raise ValueError(f'{identifier} not a record.') 
+            raise ValueError(f'{identifier} not a record.')
+        except OSError:
+            return None
         if prune:
             graph = self._generalise_get_results(graph)
         return graph
@@ -79,6 +81,20 @@ class AbstractSynBioHubInterface(DatabaseInterface):
         res = self._sparql(sparql_query)
         return res["boolean"]
 
+    def is_up(self):
+        '''
+        Many DBS's (synbiohub especially) are unstable.
+        Checks theyre available before accessing.
+        '''
+        try:
+            response = requests.head(self.base)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except requests.ConnectionError:
+            return False
+        
     def sequence(self,sequence,similarity=None):
         if similarity is None:
             similarity = 1.0
@@ -87,19 +103,14 @@ class AbstractSynBioHubInterface(DatabaseInterface):
                 f'(https://github.com/SynBioHub/synbiohub/issues/1507)')
             return None
         get_uri = f'{self.base}search/sequence={sequence}&id={str(similarity)}&'
-        try:
-            r = requests.get(get_uri,timeout=50,
-                            headers={'Accept': 'text/plain'})
-        except (ConnectionError,ReadTimeout):
-            print(f"WARN:: GET request for {get_uri} timed out.")
-            return None
-        try:
-            r.raise_for_status()
-        except requests.exceptions.HTTPError:
-            return None
+        r = requests.get(get_uri,timeout=50,
+                        headers={'Accept': 'text/plain'})
+        r.raise_for_status()
         contents = json.loads(r.content)
-        return {URIRef(c["uri"]) : float(c["percentMatch"])/100 for c 
-                in contents if c["percentMatch"] != ""}
+        return {URIRef(c["uri"]): float(c["percentMatch"]) / 100 
+                if c["percentMatch"] != "" else 1.0 for c in contents}
+    
+
         
     def get_metadata_identifiers(self):
         return metadata_predicates

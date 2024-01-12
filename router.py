@@ -18,6 +18,8 @@ from flask_login import current_user
 from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 
 from app.utility import forms
 from app.utility import form_handlers
@@ -26,7 +28,9 @@ from app.utility.sbol_connector.connector import SBOLConnector
 from app.converter.handler import file_convert
 from app.converter.sbol_convert import export
 from app.graph.world_graph import WorldGraph
+from app.graph.neo4j_interface.interface import Neo4jInterface
 from app.utility.login import LoginHandler
+from app.tools.data_miner.data_miner import data_miner
 
 from app.tools.graph_query.handler import GraphQueryHandler
 from app.tools.visualiser.design import DesignDash
@@ -37,6 +41,7 @@ from app.tools.visualiser.truth import TruthDash
 from app.tools.enhancer.enhancer import Enhancer
 from app.tools.kg_expansion.builder import TruthGraphBuilder
 from app.tools.evaluator.evaluator import Evaluator
+
 
 root_dir = "app"
 static_dir = os.path.join(root_dir, "assets")
@@ -50,6 +55,8 @@ user_gns = "graph_names.json"
 server = Flask(__name__, static_folder=static_dir,
                template_folder=template_dir)
 
+scheduler = BackgroundScheduler()
+scheduler.configure(timezone="UTC")
 
 db_host = os.environ.get('NEO4J_HOST', 'localhost')
 db_port = os.environ.get('NEO4J_PORT', '7687')
@@ -59,7 +66,8 @@ uri = f'neo4j://{db_host}:{db_port}'
 login_graph_name = "login_manager"
 
 logger = ChangeLogger()
-graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name],logger=logger)
+graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name],
+                   logger=logger)
 
 
 # Tools
@@ -88,8 +96,6 @@ app = DispatcherMiddleware(server, {
 })
 connector = SBOLConnector()
 
-
-
 server.config['SESSION_PERMANENT'] = True
 server.config['SESSION_TYPE'] = 'filesystem'
 server.config['SESSION_FILE_THRESHOLD'] = 100
@@ -99,6 +105,43 @@ login_manager = LoginHandler(server,graph.driver,login_graph_name)
 login_manager.login_view = "login"
 fn_size_threshold = os.environ.get('FILESIZE_THRESHOLD', 106384)
 
+def cleanup():
+    cl_interface = Neo4jInterface(uri,db_auth,
+                                  reserved_names=[login_graph_name])
+    current_time = time.time()
+    one_week_ago = current_time - 604800
+    print(f"Perfoming cleanup {time.ctime(current_time)}")
+    for o in os.listdir(sessions_dir):
+        if o == login_manager.get_admin().get_id():
+            continue
+        curr_dir = os.path.join(sessions_dir,o)
+        for file in os.listdir(curr_dir):
+            if file.endswith("xml"):
+                gn = file.split(".")[0]
+                design_f = os.path.join(sessions_dir,o,file)
+                changes = os.path.join(sessions_dir,o,gn+".json")
+                if os.path.isfile(changes):
+                    modified_time = os.path.getmtime(changes)
+                else:
+                    modified_time = os.path.getmtime(design_f)
+                if modified_time < one_week_ago:
+                    cl_interface.remove_graph(gn)
+                    _remove_graph_files(gn,o)
+            elif file.endswith("zip"):
+                os.remove(os.path.join(sessions_dir,o,file))
+        if len(os.listdir(curr_dir)) <= 1:
+            shutil.rmtree(curr_dir)
+            login_manager.remove_user(o)
+    data_miner.cleanup()
+    
+
+scheduler.add_job(
+    cleanup,
+    trigger=IntervalTrigger(minutes=10080),
+    id="cleanup_id",
+    name="Runs a cleanup of graph and files periodically.",
+)
+scheduler.start()
 
 @login_manager.user_loader
 def load_user(user_name):
@@ -266,12 +309,8 @@ def modify_graph():
     elif remove_graph.validate_on_submit():
         gn = remove_graph.graphs.data
         graph.remove_design(gn)
+        _remove_graph(gn)
         remove_graph,_ = _add_graph_forms()
-        try:
-            os.remove(os.path.join(session["user_dir"], gn+".xml"))
-        except FileNotFoundError:
-            pass
-        _remove_user_gn(gn)
         success_string = f'{gn} Removed.'
     elif export_graph.validate_on_submit():
         out_dir = os.path.join(session["user_dir"], "designs")
@@ -285,7 +324,8 @@ def modify_graph():
         shutil.copyfile(dfn, os.path.join(out_dir, fn))
         shutil.make_archive(out_dir, 'zip', out_dir)
         shutil.rmtree(out_dir)
-        return send_from_directory(session["user_dir"], "designs.zip", as_attachment=True)
+        return send_from_directory(session["user_dir"], "designs.zip", 
+                                   as_attachment=True)
     if add_graph_fn is not None:
         if g_name == "":
             g_name = add_graph_fn.split(os.path.sep)[-1].split(".")[0]
@@ -381,7 +421,8 @@ def truth_query():
         if query_form.submit_query.id in request.form:
             qd = query_form.query.data
             qt = query_form.query_type.data
-            results = tg_query.query(qt,qd)
+            strict = query_form.strict.data
+            results = tg_query.query(qt,qd,strict=strict)
             results = forms.build_tgrf(results,qt)
         else:
             for identifier,action in request.form.items():
@@ -624,13 +665,34 @@ def _convert_file(fn,name,ct):
 
 def _remove_graph(gn,user=None):
     graph.remove_design(gn)
+    _remove_graph_files(gn,user)
+
+
+def _remove_graph_files(gn,user=None):
     if user is None:
         user = current_user.get_id()
     try:
         os.remove(os.path.join(sessions_dir,user, gn+".xml"))
     except FileNotFoundError:
         pass
+    try:
+        os.remove(os.path.join(sessions_dir,user, gn+".json"))
+    except FileNotFoundError:
+        pass
     _remove_user_gn(gn,user)
+
+def _remove_user_gn(gn,user=None):
+    if user is None:
+        user = current_user.get_id()
+    user_gn_file = os.path.join(sessions_dir,user,user_gns)
+    if not os.path.isfile(user_gn_file):
+        return
+    with open(user_gn_file) as f:
+        data = json.load(f)
+    print(gn)
+    data.remove(gn)
+    with open(user_gn_file, 'w') as outfile:
+        json.dump(data, outfile)
 
 def _add_graph_forms():
     gns = graph.get_design_names()
@@ -672,17 +734,6 @@ def _add_user_gn(gn):
     if os.path.isfile(user_gn_file):
         with open(user_gn_file) as f:
             data += json.load(f)
-    with open(user_gn_file, 'w') as outfile:
-        json.dump(data, outfile)
-
-
-def _remove_user_gn(gn):
-    user_gn_file = os.path.join(sessions_dir,current_user.get_id(),user_gns)
-    if not os.path.isfile(user_gn_file):
-        return
-    with open(user_gn_file) as f:
-        data = json.load(f)
-    data.remove(gn)
     with open(user_gn_file, 'w') as outfile:
         json.dump(data, outfile)
 

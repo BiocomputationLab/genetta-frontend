@@ -46,7 +46,7 @@ class EditorInteractionViewBuilder(InteractionViewBuilder):
                               for e in i_eles]
                     edges += [(e.n,e.v,e.get_type(),e.properties) for
                                e in self._graph.get_consists_of(edge.n)]
-                return edges
+                    return edges
             
         node_uri = build_interaction_uri(n,v,e)
         i_node = Node(node_uri,e,**build_properties(node_uri,self._graph.name))

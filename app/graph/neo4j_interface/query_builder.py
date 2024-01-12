@@ -160,6 +160,7 @@ class QueryBuilder:
             if index == 0:
                 qry_str += "("
             for index2,ele in enumerate(v):
+                ele = self._escape_sequence(ele)
                 if is_url(ele):
                     ele = f'`{ele}`'
                 if wildcard:
@@ -174,7 +175,12 @@ class QueryBuilder:
         return f'CALL db.index.fulltext.queryNodes("{index_name}", "{qry_str}") YIELD node, score'
     
     def _escape_sequence(self,string):
-        return string.replace("[","\[").replace("]","\]").replace("/","\/").replace(":","\:")
+        return (string.replace("[","\[").
+                        replace("]","\]").
+                        replace("/","\/").
+                        replace(":","\:").
+                        replace("(","\(").
+                        replace(")","\)"))
     
     def duplicate_node(self,old,new,graph_name):
         return f'''

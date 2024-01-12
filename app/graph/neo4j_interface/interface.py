@@ -264,7 +264,8 @@ class Neo4jInterface:
             key, r_type = self.derive_key_type(node.labels)
             props = self._go_dict(node)
             score = int(score)*10
-            assert(score <= 100)
+            if score > 100:
+                score = 100
             results[self._node(key, r_type, props)] = score 
         return results
 

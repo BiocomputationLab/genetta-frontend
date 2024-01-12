@@ -206,3 +206,17 @@ class TestConvert(unittest.TestCase):
             self.assertEqual(root,e.n)
             self.assertIn(e.v,pes)
         dg.drop()
+
+    def test_interlab(self):
+        fn = os.path.join("..","files","Negative_2016Interlab.xml")
+        gn = "test_sbol_collection"
+        graph = WorldGraph(uri,db_auth,reserved_names=[login_graph_name])
+        graph.remove_design(gn)
+        sb_convert(fn,graph.driver,gn)
+        dg = graph.get_design(gn)
+        pes = dg.get_physicalentity()
+        root = pes.pop(0)
+        for e in dg.get_haspart(root):
+            self.assertEqual(root,e.n)
+            self.assertIn(e.v,pes)
+        dg.drop()
