@@ -229,10 +229,10 @@ def graph_admin():
             success_string = f'Truth Graph Saved.'
         elif tg_form.tg_reseed.data:
             graph.truth.drop()
-            enhancer.seed_truth_graph()
+            tg_builder.seed()
             success_string = f'Reset Truth Graph'
         elif tg_form.tg_expand.data:
-            enhancer.expand_truth_graph()
+            tg_builder.expand()
             success_string = f'Expanded Truth Graph'
         elif tg_form.tg_restore.data:
             fn = os.path.join(truth_save_dir, request.form["files"])
