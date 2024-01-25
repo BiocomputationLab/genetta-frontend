@@ -1,4 +1,3 @@
-from PIL import Image, ImageDraw, ImageFont
 import re
 
 start_val = (0,90,75)
@@ -34,33 +33,6 @@ class ColorPicker:
         hsl.l = l
         return str(hsl)
     
-    
-
-    def produce_plot(self,outname):
-        hsl_list = self._colors[0:int(len(self._colors)/4)]
-        if isinstance(hsl_list[0],HSLVal):
-            hsl_list = [[hsv_val] for hsv_val in hsl_list]
-        grid_width = len(hsl_list) * 1000
-        grid_height = len(max(hsl_list,key=len)) * 1000
-        square_h = grid_height / len(max(hsl_list,key=len))
-        square_l = grid_width / len(hsl_list)
-        x_orig = 0
-        y_orig = 0
-        cur_x = x_orig
-        cur_y = y_orig
-        fnt = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", 100)
-        img = Image.new('RGB', (grid_width, grid_height), color = (255,255,255))
-        d = ImageDraw.Draw(img)
-        for color in hsl_list:
-            cur_y = y_orig
-            for shade in color:
-                d.rectangle((cur_x, cur_y, cur_x + square_l, cur_y + square_h), fill=str(shade), outline=(255, 255, 255))
-                d.text((cur_x,cur_y), str(shade), font=fnt,fill=(0,0,0))
-                cur_y += square_h
-            cur_x += square_l
-        img.save(outname)
-        return outname
-
     def _build_color(self,shuffle=True):
         cur_hue = start_val[0]
         hsl_list = []
