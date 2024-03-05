@@ -15,4 +15,4 @@ class TruthTopologicalInteraction(AbstractExpansion):
         '''
         m_graph = self._tg.modules.get()
         for modules in m_graph.modules():
-            print(modules)
+            pass

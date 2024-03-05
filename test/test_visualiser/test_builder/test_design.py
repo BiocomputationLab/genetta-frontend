@@ -194,8 +194,6 @@ class TestViews(unittest.TestCase):
         self.builder.set_positional_view()
         self.builder.build()
         graph = self.builder.view
-        for edge in graph.edges():
-            print(edge)
         self.assertTrue(len(graph) > 0) 
 
     def test_views_multiple_graphs_any(self):

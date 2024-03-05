@@ -194,6 +194,30 @@ class QueryBuilder:
         RETURN newNode
         '''
     
+    def node_edge_count(self,graph_name=None):
+        if graph_name is None:
+            gn_str = ""
+        else:
+            if not isinstance(graph_name,list):
+                graph_name = [graph_name]
+            gn_str = "{graph_name: ["
+            gn_str += ",".join([f'"{n}"' for n in graph_name])
+            gn_str += "]}"
+        node_str = f'''
+            MATCH (n {gn_str})
+            UNWIND labels(n) AS label
+            WITH label, COUNT(*) AS count
+            WHERE count > 1
+            RETURN label, count ORDER BY count DESC
+        '''
+        edge_str = f'''
+            MATCH ()-[r {gn_str}]->()
+            WITH TYPE(r) AS label, COUNT(r) AS count
+            WHERE count > 1
+            RETURN label, count ORDER BY count DESC
+        '''
+        return node_str,edge_str
+
     def count_edge(self,e_type):
         return f'''match(n) - [e:`{e_type}`] - (v) return count(e)'''
     

@@ -210,24 +210,24 @@ class ProjectionDash(AbstractDash):
     def load(self, graph_name):
         if not graph_name or not isinstance(self.visualiser, ProjectionVisual):
             raise PreventUpdate()
-        #try:
-        gn = graph_name.split("-")[0]
-        gn = [g for g in gn.split("/")]
-        self.visualiser.set_design_names(gn)
-        self.visualiser.set_projection_graph(graph_name)
-        self.visualiser.set_projection_view()
-        figure,dt = self.visualiser.build(graph_id=graph_id,datatable=True)
-        d = self.create_div(update_o["graph_id"].component_id, figure, className="col")
-        dt = (self._create_datatable("project-meta",self.visualiser.get_graph_metadata()) + self._create_datatable("project-data",dt))
-        project_struct = self.visualiser.get_project_info()
-        ni = self._create_datatable("WUT",project_struct)
-        params = [n.component_id.split("/")[-1] for n in plo_i_box]
-        box_values = self.visualiser.get_parameter_types(params)
-        return d,dt,ni,{"style":"block"},*box_values
+        try:
+            gn = graph_name.split("-")[0]
+            gn = [g for g in gn.split("/")]
+            self.visualiser.set_design_names(gn)
+            self.visualiser.set_projection_graph(graph_name)
+            self.visualiser.set_projection_view()
+            figure,dt = self.visualiser.build(graph_id=graph_id,datatable=True)
+            d = self.create_div(update_o["graph_id"].component_id, figure, className="col")
+            dt = (self._create_datatable("project-meta",self.visualiser.get_graph_metadata()) + self._create_datatable("project-data",dt))
+            project_struct = self.visualiser.get_project_info()
+            ni = self._create_datatable("WUT",project_struct)
+            params = [n.component_id.split("/")[-1] for n in plo_i_box]
+            box_values = self.visualiser.get_parameter_types(params)
+            return d,dt,ni,{"style":"block"},*box_values
 
-        #except Exception as ex:
-        #    print(ex)
-         #   raise PreventUpdate()
+        except Exception as ex:
+            print(ex)
+            raise PreventUpdate()
 
     def procedure(self,*args):
         if not isinstance(self.visualiser, ProjectionVisual):

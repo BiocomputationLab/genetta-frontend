@@ -84,49 +84,33 @@ class GDSQueryBuilder:
     def __init__(self):
         pass
         
-    def cypher_project(self,name,nodes=None,edges=None):
-        where = " WHERE "
-        def _where(n):    
-            if n is not None:
-                if not isinstance(n,list):
-                    n = [n]
-                w_inner = ""
-                v_inner = ""
-                for index, i in enumerate(n):
-                    if isinstance(i,Node):
-                        w_inner += f' (n:`{i.get_key()}`' if i.get_key() != "None" else ""
-                        w_inner += f' AND n:`{i.get_type()}`' if i.get_type() != "None" else ""
-                        w_inner += f' AND ANY(a IN {str(i.graph_name)} WHERE a IN n.`graph_name`)) '
+    def cypher_project(self,name,node_labels=None,edge_labels=None,node_properties=None):
+        def _handle_labels(labels):
+            if labels is None:
+                return ""
+            return ":" + ":".join([f'`{l}`' for l in labels])
+        node_label_str = _handle_labels(node_labels)
+        edge_label_str = _handle_labels(edge_labels)
+        where_str = ""
+        if node_properties is not None:
+            for index,(k,v) in enumerate(node_properties.items()):
+                if isinstance(v,str) and v not in self._matches.keys():
+                    v = f'"{v}"'
+                where_str += f'source.{k} = {v} '
+                where_str += " AND "
+                where_str += f'target.{k} = {v} '
+                if index < len(node_properties) - 1:
+                    where_str += "AND"
+        if len(where_str) > 0 :
+            where_str = f"WHERE {where_str}"
 
-                        v_inner += f'  (v:`{i.get_key()}`' if i.get_key() != "None" else ""
-                        v_inner += f' AND v:`{i.get_type()}`' if i.get_type() != "None" else ""
-                        v_inner += f' AND ANY(a IN {str(i.graph_name)} WHERE a IN v.`graph_name`)) '
-                    else:
-                        w_inner += f'( n:`{i}` )'
-                        v_inner += f' (v:`{i}` )'   
-                    if index < len(n) - 1:
-                        w_inner += " OR "
-                        v_inner += " OR "
-                return f'{where} {w_inner} {"AND" if len(w_inner+v_inner)>0 else ""} {v_inner} '
-            return where
-        
-        ewhere = _where(nodes)
-        all_gns = list(set([item for sublist in nodes for item in sublist.graph_name]))
-        e = ""
-        if edges is not None and len(edges) > 0:
-            e = ":" + "" + ""+"|".join(["`" + str(edge) + "`" for edge in edges])
-        
-        gnwhere = f'{"AND" if len(ewhere) != where else ""} ANY(a IN {str(all_gns)} WHERE a IN r.`graph_name`)' if len(ewhere)+len(nodes)>0 else ''
-        n_str = f"MATCH (n)-[r{e}]-(v) {ewhere}  {gnwhere} RETURN id(n) AS id, labels(n) AS labels"
-        e_str = f"MATCH (n)-[r{e}]->(v) {ewhere} {gnwhere} RETURN id(n) AS source, id(v) AS target, type(r) AS type"
-        return f'''
-        CALL gds.graph.project.cypher(
-        "{name}",
-        "{n_str}",
-        "{e_str}",
-         {{validateRelationships: false}}   )
-        YIELD graphName AS graph, nodeQuery, nodeCount AS nodes, relationshipQuery, relationshipCount AS rels
-        '''
+        return f"""MATCH (source{node_label_str})-[r{edge_label_str}]->(target{node_label_str})
+        {where_str}
+        WITH gds.graph.project(
+        '{name}',
+        source,
+        target) as g
+        RETURN g.graphName AS graph, g.nodeCount AS nodes, g.relationshipCount AS rels"""
 
     def mutate(self,name,types,mutate_type,node_labels=None):
         sb = StringBuilder()

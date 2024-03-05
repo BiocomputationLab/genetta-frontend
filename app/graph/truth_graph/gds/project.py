@@ -3,12 +3,10 @@ class TruthProjectBuilder(ProjectBuilder):
     def __init__(self, graph):
         super().__init__(graph)
     
-    def derivative(self,name,derivatives=None,direction="UNDIRECTED"):
-        e = {self._ids.external.derivative:{"orientation" : direction}}
-        n = []
-        if derivatives is None:
-            derivatives = self._graph.derivatives.get()
-        for edge in derivatives.derivatives():
-            n += [str(edge.n),str(edge.v)]
-        n = self._cast(list(set(n)))
-        return self._driver.project.project(name,n,e)[0]
+    def derivative(self,name):
+        edge_labels = [self._ids.external.derivative]
+        node_props = {"graph_name" : self._graph.name}
+        res = self._driver.project.cypher_project(name,
+                                                  edge_labels=edge_labels,
+                                                  node_properties=node_props)
+        return res

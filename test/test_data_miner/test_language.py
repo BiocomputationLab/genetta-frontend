@@ -60,7 +60,6 @@ class TestLanguageAnalyser(unittest.TestCase):
     def test_get_all_nouns_uri(self):
         text = "ptet laci https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/pTet/1 Matthew or Kevin"
         res = self.language_analyser.get_all_nouns(text)
-        print(res)
         self.assertEqual(res,["ptet","laci","https://synbiohub.programmingbiology.org/public/GokselEco1C1G1T2/pTet/1","Matthew","Kevin"])
 
 if __name__ == '__main__':

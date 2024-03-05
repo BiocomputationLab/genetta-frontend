@@ -3,10 +3,14 @@ from abc import ABC
 from abc import abstractmethod
 
 class AbstractExpansion(ABC):
-    def __init__(self,truth_graph,miner):
+    def __init__(self,truth_graph,miner,name=None):
         self._tg = truth_graph
         self._miner = miner
         self._match_threshold = 80
+        if name is None:
+            self.name = self.__class__.__name__
+        else:
+            self.name = name
     
     @abstractmethod
     def expand(self):

@@ -20,6 +20,7 @@ from flask_login import logout_user
 from flask_login import login_required
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from celery import Celery
 
 from app.utility import forms
 from app.utility import form_handlers
@@ -42,7 +43,6 @@ from app.tools.enhancer.enhancer import Enhancer
 from app.tools.kg_expansion.builder import TruthGraphBuilder
 from app.tools.evaluator.evaluator import Evaluator
 
-
 root_dir = "app"
 static_dir = os.path.join(root_dir, "assets")
 template_dir = os.path.join(root_dir, "templates")
@@ -50,6 +50,7 @@ sessions_dir = os.path.join(root_dir, "sessions")
 truth_save_dir = os.path.join(root_dir, "truth_saves")
 example_dir = os.path.join(static_dir, "examples")
 example_file = os.path.join(static_dir, "examples","explanation.json")
+expand_result_fn = os.path.join(sessions_dir,"expansion_result.json")
 user_gns = "graph_names.json"
 
 server = Flask(__name__, static_folder=static_dir,
@@ -105,6 +106,22 @@ login_manager = LoginHandler(server,graph.driver,login_graph_name)
 login_manager.login_view = "login"
 fn_size_threshold = os.environ.get('FILESIZE_THRESHOLD', 106384)
 
+def make_celery():
+    celery = Celery(
+        server.import_name,
+        backend='redis://localhost:6379/0',
+        broker='redis://localhost:6379/0'
+    )
+    celery.conf.update(server.config)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with server.app_context():
+                return self.run(*args, **kwargs)
+    celery.Task = ContextTask
+    return celery
+celery = make_celery()
+
 def cleanup():
     cl_interface = Neo4jInterface(uri,db_auth,
                                   reserved_names=[login_graph_name])
@@ -134,7 +151,6 @@ def cleanup():
             login_manager.remove_user(o)
     data_miner.cleanup()
     
-
 scheduler.add_job(
     cleanup,
     trigger=IntervalTrigger(minutes=10080),
@@ -165,7 +181,7 @@ def login():
                                                 create_admin_form.password.data)
                 login_user(admin)
                 if len(list(set(graph.truth.name) & set(graph.get_graph_names()))) == 0:
-                    tg_builder.seed()
+                    reset_graph.delay()
                 return redirect(url_for('index'))
             else:
                 return render_template('signup.html', create_admin_form=create_admin_form)
@@ -222,23 +238,35 @@ def graph_admin():
         return design_form,user_form
     design_form,user_form = _derive_admin_forms()
 
-    success_string = None
+    tg_string = None
+    expand_result = None
     if tg_form.validate_on_submit():
         if tg_form.tg_save.data:
-            _save_truth_graph()
-            success_string = f'Truth Graph Saved.'
+            save_graph.delay()
+            tg_string = f'''Save graph initiated. 
+            Please wait for the proccess to run.'''
         elif tg_form.tg_reseed.data:
-            graph.truth.drop()
-            tg_builder.seed()
-            success_string = f'Reset Truth Graph'
+            reset_graph.delay()
+            tg_string = f'''Reset graph initiated. 
+            Please wait for the proccess to run.'''
         elif tg_form.tg_expand.data:
-            tg_builder.expand()
-            success_string = f'Expanded Truth Graph'
+            expand_graph.delay()
+            tg_string = f'''Expand graph initiated. 
+            Please wait for the proccess to run.'''
         elif tg_form.tg_restore.data:
             fn = os.path.join(truth_save_dir, request.form["files"])
-            graph.truth.drop()
-            graph.truth.load(fn)
-            success_string = f'Restored Truth Graph {request.form["files"]}'
+            restore_graph.delay(fn)
+            tg_string = f'''Restore graph initiated 
+            ({request.form["files"]}). Please wait 
+            for the proccess to run.'''
+        elif tg_form.tg_see_expand.data:
+            if not os.path.isfile(expand_result_fn):
+                expand_result = {}
+                tg_string = "Expansion has never been initiated."
+            else:
+                with open(expand_result_fn) as f:
+                    expand_result = json.load(f)
+        
     elif d_projection.validate_on_submit():
         dg = d_projection.graphs.data
         if dg == "Remove All":
@@ -266,14 +294,12 @@ def graph_admin():
             login_manager.remove_user(k)            
             shutil.rmtree(os.path.join(sessions_dir,k))
         design_form,user_form = _derive_admin_forms()
-
     return render_template('admin.html', tg_form=tg_form,
                            drop_projection=d_projection,
                            design_form = design_form,
                            user_form=user_form,
-                           success_string=success_string)
-
-
+                           expand_result=expand_result,
+                           tg_string=tg_string)
 
 @server.route('/modify-graph', methods=['GET', 'POST'])
 @login_required
@@ -653,6 +679,29 @@ def before_request_func():
     session["user_dir"] = user_dir
     _handle_restore_dir()
 
+@celery.task
+def reset_graph():
+    graph.truth.drop()
+    tg_builder.seed()
+    return 'Reset graph complete.'
+
+@celery.task
+def expand_graph():
+    expand_result = tg_builder.expand()
+    with open(expand_result_fn, 'w') as outfile:
+        json.dump(expand_result, outfile)
+    return 'Expand graph complete.'
+
+@celery.task
+def restore_graph(fn):
+    graph.truth.drop()
+    graph.truth.load(fn)
+    return 'Restore graph complete'
+
+@celery.task
+def save_graph():
+    _save_truth_graph()
+    return 'Save graph complete'
 
 def _convert_file(fn,name,ct):
     try:
@@ -689,7 +738,6 @@ def _remove_user_gn(gn,user=None):
         return
     with open(user_gn_file) as f:
         data = json.load(f)
-    print(gn)
     data.remove(gn)
     with open(user_gn_file, 'w') as outfile:
         json.dump(data, outfile)

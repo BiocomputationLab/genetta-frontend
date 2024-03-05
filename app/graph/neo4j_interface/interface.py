@@ -3,6 +3,8 @@ from graphdatascience import GraphDataScience
 from graphdatascience.error.unable_to_connect import UnableToConnectError
 from neo4j.graph import Node as NeoNode
 from neo4j.graph import Relationship
+from neo4j.exceptions import DatabaseError
+from neo4j.exceptions import ClientError
 import copy
 import time
 
@@ -239,12 +241,18 @@ class Neo4jInterface:
                 self.drop_text_index(name)
                 break
         qry = self.qry_builder.create_text_index(name, labels, on)
-        self._run(qry)
+        try:
+            self._run(qry)
+        except ClientError:
+            pass
         return name
 
     def drop_text_index(self, name):
         qry = self.qry_builder.drop_text_index(name)
-        return self._run(qry)
+        try:
+            return self._run(qry)
+        except DatabaseError:
+            pass
 
     def query_text_index(self, index_name, values, graph_names=None,
                          predicate=None, wildcard=False, fuzzy=False,
@@ -331,6 +339,15 @@ class Neo4jInterface:
                         results.append(v)
         return results
 
+    def node_edge_count(self,graph_name=None):
+        n_qry,e_qry = self.qry_builder.node_edge_count(graph_name=graph_name)
+        n_v = {rec["label"] : rec["count"] 
+               for rec in self.run_query(n_qry)}
+        e_v = {rec["label"] : rec["count"] 
+               for rec in self.run_query(e_qry)}
+        return n_v,e_v
+
+    
     def count_edges(self,e_type):
         qry = self.qry_builder.count_edge(e_type)
         return self.run_query(qry)[0]["count(e)"]

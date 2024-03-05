@@ -60,44 +60,17 @@ class DesignGraph:
     def add_node(self,key,type,sequence=None,description=None,**kwargs):
         if "graph_name" not in kwargs:
             kwargs["graph_name"] = self.name
-        if sequence is not None:
-            if isinstance(sequence,list):
-                assert(len(sequence) == 1)
-                sequence = sequence[0]
-            kwargs[nv_has_seq] = sequence.upper()
-        if description is not None:
-            if not isinstance(description,list):
-                description = [description]
-            kwargs[DCTERMS.description] = description
-        if "name" not in kwargs:
-            if hasattr(key,"name"):
-                name = key.name
-            else:
-                name = _get_name(key)
-            kwargs["name"] = name
-            
+        kwargs = self._format_sequence(sequence,kwargs)
+        kwargs = self._format_description(description,kwargs)
+        kwargs = self._format_name(key,kwargs)
         n = self.driver.add_node(key,type,**kwargs)
         self.driver.submit()
         return n
         
     def add_edges(self,edges):
         for edge in edges:
-            if isinstance(edge,Edge):
-                n = edge.n
-                v = edge.v
-                e = edge.get_type()
-                props = edge.get_properties()
-            elif len(edge) == 4:
-                n,v,e,props = edge
-            else:
-                n,v,e = edge
-                props = {}
-            if "graph_name" not in props:
-                props["graph_name"] = self.name
-            if "graph_name" not in n.get_properties():
-                n.add_property("graph_name",self.name)
-            if "graph_name" not in v.get_properties():
-                v.add_property("graph_name",self.name)
+            n,v,e,props = self._derive_edge_elements(edge)
+            n,v,props = self._add_graph_names_edge(n,v,props)
             self.driver.add_edge(n,v,e,**props)
         self.driver.submit()
 
@@ -114,25 +87,14 @@ class DesignGraph:
         if not isinstance(edges,list):
             edges = [edges]
         for edge in edges:
-            if isinstance(edge,Edge):
-                n = edge.n
-                v = edge.v
-                e = edge.get_type()
-                props = edge.get_properties()
-            elif len(edge) == 4:
-                n,v,e,props = edge
-            else:
-                n,v,e = edge
-                props = {}
-            if "graph_name" not in props:
-                props["graph_name"] = self.name
-            if "graph_name" not in n.get_properties():
-                n.add_property("graph_name",self.name)
-            if "graph_name" not in v.get_properties():
-                v.add_property("graph_name",self.name)
+            n,v,e,props = self._derive_edge_elements(edge)
+            n,v,props = self._add_graph_names_edge(n,v,props)
             self.driver.remove_edge(n,v,e,**props)
         self.driver.submit()
 
+    def node_edge_count(self):
+        return self.driver.node_edge_count(self.name)
+    
     def count_edges(self,e_type):
         return self.driver.count_edges(e_type)
 
@@ -363,7 +325,59 @@ class DesignGraph:
         return self.driver.edge_query(n=n, v=v, e=e,
                                       e_props=props, n_props=props, v_props=props,
                                       predicate=predicate, **kwargs)
+    
+    def _format_sequence(self,sequence,properties):
+        if sequence is not None:
+            if isinstance(sequence,list):
+                assert(len(sequence) == 1)
+                sequence = sequence[0]
+            properties[nv_has_seq] = sequence.upper()
+        return properties
+    
+    def _format_description(self,description,properties):
+        if description is not None:
+            if not isinstance(description,list):
+                description = [description]
+            properties[DCTERMS.description] = description
+        return properties
 
+    def _format_name(self,key,properties):
+        if "name" not in properties:
+            if hasattr(key,"name"):
+                name = key.name
+            else:
+                name = _get_name(key)
+            properties["name"] = name
+        return properties
+    
+    def _derive_edge_elements(self,edge):
+        if isinstance(edge,Edge):
+            n = edge.n
+            v = edge.v
+            e = edge.get_type()
+            props = edge.get_properties()
+        elif len(edge) == 4:
+            n,v,e,props = edge
+        else:
+            n,v,e = edge
+            props = {}
+        return n,v,e,props
+    
+    def _add_graph_names_edge(self,n,v,props):
+        if "graph_name" not in props:
+            props["graph_name"] = self.name
+        if "graph_name" not in n.get_properties():
+            n.add_property("graph_name",self.name)
+        if "graph_name" not in v.get_properties():
+            v.add_property("graph_name",self.name)
+
+        if "graph_name" not in props:
+            props["graph_name"] = self.name
+        if "graph_name" not in n.get_properties():
+            n.add_property("graph_name",self.name)
+        if "graph_name" not in v.get_properties():
+            v.add_property("graph_name",self.name)
+        return n,v,props
 
 def _get_name(subject):
     split_subject = _split(subject)

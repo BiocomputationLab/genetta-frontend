@@ -11,7 +11,7 @@ class Enhancer:
         self._graph = graph
         self._miner = data_miner
         self._canonicaliser = Canonicaliser(graph,self._miner)
-        self._enhancers = [ProteinProduction(graph,self._miner),
+        self._enhancers = [#ProteinProduction(graph,self._miner),
                         TruthInteractions(graph,self._miner),
                         Positional(graph,self._miner)]
     

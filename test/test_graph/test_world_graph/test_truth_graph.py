@@ -1,13 +1,14 @@
 import sys
 import os
 import unittest
-from rdflib import RDF
+import networkx as nx
 sys.path.insert(0, os.path.join(".."))
 sys.path.insert(0, os.path.join("..",".."))
 sys.path.insert(0, os.path.join("..","..",".."))
 sys.path.insert(0, os.path.join("..","..","..",".."))
 sys.path.insert(0, os.path.join("..","..","..","..",".."))
 from app.graph.world_graph import WorldGraph
+from app.converter.sbol_convert import convert
 from app.graph.truth_graph.modules.abstract_module import AbstractModule
 from app.graph.truth_graph.modules.synonym import SynonymModule
 from app.graph.truth_graph.modules.interaction import InteractionModule
@@ -673,6 +674,15 @@ class TestDerivativeModule(unittest.TestCase):
         self.module = DerivativeModule(self.tg)
         self.props = {"graph_name" : self.tg.name}
 
+    def test_get_all(self):
+        p_derivative = str(model.identifiers.external.derivative)
+        graph = self.module.get()
+        all_edges = list(graph.edges())
+        actual_edges = self.tg.edge_query(e=p_derivative)
+        diff = list(set(actual_edges) - set(all_edges))
+        self.assertEqual(len(all_edges),len(actual_edges))
+        self.assertEqual(len(diff),0)
+
     def test_get(self):
         node = ReservedNode("https://test_resource/BBa_test_K823003/1",
                     model.identifiers.objects.physical_entity,**self.props)
@@ -684,6 +694,13 @@ class TestDerivativeModule(unittest.TestCase):
         res = self.module.get(node,vertex,threshold=5)
         res = list(res.edges())
         self.assertEqual([edge],res)
+
+        self.module.negative(node,vertex)
+        res = self.module.get(node,vertex,threshold=5)
+        res = list(res.edges())
+        self.assertEqual([],res)
+
+
 
     def test_positive(self):
         node = ReservedNode("https://test_resource/BBa_test_K8230036/1",
@@ -698,6 +715,13 @@ class TestDerivativeModule(unittest.TestCase):
         res = list(res.edges())
         self.assertEqual([edge],res)
         self.assertEqual(res[0].confidence,25)
+
+
+        for a in range(0,5):
+            self.module.negative(node,vertex)
+        res = self.module.get(node,vertex,threshold=5)
+        res = list(res.edges())
+        self.assertEqual([],res)
 
 
     def test_negative(self):
@@ -730,6 +754,46 @@ class TestDerivativeModule(unittest.TestCase):
         self.assertTrue(self.module.are_derivatives(ders[0].n,ders[0].v))
         self.assertFalse(self.module.are_derivatives(ders[0].n,ders[3].v))
 
+    def test_projection_graph_name(self):
+        gn = "test_enhancer"
+        fn = os.path.join("..","files","canonical_AND.xml")
+        self.wg.remove_design(gn)
+        convert(fn,self.tg.driver,gn)
+        try:
+            self.tg.project.drop("test_derivative_projection")
+        except ValueError:
+            pass
+        res = self.tg.project.derivative("test_derivative_projection")
+        pre_node_count = res.node_count()
+        pre_edge_count = res.relationship_count()
+        self.wg.remove_design(gn)
+        self.tg.project.drop("test_derivative_projection")
+        res = self.tg.project.derivative("test_derivative_projection")
+        post_node_count = res.node_count()
+        post_edge_count = res.relationship_count()
+        self.assertEqual(pre_node_count,post_node_count)
+        self.assertEqual(pre_edge_count,post_edge_count)
+        ders = [e.n for e in list(self.tg.derivatives.get().derivatives())]
+        for node in self.tg.procedure.degree("test_derivative_projection").keys():
+            self.assertIn(node,ders)
+
+    def test_get_components(self):
+        components = self.module.get_components()
+        graph = self.module.get()
+        all_edges = list(graph.edges())
+        all_nodes = list(graph.nodes())
+        cmp_edges = []
+        cmp_nodes = []
+        for index,component in enumerate(components):
+            for other_comp in components[index+1:]:
+                self.assertFalse(any(node in other_comp for node in component.nodes()))
+            self.assertTrue(nx.is_weakly_connected(component._graph))
+            for edge in component.edges():
+                cmp_edges.append(edge)
+                cmp_nodes.append(edge.n)
+                cmp_nodes.append(edge.v)
+        self.assertCountEqual(all_edges,cmp_edges)
+        self.assertCountEqual(all_nodes,list(set(cmp_nodes)))
 
 nv_module = str(model.identifiers.objects.module)
 nv_has_interaction = str(model.identifiers.predicates.hasInteraction)

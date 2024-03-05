@@ -239,6 +239,5 @@ class Canonicaliser(AbstractEnhancement):
     def _resolve_synonym(self,synonym):
         syn = self._wg.truth.synonyms.get(synonym=synonym)
         syn = list(syn.synonyms(synonym=synonym))
-        assert(len(syn) == 1)
         return syn[0].n,syn[0].confidence
         

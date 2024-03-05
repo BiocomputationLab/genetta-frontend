@@ -36,6 +36,8 @@ def add_truth_graph_form(directory,**kwargs):
         tg_reseed = SubmitField('Reset (All Information will be lost.)')
         tg_expand = SubmitField('Expand')
         tg_restore = SubmitField('Restore')
+        tg_see_expand = SubmitField("Previous expansion results")
+        
     files = []
     for c in os.listdir(directory):
         desc = c.split(".")[0]
@@ -285,7 +287,6 @@ def add_remove_user_admin_form(d_names,**kwargs):
         submit_rua = SubmitField('Submit')
     u_forms = []
     for d_name in d_names:
-        print(d_name)
         data = {"label":d_name}
         identifier = d_name
         u_forms.append((identifier,BooleanField,data))

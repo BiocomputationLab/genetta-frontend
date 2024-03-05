@@ -34,43 +34,47 @@ class TruthGraph(DesignGraph):
         self._np = {"graph_name": self.name}
         self._create_text_index(index_name,index_labels,index_on)
     
+
     def add_node(self,key,type=None,**kwargs):
         kwargs.update(self._np)
-        return super().add_node(key,type,**kwargs)
-
+        if "sequence" in kwargs:
+            kwargs = self._format_sequence(kwargs["sequence"],kwargs)
+        if "description" in kwargs:
+            kwargs = self._format_description(kwargs["description"],kwargs)
+        kwargs = self._format_name(key,kwargs)
+        n = self.driver.add_node(key,type,**kwargs)
+        self.driver.submit(log=False)
+        return n
+    
     def add_edges(self, edges, modifier=5):
         if not isinstance(edges,list):
             edges = [edges]
         if modifier <= 0:
             return
-        uedges = []
         for e in edges:
-            if not isinstance(e,(Edge,ReservedEdge)):
-                e = ReservedEdge(*e)
-            e = self._add_edge_gn(e)
-            e.update({p_confidence: modifier})
-            uedges.append(e)
-        super().add_edges(uedges)
+            n,v,e,props = self._derive_edge_elements(e)
+            props[p_confidence] = modifier
+            n,v,props = self._add_graph_names_edge(n,v,props)
+            self.driver.add_edge(n,v,e,**props)
+        self.driver.submit(log=False)
 
     def remove_edges(self,edges):
         if not isinstance(edges,list):
             edges = [edges]
-        uedges = []
         for e in edges:
-            if not isinstance(e,(Edge,ReservedEdge)):
-                e = ReservedEdge(*e)
-            e = self._add_edge_gn(e)
-            uedges.append(e)
-        super().remove_edges(uedges)
+            n,v,e,props = self._derive_edge_elements(e)
+            n,v,props = self._add_graph_names_edge(n,v,props)
+            self.driver.remove_edge(n,v,e,**props)
+        self.driver.submit(log=False)
 
     def set_confidence(self, edge, confidence):
         self.driver.set_edge(edge, {p_confidence: confidence})
-        return self.driver.submit()
+        return self.driver.submit(log=False)
 
     def merge_nodes(self,source,merged):
         properties = {model.identifiers.external.description:"'combine'"}
         self.driver.merge_nodes(source,merged,properties=properties)
-        return self.driver.submit()
+        return self.driver.submit(log=False)
 
     def node_query(self, n=[], **kwargs):
         return self._node_query(n,**kwargs)
@@ -139,13 +143,6 @@ class TruthGraph(DesignGraph):
             on.append("graph_name")
         return self.driver.create_text_index(name,labels,on)
     
-    def _add_edge_gn(self, edge):
-        gnd = self._np
-        edge.n.update(gnd)
-        edge.v.update(gnd)
-        edge.update(gnd)
-        return edge
-
     def _add_node_gn(self, node):
         if node is not None:
             gnd = self._np

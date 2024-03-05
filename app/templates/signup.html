@@ -61,6 +61,8 @@
                 <p>This is the time this instance of Genetta is active.
                     Admin credentials are required to make changes to the system.
                 </p>
+                <p>When created, the Truth graph will be built, running in the background and taking some time. 
+                    Please do not use tools interfacing with the truth graph until this is finished.</p>
                 <p>This may take a few minutes to initialise the tool.</p>
                 <form action="" method="post" enctype="multipart/form-data">
                     {{ create_admin_form.hidden_tag() }}

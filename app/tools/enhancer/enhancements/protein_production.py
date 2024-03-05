@@ -35,7 +35,6 @@ class ProteinProduction(AbstractEnhancement):
             defered_ints = []
             for i in cds_ints:
                 if i.n.get_type() == nv_pp:
-                    print(i)
                     pp_int.append(i)
                 elif i.n.get_type() in defered_int_types:
                     defered_ints.append(i)

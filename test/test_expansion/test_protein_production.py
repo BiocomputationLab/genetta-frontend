@@ -73,7 +73,6 @@ class TestPPExpansion(unittest.TestCase):
         
         self.assertGreater(len(diff),0)
         for d in diff:
-            print(d)
             if d.n == interaction:
                 self.assertEqual(d.v.get_type(),nv_p)
                 break

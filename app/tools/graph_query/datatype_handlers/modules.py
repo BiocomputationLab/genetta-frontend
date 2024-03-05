@@ -52,11 +52,9 @@ class ModuleHandler(AbstractHandler):
         return results
 
     def feedback(self, source, result, positive=True):
-        print(source,result)
         graph = self._graph.modules.get(result)
         # We assume source is already an edge.
         for e in graph.edges():
-            print(e)
             if positive:
                 self._graph.modules.positive(e.n,e.v,e.get_type())
             else:

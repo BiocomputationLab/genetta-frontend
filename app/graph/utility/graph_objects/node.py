@@ -28,8 +28,11 @@ class Node:
                 return True
         return False
 
-    def duplicate(self):
-        return self.__class__(self.key,self.type,**self.properties)
+    def duplicate(self,graph_name=None):
+        props = self.properties.copy()
+        if graph_name is not None:
+            props["graph_name"] = graph_name
+        return self.__class__(self.key,self.type,**props)
         
     def __eq__(self, obj):
         if not isinstance(obj, Node):

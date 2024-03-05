@@ -1,6 +1,7 @@
 APScheduler==3.10.4
 Bio==1.6.2
 biopython==1.81
+celery==5.2.3
 dash==2.12.1
 dash_bio==1.0.2
 dash_bootstrap_components==1.4.2
@@ -21,3 +22,4 @@ SPARQLWrapper==2.0.0
 validators==0.21.2
 Werkzeug
 WTForms==3.0.1
+Redis

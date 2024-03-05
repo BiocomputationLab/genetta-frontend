@@ -20,7 +20,6 @@ class TruthTextExtraction(AbstractExpansion):
                 for d_entity in self._miner.get_entities(desc):
                     for interaction,synonyms in self._interaction_map.items():
                         for sim in self._miner.word_similarity(d_entity,synonyms):
-                            if sim > self._threshold:
-                                print(entity,d_entity,sim) 
+                            if sim > self._threshold: 
                                 pass#self._tg.interactions.positive(inter,entity,p_type)
             

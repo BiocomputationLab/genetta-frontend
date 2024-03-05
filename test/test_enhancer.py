@@ -180,7 +180,6 @@ class TestEnhancer(unittest.TestCase):
                 i_counts.append(i.get_type())
         self.wg.remove_design(gn)
 
-
     def test_enhance_positional_manual_AND(self):
         enhancer = Positional(self.wg,self.miner)
         changes = enhancer.enhance(self.gn,automated=False)

@@ -66,7 +66,6 @@ class SequenceHandler(AbstractHandler):
         if source is None:
             return
         if positive:
-            print(source,result)
             self._graph.derivatives.positive(source,result)
         else:
             self._graph.derivatives.negative(source,result)

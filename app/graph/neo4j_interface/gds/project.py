@@ -7,7 +7,7 @@ class Projection():
     
     def project(self, name, nodes, edges, **kwargs):
         nodes = [n.get_key() if isinstance(n,Node) else n for n in nodes]
-        return self._driver.graph.project(name, nodes, edges, **kwargs)
+        return self._driver.graph.project(name, nodes, edges,**kwargs)
         
     def drop(self, name):
         g = self.get_graph(name)
@@ -20,8 +20,10 @@ class Projection():
     def get_graph(self, graph_name):
         return self._driver.graph.get(graph_name)
 
-    def cypher_project(self, name, n, e):
-        qry = self._qry_builder.cypher_project(name, n, e)
+    def cypher_project(self,name,node_labels=None,edge_labels=None,
+                       node_properties=None):
+        qry = self._qry_builder.cypher_project(name, node_labels,
+                                                edge_labels,node_properties)
         ret = self._run(qry)
         return self.get_graph(name)
         
